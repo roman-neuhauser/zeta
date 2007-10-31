@@ -1,0 +1,152 @@
+=============================================================================
+                                    Zeta
+=============================================================================
+-----------------------------------------------------------------------------
+                       Functional tools for JavaScript
+-----------------------------------------------------------------------------
+
+:Author: Roman Neuhauser
+:Contact: neuhauser@sigpipe.cz
+:Copyright: This document is in the public domain.
+:HeadURL: $HeadURL$
+:Id: $Id$
+
+.. contents::
+
+Introduction
+============
+
+Zeta is an `open-source`_ functional JavaScript library.  It comprises
+a set of algorithms, operators, and higher-order functions (functions which
+return and/or accept functions as arguments).
+
+A programming language in which functions are values like JavaScript is
+actually a metaprogramming language.  Exploiting this feature and treating
+code as data enables major reductions in code volume and complexity.
+
+Zeta is published under the `MIT license`_ which means you are free and
+welcome to use it in any way.
+
+.. _STL: http://www.sgi.com/tech/stl/
+.. _open-source: http://opensource.org/docs/definition.php
+.. _MIT license: http://opensource.org/licenses/mit-license.php
+
+
+Prerequisities
+==============
+
+* JavaScript 1.5+
+
+
+Downloads
+=========
+
+Repository
+++++++++++
+
+The latest source can be checked out from the Subversion_ repository_,
+which is also available for anonymous browsing using the viewvc_ interface_.
+
+.. _Subversion: http://subversion.tigris.org/
+.. _repository: https://svn.sigpipe.cz/r/
+.. _viewvc:     http://www.viewvc.org/
+.. _interface:  http://svn.sigpipe.cz/
+
+Official tarballs
++++++++++++++++++
+
+Zeta source releases are distributed as bzip2ed tarballs created with
+either Tim Kientzle's bsdtar_ or GNU tar, Julian Seward's bzip2_ in all
+cases.  Your operating system should include compatible extraction tools.
+
+All Zeta releases can be found in the `download directory`_.
+
+.. _bsdtar: http://people.freebsd.org/~kientzle/libarchive/
+.. _bzip2: http://www.bzip.org/
+.. _download directory: http://codex.sigpipe.cz/zeta/dist/
+
+
+Build and Installation
+======================
+
+Web servers (and even more so *non-web* uses of JavaScript/ECMA-262) are
+an area too volatile to warrant a vendor-provided installation mechanism.
+Most of the task is left as an excercise for the user's software
+comfiguration management process.  Zeta should be seen as a static library,
+and this position is therefore fully justified.
+
+Zeta is developed and tested on FreeBSD 6 with SpiderMonkey_ 1.5.
+
+.. _SpiderMonkey: http://www.mozilla.org/js/spidermonkey/
+
+Running the test suite
+++++++++++++++++++++++
+
+Zeta's test suite can be exercised by running ``make check`` in the top
+directory.
+
+Reference
+=========
+
+`Zeta Library Reference`_ describes public functions.  The complete source
+code can be found in the `src`_ directory.
+
+.. _Zeta Library Reference: docs/reference.rest
+.. _src: src/
+
+Examples
+========
+
+See `Zeta Usage Examples`_.
+
+.. _`Zeta Usage Examples`: docs/examples.rest
+
+Releases
+========
+
+Release types
++++++++++++++
+
+Zeta releases fall into one of the following four categories:
+
+* snapshots
+* bugfix releases
+* new functionality
+* backward-incompatible change
+
+Release versioning
+++++++++++++++++++
+
+Each release is tagged with a version number string with the following
+structure (ABNF_): ::
+
+  version-string    = compat-cnt "." newfun-cnt "." bugfix-cnt [rel-candidate]
+  compat-cnt    = counter
+  newfun-cnt    = counter
+  bugfix-cnt    = counter
+  rel-candidate = "." snapshot counter
+  ; "snap"
+  snapshot          = %x73.6e.61.70
+  ; counter is a positive integer (includes 0)
+  counter            = 1 * DIGIT
+
+For each release of any type the appropriate counter is incremented by at
+least one and counters to the right of it are reset to 0 (the
+release-candidate part is removed altogether), while counters to the left of
+it are left at their current values.
+
+Version string of the first nonsnapshot Zeta release is ``0.0.0``, while
+"0.0.0.snap135" is the version string of a pre-0.0.0 snapshot.  Note that
+there may be gaps between.
+
+This handling is consistent with the way FreeBSD's `pkg_version -t`_
+interprets version strings.
+
+.. _ABNF: http://tools.ietf.org/html/rfc4234
+.. _pkg_version -t: http://www.freebsd.org/cgi/man.cgi?query=pkg_version
+
+
+.. target-notes::
+.. section-numbering::
+
+.. vim: ft=rst sts=2 sw=2 tw=80

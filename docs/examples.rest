@@ -1,0 +1,62 @@
+=============================================================================
+                             Zeta Usage Examples
+=============================================================================
+
+:Author: Roman Neuhauser
+:Contact: neuhauser@sigpipe.cz
+:Copyright: This document is in the public domain.
+:HeadURL: $HeadURL$
+:Id: $Id$
+
+.. contents::
+
+
+Each of these articles introduces a few parts of Zeta through several
+refactorings of an implementation of a Zeta element.  These articles should
+be fairly self-contained, which means some overlap is inevitable.  On the
+other hand, the topics are chosen to cover as much of Zeta as possible.
+Where the articles do overlap, the function in question is presented from
+a different angle, if possible.
+
+Refactoring *min(lhs, rhs)*, *max(lhs, rhs)*
+============================================
+
+`Refactoring min(lhs, rhs), max(lhs, rhs)`_  documents a refactoring of the
+(shared) implementation of the *max* and *min* operators.
+
+.. _Refactoring min(lhs, rhs), max(lhs, rhs): examples-ref-minmax.rest
+
+Refactoring *unique(eqfun, arr)*
+================================
+
+`Refactoring unique(eqfun, arr)`_ presents a refactoring of an implementation
+of the *unique* algorithm.
+
+.. _Refactoring unique(eqfun, arr): examples-ref-unique.rest
+
+::
+
+    var composex = bind(
+        reduce
+      , [value(compose), $1, value(itself)]
+    );
+
+    function composex(fs)
+    {
+        fs = reverse(fs);
+        return function ()
+        {
+            var tmp = arguments;
+            for_(
+                fs
+              , function (f)
+                {
+                    tmp = [apply(f, tmp)];
+                }
+            );
+            return tmp[0];
+        }
+    }
+
+
+.. vim: ft=rst tw=80

@@ -1,0 +1,680 @@
+=============================================================================
+                      Refactoring *unique(eqfun, arr)*
+=============================================================================
+-----------------------------------------------------------------------------
+                             Zeta Usage Examples
+-----------------------------------------------------------------------------
+
+:Author: Roman Neuhauser
+:Contact: neuhauser@sigpipe.cz
+:Copyright: This document is in the public domain.
+:HeadURL: $HeadURL$
+:Id: $Id$
+
+.. contents::
+
+Introduction
+++++++++++++
+
+This example introduces a few elements of Zeta through several refactorings
+of an implementation of the *unique* algorithm.
+
+The `Zeta Library Reference`_ carries this description of *unique*:
+
+  *unique(eqfun, arr)*
+
+  *eqfun* is binary function, *arr* is an array.  *unique* returns a `shallow
+  copy`_ of *arr* such that every time a consecutive group of identical
+  elements appears in *arr*, *unique* removes all but the first element.
+  The second and succeeding copies of identical adjacent elements are not
+  copied.
+
+.. _Zeta Library Reference: reference.rest
+.. _shallow copy: reference.rest#shallow-copy
+
+Setup
++++++
+
+Version 0
+~~~~~~~~~
+
+The version we start with is listed below.
+
+::
+
+    function unique(eqfun, arr)
+    {
+        var first = true;
+        var prev = undefined;
+        var rv = [];
+        var len = arr.length;
+        for (var i = 0; i < len; ++i) {
+            if (!(i in arr)) {
+                continue;
+            }
+            var val = arr[i];
+            if (first || !eqfun(val, prev)) {
+                rv.push(val);
+                first = false;
+            }
+            prev = val;
+        }
+        return rv;
+    }
+
+Comments
+~~~~~~~~
+
+A few notes on the code:
+
+* The loop is written to comply with the description of
+  `Array.prototype.forEach`_ at developer.mozilla.org:
+  
+    The range of elements processed by forEach is set before the first
+    invocation of callback. Elements which are appended to the array after
+    the call to forEach begins will not be visited by callback. If existing
+    elements of the array are changed, or deleted, their value as passed to
+    callback will be the value at the time forEach visits them; elements
+    that are deleted are not visited.
+
+* *first* is ``true`` on the first pass through the loop, and ``false`` on
+  all subsequent ones.  It guarantees that the first element is copied,
+  shortcuts *eqfun* for the first element (there's nothing to compare it
+  with), and leaves the decision to *eqfun* for all other elements.
+
+  The code cannot simply use ``0 == i`` because that element might be
+  deleted, and the first element would actually be further up.
+
+* *prev* keeps the previous value for comparison with the current one.
+  It's undefined (and unused, except the assignment) during the first
+  pass through the loop, and contains the previous value of *val* on all
+  subsequent ones.
+
+  The code cannot simply use ``val == arr[i - 1]`` because that element
+  might be deleted, and the previous element would actually be further
+  down.
+
+.. _Array.prototype.forEach: http://developer.mozilla.org/en/docs/Core_JavaScript_1.5_Reference:Global_Objects:Array:forEach
+
+Objections
+~~~~~~~~~~
+
+Although many would consider the above implementation reasonable, I'm
+going to shoot it down immediately, for several reasons.
+
+**Separation of concerns** is a fundamental principle of programming, and
+one of the rules through which it manifests is: keep the *how* separate
+from the *what*.
+
+The presented function intermingles both aspects in a mothball of
+low-level operations.  This has at least three negative consequences:
+
+* although the point of the function is to copy all elements of an array
+  for which certain condition is true, this fact is not immediately
+  obvious because of all the necessary but irrelevant implementation
+  details
+
+* presence of common low-level code suggests that the function is
+  unnecessarily long
+
+* common low-level code also suggests code duplication
+
+There are at least four aspects that deserve attention: plain presence of
+the *for* loop, inline presence of a common code structure (conditional
+copy of array elements) and convolutions around *first* and *prev* (counting
+*first* and *prev* separately).
+
+We'll tackle them one by one using functions from the Zeta library,
+reducing the code *and* improving clarity with each step.
+
+Refactorings
+++++++++++++
+
+*for_*
+~~~~~~
+
+The *for* loop raises an immediate objection: too much house keeping.
+In fact, iterating over an array from start to end is so common, we
+shouldn't be forced to write, read and maintain this code over and over.
+Zeta includes this operation wrapped up in a function: *for_(arr, op)*:
+
+  *for_(arr, op)*
+  
+  *arr* is an array, *op* is an `array callback`_.  *op* is called
+  once for each element in *arr*.
+
+.. _array callback: reference.rest#array-callback
+
+*for_* behaves the same as JavaScript 1.6 *Array.prototype.forEach*
+in Mozilla (see above).
+
+Like *Array.prototype.forEach*, *for_* calls *op* with three arguments:
+the current element's value, the current element's index, and the whole
+array.
+
+Benefits of using *for_* rather than *for* should be immediately obvious.
+Half of the loop goes away as the iteration, skipping deleted elements,
+dereferencing *arr[i]*, etc are handled by *for_*, and this: ::
+
+        for (var i = 0; i < len; ++i) {
+            if (!(i in arr)) {
+                continue;
+            }
+            var val = arr[i];
+            if (first || !eqfun(val, prev)) {
+                rv.push(val);
+                first = false;
+            }
+            prev = val;
+        }
+
+becomes: ::
+
+        var maybepush = function (val)
+        {
+            if (first || !eqfun(val, prev)) {
+                rv.push(val);
+                first = false;
+            }
+            prev = val;
+        }
+        for_(arr, maybepush);
+
+With the low-level implementation details out of sight, the important things
+are now a bit more visible: ::
+
+    function unique(eqfun, arr)
+    {
+        var first = true;
+        var prev = undefined;
+        var rv = [];
+        var maybepush = function (val)
+        {
+            if (first || !eqfun(val, prev)) {
+                rv.push(val);
+                first = false;
+            }
+            prev = val;
+        }
+        for_(arr, maybepush);
+        return rv;
+    }
+
+Turn *first* into function
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The complicated handling of *first* and *prev* is prone to error.
+Let's take a look at *first*.  It's a function in hiding: one that returns
+``true`` on the first call, and ``false`` from then on. ::
+
+        var first = ???
+        ...
+            if (first() || !eqfun(val, prev)) {
+
+What would *first* look like?  Straight extraction of the logic would
+certainly not improve the situation with another state variable and one
+more *if* statement: ::
+
+        var _first = true;
+        var first = function ()
+        {
+            if (_first) {
+                _first = false;
+                return true;
+            }
+            return false;
+        }
+
+A change of perspective is in order.  Another way to implement *first*
+(without functions) is with an incrementing integer: ::
+
+        var notfirst = -1;
+        ...
+            if (!++notfirst || !eqfun(val, prev)) {
+                rv.push(v);
+            }
+        ...
+
+This allows us to get rid of one statement compared to the original, but the
+resulting code is ugly.  Nevertheless, it also hints at the desired
+implementation.
+
+*inc*
+-----
+
+An important thing to realize is that the ``++notfirst`` expression is
+a nullary function (returns (lastvalue + 1)), and we're looking at: ::
+
+    !next()
+
+Zeta includes the *inc* factory: *inc(x)* returns a function which
+returns *++x*. ::
+
+    function inc(init)
+    {
+        return function ()
+        {
+            return ++init;
+        }
+    }
+
+That leaves us with ::
+
+        var notfirst = inc(-1);
+        ...
+            if (!notfirst() || !eqfun(val, prev)) {
+                rv.push(v);
+            }
+        ...
+
+*not*, *compose*
+----------------
+
+``!notfirst()``, eh?  What we want to achieve is ::
+
+            if (first() || !eqfun(val, prev)) {
+
+but what will *first* look like?  A naive attempt could be: ::
+
+        var notfirst = inc(-1);
+        var first = function ()
+        {
+            return !notfirst();
+        }
+
+The "logical not" operator is a unary function, and ``not(notfirst())`` is a
+case of *function composition*.  Zeta includes *not(v)* and *compose(f, g)*.
+*not* should be obvious, so let's take a look at *compose*.  The `Zeta Library
+Reference`_ describes it this way:
+
+  *compose(f, g)*
+
+  *f* and *g* are functions.  *compose* returns a variadic function such
+  that calling it with arguments *a1, a2, ..., aN* is the same as calling
+  *f(g(a1, a2, ..., aN))*.
+
+That means we can write *first* as ::
+
+        var notfirst = inc(-1);
+        var first = compose(not, notfirst);
+
+but more probably as: ::
+
+        var first = compose(not, inc(-1));
+
+*negate*
+--------
+
+In fact, *compose(not, f)* is so common, it's available as *negate*:
+
+  *negate(fun)*
+
+  *fun* is a function.  *negate* returns a function such that calling it with
+  arguments *a1, a2, ... aN* is the same as calling *!fun(a1, a2, ... aN)*.
+
+*negate* is a convenient shortcut: ::
+
+        var first = negate(inc(-1));
+
+Complete *unique* now looks like this: ::
+
+    function unique(eqfun, arr)
+    {
+        var first = negate(inc(-1));
+        var prev = undefined;
+        var rv = [];
+        var maybepush = function (val)
+        {
+            if (first() || !eqfun(val, prev)) {
+                rv.push(val);
+            }
+            prev = val;
+        }
+        for_(arr, maybepush);
+        return rv;
+    }
+
+Turn *prev* into function
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*previous*
+----------
+
+Next we concentrate on *prev*.  This variable carries the value of *val* 
+from the previous call to *maybepush*.  If we had a function which returned
+its argument from the *previous* call, we could remove the ``prev = val;``
+statement. That would enable a cascade of reductions.
+
+Zeta includes a factory of such functions, called *previous*.
+
+  *previous(init)*
+
+  *init* is any value.  *previous* returns a unary function which returns
+  *init* on the first call, and its argument from the previous call on all
+  subsequent ones.  ::
+
+    var prev = previous(42);
+    assertEquals(42, prev(69));
+    assertEquals(69, prev(78));
+    assertEquals(78, prev(13));
+    ...
+
+It would be sweet if we could streamline the code and put
+the call to *prev* where it's needed, but this would cause
+*prev* to lag behind the iteration: bug. ::
+
+            if (first() || !eqfun(val, prev(val))) {
+
+That forces us to use an explicit sequence of statements: ::
+
+        var prev = previous(undefined);
+        var maybepush = function (val)
+        {
+            var prev_ = prev(val);
+            if (first() || !eqfun(val, prev_)) {
+                rv.push(val);
+            }
+        }
+
+This is no improvement over *prev* as a simple variable.  What now?
+
+*bind, itself*
+--------------
+
+Seen from the right angle, *prev_* is an argument of *maybepush*.
+The only problem is getting *for_* to call *maybepush(val, prev(val))*. ::
+
+        var prev = previous(undefined);
+        var maybepush = function (val, prev)
+        {
+            if (first() || !eqfun(val, prev)) {
+                rv.push(val);
+            }
+        }
+
+It's always possible (and easy, if tiresome) to write such an adapter by
+hand, but that can lead to excessive code: ::
+
+        var prev = previous(undefined);
+        var maybepush = function (val, prev)
+        {
+            if (first() || !eqfun(val, prev)) {
+                rv.push(val);
+            }
+        }
+        function call_maybepush(val)
+        {
+            return maybepush(val, prev(val));
+        }
+        for_(arr, call_maybepush);
+
+Zeta provides a general function adapter factory:
+
+  *bind(fun, binders)*
+
+  *fun* is a function, *binders* is an array of functions.
+  *bind* returns a variadic function.  This function calls each element
+  of *binders* relaying arguments, and collects the return values.
+  *fun* is then called with positional arguments supplied from the
+  collected returns.  Returns *fun*'s return value.
+
+  In other words, *bind* returns a function which wraps *fun*, *bind*'s
+  first argument.  When called, the wrapper returned from *bind* doesn't
+  just pass its arguments to *fun*, it uses *binders* to generate *fun*'s
+  arguments: *binders[0]* supplies the first argument, *binders[1]* second
+  one, and so on.  Each binder is called with the arguments the wrapper is
+  being called with.  *fun* is then called with as many positional arguments
+  as there are *binders*.
+
+The description above suggests we need ::
+
+    bind(maybepush, [itself, prev])
+
+where *itself* is a function which returns its (first) argument:
+
+  *itself(val)*
+
+  *val* is any value.  Returns *val*.  Reference types are not copied.
+
+The function returned from *bind* will call *maybepush* with two arguments
+(because [*itself*, *prev*] has two elements).  The first argument will be
+obtained by calling *itself* with whatever arguments the wrapper is being
+called with, the second argument by calling *prev* in the same way.
+
+Since the function will be used as an `array callback`_, we know it'll be
+called with tree arguments: the value, the index, and the array.  Both
+*itself* and *prev* are unary, and thus will ignore all but the first
+argument, the value.  Which is exactly the desired behavior.
+
+As an extra bonus, the *prev* symbol is not needed anymore, since its use,
+previously in *maybepush* and later *call_maybepush*, is now implied by
+*bind*.
+
+::
+
+        for_(arr, bind(maybepush, [itself, previous(undefined)]));
+
+*unique* now looks like this: ::
+
+    function unique(eqfun, arr)
+    {
+        var first = negate(inc(-1));
+        var rv = [];
+        var maybepush = function (val, prev)
+        {
+            if (first() || !eqfun(val, prev)) {
+                rv.push(val);
+            }
+        }
+        for_(arr, bind(maybepush, [itself, previous(undefined)]));
+        return rv;
+    }
+
+*filter*
+~~~~~~~~
+
+Another problem is the explicit presence of a common code structure, even
+if our code uses *for_*: ::
+
+    for (var i = 0; i < a1.len; ++i) {
+        if (condition) {
+            a2.push(a1[i]);
+        }
+    }
+
+This structure appears almost as frequently as *for* (with any body).
+It makes sense to encapsulate it as a function.  Zeta has *filter*:
+
+  *filter(pred, arr)*
+
+  *arr* is an array, *pred* is an `array callback`_.  *pred* is called once
+  with each element in *arr*.  *filter* returns an array of those elements
+  of *arr* for which *pred* returned ``true``.
+
+Current contents of *maybepush* make the change to a test function trivial:
+::
+
+        var maybepush = function (val, prev)
+        {
+            if (first() || !eqfun(val, prev)) {
+                rv.push(val);
+            }
+        }
+
+becomes ::
+
+        var test = function (val, prev)
+        {
+            return (first() || !eqfun(val, prev));
+        }
+
+*for_* is replaced with *filter*, and all mentions of *rv* go away.
+Here's complete current *unique*: ::
+
+    function unique(eqfun, arr)
+    {
+        var first = negate(inc(-1));
+        var test = function (val, prev)
+        {
+            return (first() || !eqfun(val, prev));
+        }
+        return filter(
+            bind(test, [itself, previous(undefined)])
+          , arr
+        );
+    }
+
+*disjoin*
+~~~~~~~~~
+
+Let's get rid of the *test* function body.
+
+Logical or, the || operator, can be viewed as a binary function which
+returns true if either of its arguments converts to ``true``, and
+(important, as we've seen) shortcuts argument evaluation.
+
+If we wanted to realize the || operator as a function, what would it take
+as arguments?  Functions.
+
+First, the ``!eqfun(val, prev)`` expression needs to turn into a simple
+function call: ::
+
+        var different = negate(eqfun);
+        var test = function (val, prev)
+        {
+            return (first() || different(val, prev));
+        }
+
+Second, it's important to realize that, as long as *first* ignores any
+arguments it may have received, this: ::
+
+        var test = function (val, prev)
+        {
+            return (first() || different(val, prev));
+        }
+
+is exactly the same as this: ::
+
+        var test = function (val, prev)
+        {
+            return (first(val, prev) || different(val, prev));
+        }
+
+This is the functional || operator:
+
+  *disjoin(fs)*
+
+  *fs* is an array of functions.  *disjoin* returns a variadic function
+  which calls each function in *fs* in turn relaying arguments until one
+  returns true or until *fs* is exhausted.  Returns true if one of the
+  functions returned true, otherwise false.
+
+And this is what remains of *test*: ::
+
+        var test = disjoin([first, different]);
+
+As opposed to the handwritten *test*, the function returned from *disjoin*
+will call both *first* and *different* with any arguments it received, but
+that doesn't change their behavior, and so presents no problem.
+
+Here's the complete *unique* again, with *test* definition inlined into
+the *bind* call: ::
+
+    function unique(eqfun, arr)
+    {
+        var first = negate(inc(-1));
+        var different = negate(eqfun);
+        return filter(
+            bind(
+                disjoin([first, different])
+              , [itself, previous(undefined)]
+            )
+          , arr
+        );
+    }
+
+*map*
+~~~~~
+
+All we do with *first* and *different* is pass it to *disjoin*: ::
+
+                disjoin([first, different])
+
+In other words, we're calling *disjoin* with [*notfirst*, *eqfun*] pulled
+through *negate*.  Creating an array from another one with each element
+transformed in some way is also a common structure, and Zeta makes it
+available as *map*:
+
+  *map(fun, arr)*
+
+  *fun* is an `array callback`_, *arr* is an array.  *fun* is called
+  once for each element in *arr*.  *map* returns an array of results.
+
+We can build the array given to *disjoin* on the fly, and remove the
+*first* and *different* symbols. ::
+
+    function unique(eqfun, arr)
+    {
+        return filter(
+            bind(
+                disjoin(map(negate, [inc(-1), eqfun]))
+              , [itself, previous(undefined)]
+            )
+          , arr
+        );
+    }
+
+Looks like we've reached the sweet spot.
+
+Conclusion
+++++++++++
+
+Let's look at the starting version again: ::
+
+    function unique(eqfun, arr)
+    {
+        var first = true;
+        var prev = undefined;
+        var rv = [];
+        var len = arr.length;
+        for (var i = 0; i < len; ++i) {
+            if (!(i in arr)) {
+                continue;
+            }
+            var val = arr[i];
+            if (first || !eqfun(val, prev)) {
+                rv.push(val);
+                first = false;
+            }
+            prev = val;
+        }
+        return rv;
+    }
+
+* 15 lines
+* 23 symbols, 6 local (excl. formal parameters)
+* 25 expressions
+* 15 statements (incl. compound statements)
+* 3 branch points
+
+The final version: ::
+
+    function unique(eqfun, arr)
+    {
+        return filter(
+            bind(
+                disjoin(map(negate, [inc(-1), eqfun]))
+              , [itself, previous(undefined)]
+            )
+          , arr
+        );
+    }
+
+* 7 lines
+* 12 symbols, 0 local (excl. formal parameters)
+* 14 expressions
+* 1 statement
+* 0 branch points
+
+
+.. vim: ft=rst tw=80

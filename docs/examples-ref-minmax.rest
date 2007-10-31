@@ -1,0 +1,429 @@
+=============================================================================
+                Refactoring *min(lhs, rhs)*, *max(lhs, rhs)*
+=============================================================================
+-----------------------------------------------------------------------------
+                             Zeta Usage Examples
+-----------------------------------------------------------------------------
+
+:Author: Roman Neuhauser
+:Contact: neuhauser@sigpipe.cz
+:Copyright: This document is in the public domain.
+:HeadURL: $HeadURL$
+:Id: $Id$
+
+.. contents::
+
+Introduction
+============
+
+This example introduces a few elements of Zeta through several refactorings
+of an implementation of the *max* and *min* operators.
+
+The `Zeta Library Reference`_ carries these descriptions of *max* and *min*:
+
+  *max(lhs, rhs)*
+
+  *lhs* is any value.  *rhs* is any value.  *max* returns *rhs* iff *lhs* is
+  greater than *rhs*, otherwise *lhs*.  Reference types are not copied.
+
+  *min(lhs, rhs)*
+
+  *lhs* is any value.  *rhs* is any value.  *min* returns *rhs* iff *lhs* is
+  less than *rhs*, otherwise *lhs*.  Reference types are not copied.
+
+.. _Zeta Library Reference: reference.rest
+.. _shallow copy: reference.rest#shallow-copy
+
+Setup
+=====
+
+Version 0
++++++++++
+
+The version we start with is listed below.
+
+::
+
+    function minmax(pred)
+    {
+        return function (lhs, rhs)
+        {
+            if (pred(lhs, rhs)) {
+                return rhs;
+            }
+            return lhs;
+        }
+    }
+
+    var min = minmax(gt);
+
+    var max = minmax(lt);
+
+
+Comments
+++++++++
+
+*min* and *max* are implemented in terms of the *minmax* helper.  This
+organization exploits the obvious parallel between the functions. *minmax*
+body closely matches the story told by the descriptions of both operators.
+
+Objections
+++++++++++
+
+Too long, because imperative.
+
+Refactorings
+============
+
+Replace conditional statements with table lookup
+++++++++++++++++++++++++++++++++++++++++++++++++
+
+The first simplification builds on the observation that *if ... else ...*
+structures can usually be replaced with table lookup.  The value returned
+in the ``false`` branch is put under index 0, the value returned in the
+``true`` branch is put under index 1.  Return value of the predicate (the
+*if* condition) then corresponds to the index offset: ::
+
+    function minmax(pred)
+    {
+        return function (lhs, rhs)
+        {
+            return [lhs, rhs][pred(lhs, rhs)];
+        }
+    }
+
+Unfortunately, the above isn't equivalent to the original: this latter code
+will break if *pred* returns anything but 0 or 1 whereas the original relied
+on implicit conversion to bool.
+
+To preserve the original behavior, the code needs to make sure *pred*
+returns either 0 or 1. ::
+
+    function minmax(pred)
+    {
+        return function (lhs, rhs)
+        {
+            return [lhs, rhs][Number(Boolean(pred(lhs, rhs)))];
+        }
+    }
+
+It's getting a bit bulky, but we'll compensate for the bloat.
+
+Replace syntax with function calls
+++++++++++++++++++++++++++++++++++
+
+Although it may look like *minmax* cannot be made any shorter, the opposite
+is true.  We just need to
+
+1. limit our vocabulary, replacing most syntactic elements with function
+   calls and references, and
+2. employ a higher level of abstraction, replacing the *implementation* of
+   the inner function with its *description*.
+
+The first requirement might seem strange until you realize that when
+everything is a nail, all you need is a hammer.
+
+Here are the redundant syntax elements we'll want to get rid of to further
+compress and abstract the code: function operator, array literal, array
+subscript, and formal parameters (in fact, any explicit variables).
+
+Let's start with the vocabulary cutdown.
+
+*member(obj, prop)*
+~~~~~~~~~~~~~~~~~~~
+
+Array subscripts are syntactic sugar, the same effect can be achieved with
+function calls, as in ::
+
+    assertEquals(arr[i], member(arr, i));
+
+The *member* function is in fact part of Zeta:
+
+  *member(obj, prop)*
+
+  *obj* is an array or an object.  *prop* is an array index or property name.
+  *member* returns *obj[prop]*.
+
+The functional syntax seems to impact length negatively, but this is true
+only if it's used directly, as in the syntetic example above.  Such use
+indeed doesn't make much sense, but that's not how *member* is normally used.
+
+You'll notice that one of the things that are different between imperative
+and functional programs is that where you *call* functions (or procedures) in
+an imperative program, you *define* or *reference* them in a functional one.
+The code we're heading for certainly doesn't contain an immediate *member*
+call.
+
+Here's the code in question: ::
+
+            return [lhs, rhs][Number(Boolean(pred(lhs, rhs)))];
+
+and here's the (intermediate) version with *member*: ::
+
+            return member([lhs, rhs], Number(Boolean(pred(lhs, rhs))));
+
+For reference, the whole *minmax* now looks like this: ::
+
+    function minmax(pred)
+    {
+        return function (lhs, rhs)
+        {
+            return member([lhs, rhs], Number(Boolean(pred(lhs, rhs))));
+        }
+    }
+
+*bind(fun, binders)*
+~~~~~~~~~~~~~~~~~~~~
+
+Many function definitions are in this form: ::
+
+    function outer(...)
+    {
+        return inner(...);
+    }
+
+In fact, both *minmax* and the inner function are in this form, even if
+this might not be too obvious in the case of *minmax*.
+
+In functions of this structure, the outer function *adapts* the inner one.
+Is it possible to abstract away the invariant syntax?
+
+Zeta offers a factory of such adapters:
+
+  *bind(fun, binders)*
+
+  *fun* is a function.  *binders* is an array of functions.
+  *bind* returns a variadic function.  This function calls each element
+  of *binders* relaying arguments, and collects the return values.
+  *fun* is then called with positional arguments supplied from the
+  collected returns.  Returns *fun*'s return value.
+
+The general case can be expressed with *bind* as: ::
+
+    var outer = bind(inner, ...);
+
+and the function returned from *minmax* becomes: ::
+
+    return bind(member, ...);
+
+As we know from the *bind* reference, the ellipsis hides an array of
+argument-producing functions; each element produces one positional argument
+to the wrapped function (*member* in our case).
+
+*member*'s second parameter is an array subscript, so the second element,
+a function producing 0 or 1 from all adapter's arguments can be trivially
+written as ::
+
+        var _01 = function (lhs, rhs)
+        {
+            return Number(Boolean(pred(lhs, rhs)));
+        }
+
+Getting rid of variables and literal function definitions was among the
+proclaimed sources of savings.  *_01*'s existence doesn't contradict that
+position, we'll get back to it later.
+
+Here's an outline of current *minmax*: ::
+
+    function minmax(pred)
+    {
+        var _01 = function (lhs, rhs)
+        {
+            return Number(Boolean(pred(lhs, rhs)));
+        }
+        return bind(member, [..., _01]);
+    }
+
+*argv(...)*
+~~~~~~~~~~~
+
+We can see that the first argument *member* is called with groups all
+parameters of the containing anonymous function: ::
+
+        return function (lhs, rhs)
+        {
+            return member([lhs, rhs], ...);
+        }
+
+In other words, the code could just as well read ::
+
+        return function (lhs, rhs)
+        {
+            return member(arguments, ...);
+        }
+ 
+But how do we express *arguments* with *bind*?  The adapter calls each element
+of the second *bind* argument with all arguments it is being called with.
+We need a function which returns its arguments.
+
+*bind* returns a *variadic* function, whereas the function operator defined
+a binary one.  In other words, the *bind*-generated function will choose from
+all arguments, not just the first two.  This won't lead to trouble, because the
+subscripting expression always takes the element at either 0 or 1: the third and
+further arguments (if/when given) will be silently ignored.  Behavior of the
+function when called with a single argument is unspecified anyway.
+
+This scheme is quite common, and Zeta offers *argv*, a function which returns
+its arguments:
+
+  *argv(...)*
+
+  *argv* is a variadic function which returns a `shallow copy`_ of its
+  *arguments* object as an array.
+
+If we settle on *argv*, *minmax* becomes: ::
+
+    function minmax(pred)
+    {
+        var _01 = function (lhs, rhs)
+        {
+            return Number(Boolean(pred(lhs, rhs)));
+        }
+        return bind(member, [argv, _01]);
+    }
+
+*compose(f, g)*
+~~~~~~~~~~~~~~~
+
+The argument about excessive arguments applies to *pred* as well (it's
+supposed to be a *binary* predicate).  We could be done with *[argv, pred]*,
+if it weren't for the type conversions wrapping the *pred* call.  
+
+What is required to achieve the following syntax, but without the *_01*
+function expression?  ::
+
+        var _01 = function (lhs, rhs)
+        {
+            return Number(Boolean(pred(lhs, rhs)));
+        }
+        return bind(member, [argv, _01]);
+
+Each pair in *Number(Boolean(...))* and *Boolean(pred(...))* represents
+a case of *function composition*.  Zeta allows dynamic creation of such
+functions with *compose*:
+
+  *compose(f, g)*
+
+  *f* and *g* are functions.  *compose* returns a variadic function such
+  that calling it with arguments *a1, a2, ..., aN* is the same as calling
+  *f(g(a1, a2, ..., aN))*.
+
+There's two ways we can compose *Number*, *Boolean*, and *pred*. We can
+proceed inside out: ::
+
+        var boolpred = compose(Boolean, pred);
+        var _01 = compose(Number, boolpred);
+
+or outside in: ::
+
+        var intbool = compose(Number, Boolean);
+        var _01 = compose(intbool, pred);
+
+    function minmax(pred)
+    {
+        ...
+        var _01 = ...
+        return bind(member, [argv, _01]);
+    }
+
+This would be ok if it weren't for the local variable(s), but inlining the
+*_01* definition into the *bind* call generates longwinded code and hampers
+readability: ::
+
+    function minmax(pred)
+    {
+        return bind(
+            member
+          , [argv, compose(Number, compose(Boolean, pred))]
+        );
+    }
+
+There are two ways to handle this specific situation.  We'll discuss both.
+
+*composex(fs)* 
+~~~~~~~~~~~~~~~
+
+The first option is to generalize the *compose* function. This functionality
+is occasionaly useful (although not as much as you'd guess), and Zeta offers
+it as *composex*:
+
+  *composex(fs)*
+
+  *fs* is an array of functions.  *composex* returns a variadic function such
+  that calling it with arguments *a1, a2, ..., aN* is the same as calling
+  *fs[0](fs[1](...fs[fs.length - 1](a1, a2, ... aN)))*.
+
+*composex* cuts a bit into the code: ::
+
+    function minmax(pred)
+    {
+        return bind(
+            member
+          , [argv, composex(Number, Boolean, pred)]
+        );
+    }
+        
+
+*to_bool(fun)*, *to_num(fun)*
+~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+The other path is to use the *to_num* and *to_bool* function adapters.
+These are simply convenience shortcuts for *compose*: ::
+
+    to_bool(f) == compose(Boolean, f)
+    to_num(f) == compose(Number, f)
+
+See the `Zeta Library Reference`_ for their complete descriptions.
+
+*to_num* and *to_bool* reduce the code some more: ::
+
+    function minmax(pred)
+    {
+        return bind(
+            member
+          , [argv, to_num(to_bool(pred))]
+        );
+    }
+
+
+Conclusion
+==========
+
+We started with ::
+
+    function minmax(pred)
+    {
+        return function (lhs, rhs)
+        {
+            if (pred(lhs, rhs)) {
+                return rhs;
+            }
+            return lhs;
+        }
+    }
+
+* 7 lines
+* 6 symbols, 0 local (excl. formal parameters)
+* 7 expressions
+* 6 statements (incl. compound statements)
+* 1 branch points
+
+The refactorings took us to ::
+
+    function minmax(pred)
+    {
+        return bind(
+            member
+          , [argv, to_num(to_bool(pred))]
+        );
+    }
+
+* 4 lines
+* 7 symbols, 0 local (excl. formal parameters)
+* 10 expressions
+* 1 statement
+* 0 branch points
+
+
+
+.. vim: ft=rst tw=80

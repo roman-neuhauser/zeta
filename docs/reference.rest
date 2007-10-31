@@ -1,0 +1,1004 @@
+=============================================================================
+                           Zeta Library Reference
+=============================================================================
+
+:Author: Roman Neuhauser
+:Contact: neuhauser@sigpipe.cz
+:Copyright: This document is in the public domain.
+:HeadURL: $HeadURL$
+:Id: $Id$
+
+.. contents::
+
+Concepts
+========
+
+_`Array callback` is a function which takes up to three arguments: ::
+
+  function (val, ind, arr)
+
+These functions are used by many array algorithms.
+
+* *val* is the value of the current array element
+* *ind* is the index of the current array element
+* *arr* is the array
+
+_`Comparison function` is a binary function which returns an integer
+greater than, equal to, or less than 0, according as *lhs* is greater
+than, equal to, or less than *rhs*.
+
+_`Shallow copy` is not very deep.
+
+_`Predicate` is a function which returns values convertible to bool.
+
+Functions
+=========
+
+Function Adapters
++++++++++++++++++
+
+bind(fun, binders)
+~~~~~~~~~~~~~~~~~~
+
+*fun* is a function.  *binders* is an array of functions.
+*bind* returns a variadic function.  This function calls each element
+of *binders* relaying arguments, and collects the return values.
+*fun* is then called with positional arguments supplied from the
+collected returns.  Returns *fun*'s return value.
+
+In other words, *bind* returns a function which wraps *fun*, *bind*'s
+first argument.  When called, the wrapper returned from *bind* doesn't
+just pass its arguments to *fun*, it uses *binders* to generate *fun*'s
+arguments: *binders[0]* supplies the first argument, *binders[1]* second
+one, and so on.  Each binder is called with the arguments the wrapper is
+being called with.  *fun* is then called with as many positional arguments
+as there are *binders*.
+
+Equivalency: ::
+
+    bind(fun, [$3, $2, $1])(x, y, z) == fun(z, y, x)
+
+bind1st(fun, lhs)
+~~~~~~~~~~~~~~~~~
+
+*fun* is a binary function.  *lhs* is any value.  *bind1st* returns
+a unary function which calls *fun* with *lhs* as the first argument.
+Returns *fun*'s return value.
+
+Equivalency: ::
+
+    bind1st(fun, lhs)(rhs) == fun(lhs, rhs)
+
+Example:
+
+Print powers of 2: ::
+
+    for_(
+        map(bind1st(pow, 2), range(1, 16))
+      , use1st(print)
+    );
+
+bind2nd(fun, rhs)
+~~~~~~~~~~~~~~~~~
+
+*fun* is a binary function.  *rhs* is any value.  *bind2nd* returns
+a unary function which calls *fun* with *rhs* as the second argument.
+Returns *fun*'s return value.
+
+Equivalency: ::
+
+    bind2nd(fun, rhs)(lhs) == fun(lhs, rhs)
+
+Example:
+
+Print numbers raised to the power of 2: ::
+
+    for_(
+        map(bind2nd(pow, 2), range(1, 16))
+      , use1st(print)
+    );
+
+
+binder(fun)
+~~~~~~~~~~~
+
+*fun* is a function.  *binder* returns a function which returns *fun*
+with all arguments bound from its argument list.  Returns *fun*'s return
+value.
+
+Equivalency: ::
+
+    binder(fun)(x, y, z) == bind(fun, map(value, [z, y, x]))
+
+compose(f, g)
+~~~~~~~~~~~~~
+
+*f* and *g* are functions.  *compose* returns a variadic function such
+that calling it with arguments *a1, a2, ..., aN* is the same as calling
+*f(g(a1, a2, ..., aN))*.
+
+Equivalency: ::
+
+    compose(f, g)(x, y, z) == f(g(x, y, z))
+
+Possible implementation: ::
+
+    var compose = function(f, g)
+    {
+        return bind(f, [g]);
+    }
+
+Example:
+
+Find the index of the first element with ``false`` truth value: ::
+
+    var arr = [2, 'f', 0, 1, -3];
+    assertEquals(2, find_if(compose(not, Boolean), arr));
+
+composex(fs)
+~~~~~~~~~~~~~
+
+*fs* is an array of functions.  *composex* returns a variadic function such
+that calling it with arguments *a1, a2, ..., aN* is the same as calling
+*fs[0](fs[1](...fs[fs.length - 1](a1, a2, ... aN)))*.
+
+*composex* is a generalization of the *compose* function adapter.
+
+Equivalency: ::
+
+    composex([f, g, h])(x, y, z) == f(g(h(x, y, z)))
+
+Possible implementation: ::
+
+    var composex = bind(reduce, [value(compose), $1, value(itself)]);
+
+method(that, fun)
+~~~~~~~~~~~~~~~~~
+
+*that* is an object.  *fun* is a function.  *method* returns a function
+which calls *fun* as *that*'s method.  Returns *fun*'s return value.
+
+Equivalency: ::
+
+    method(that, fun)(x, y, z) == fun.call(that, x, y, z)
+
+negate(fun)
+~~~~~~~~~~~
+
+*fun* is a function.  *negate* returns a function such that calling it with
+arguments *a1, a2, ... aN* is the same as calling *!fun(a1, a2, ... aN)*.
+
+Equivalency: ::
+
+    negate(f)() == !f()
+
+Possible implementation: ::
+
+    var negate = bind1st(compose, not);
+
+spread(fun)
+~~~~~~~~~~~
+
+*fun* is a function.  *spread* returns a unary function which takes
+an array, and calls *fun* with positional arguments supplied from that
+array.  Returns *fun*'s return value.
+
+Equivalency: ::
+
+    spread(fun)([x, y, z]) == fun(x, y, z)
+
+Possible implementation: ::
+
+    var spread = bind1st(bind1st, apply);
+
+Example: ::
+
+    var emps = [
+        [1, "John"],
+        [2, "Mary"],
+        [3, "Eric"],
+    ];
+    var display = function (id, name)
+    {
+        print("Employee no. " + id + " is " + name);
+    }
+    for_(emps, spread(display));
+
+to_bool(fun)
+~~~~~~~~~~~~
+
+*fun* is a function.  *to_bool* returns a variadic function such that
+calling it with arguments *a1, a2, ... aN* is the same as calling
+*Boolean(fun(a1, a2, ...  aN))*.
+
+Equivalency: ::
+
+    to_bool(f)(x, y, z) == Boolean(f(x, y, z))
+
+Possible implementation: ::
+
+    var to_bool = bind1st(compose, Boolean);
+
+to_num(fun)
+~~~~~~~~~~~
+
+*fun* is a function.  *to_num* returns a variadic function such that
+calling it with arguments *a1, a2, ... aN* is the same as calling
+*Number(fun(a1, a2, ...  aN))*.
+
+Equivalency: ::
+
+    to_num(f)(x, y, z) == Number(f(x, y, z))
+
+Possible implementation: ::
+
+    var to_num = bind1st(compose, Number);
+
+use1st(fun)
+~~~~~~~~~~~
+
+*fun* is a unary function.  *use1st* returns a variadic function which calls
+*fun* with its first argument.  Returns *fun*'s return value.
+
+Equivalency: ::
+
+    use1st(f) == compose(f, $1)
+
+Possible implementation: ::
+
+    var use1st = bind2nd(compose, $1);
+
+use2nd(fun)
+~~~~~~~~~~~
+
+*fun* is a unary function.  *use2nd* returns a variadic function which calls
+*fun* with its second argument.  Returns *fun*'s return value.
+
+Equivalency: ::
+
+    use2nd(f) == compose(f, $2)
+
+Possible implementation: ::
+
+    var use2nd = bind2nd(compose, $2);
+
+Function Generators
++++++++++++++++++++
+
+conjoin(fs)
+~~~~~~~~~~~
+
+*fs* is an array of functions.  *conjoin* returns a variadic predicate_
+which calls each function in *fs* in turn relaying arguments until one
+returns false or until *fs* is exhausted.  Returns false if one of the
+functions returned false, otherwise true.
+
+This is a functional generalization of the *&&* operator.
+
+Equivalency: ::
+
+    conjoin([f, g, h])(x, y, z) == (f(x, y, z) && g(x, y, z) && h(x, y, z))
+
+disjoin(fs)
+~~~~~~~~~~~
+
+*fs* is an array of functions.  *disjoin* returns a variadic predicate_
+which calls each function in *fs* in turn relaying arguments until one
+returns true or until *fs* is exhausted.  Returns true if one of the
+functions returned true, otherwise false.
+
+This is a functional generalization of the *||* operator.
+
+Equivalency: ::
+
+    disjoin([f, g, h])(x, y, z) == (f(x, y, z) || g(x, y, z) || h(x, y, z))
+
+insert(arr)
+~~~~~~~~~~~
+
+*arr* is an array.  *insert* returns a *function (val, ind)* which
+assigns *val* to *arr[ind]*.
+
+nth(arr)
+~~~~~~~~
+
+*arr* is an array or object.  *nth* returns a *function (ind)* which
+returns *arr[ind]*.
+
+Equivalency: ::
+
+    nth(arr)(i) == arr[i]
+
+Possible implementation: ::
+
+    var nth = bind1st(bind1st, member);
+
+push(arr)
+~~~~~~~~~
+
+*arr* is an array.  *push* returns a variadic function which pushes its
+arguments into *arr*.  Returns the new length of *arr*.
+
+Equivalency: ::
+
+    push(arr)(x, y, z) == arr.push(x, y, z)
+
+Possible implementation: ::
+
+    var push = bind(method, [$1, select('push')]);
+
+value(val)
+~~~~~~~~~~
+
+*val* is any value.  *value* returns a function which returns *val*.
+Reference types are not copied.
+
+Equivalency: ::
+
+    value(v)() == v
+
+Other
++++++
+
+apply(fun, args)
+~~~~~~~~~~~~~~~~
+
+*fun* is a function.  *args* is an array.  *fun* is called with positional
+arguments supplied from *args*.  *apply* returns *fun*'s return value.
+
+Equivalency: ::
+
+    apply(fun, [x, y, z]) == fun(x, y, z)
+
+Example: ::
+
+    var args = [
+        [0, 5],
+        [3, 3, 2],
+        [3, 3, -3],
+        [-3, 4]
+    ];
+    var ranges = map(spread(range), args);
+
+argv(...)
+~~~~~~~~~
+
+*argv* is a variadic function which returns a `shallow copy`_ of its
+*arguments* object as an array.
+
+
+Algorithms
+==========
+
+Primitives
+++++++++++
+
+for_(arr, op)
+~~~~~~~~~~~~~~
+
+*arr* is an array.  *op* is an `array callback`_.  *op* is called
+once for each element in *arr*.
+
+The range of elements processed is set before the first invocation
+of callback.  Elements which are appended to the array after the call
+to *for_* begins will not be visited by *fun*.  If existing elements
+of *arr* are changed or deleted, their value as passed to *fun* will
+be the value at the time *for_* visits them; elements that are deleted
+are not visited.
+
+Example:
+
+Print all elements of an array: ::
+
+    for_(
+        ['foo', 'bar', 'baz']
+      , function (v)
+        {
+            print(v);
+        }
+    );
+
+while_(cond, fun)
+~~~~~~~~~~~~~~~~~
+
+*cond* is a nullary predicate_.  *fun* is a nullary function.
+*while_* trivially wraps a while statement, that is, it calls *fun* until
+*cond* returns ``false``.
+
+Array Transformations
++++++++++++++++++++++
+
+chain(arrs)
+~~~~~~~~~~~
+
+*arrs* is an array of arrays.  *chain* returns a concatenation of *arrs*.
+
+Equivalency: ::
+
+    chain([[a, b, c], [d, e, f]]) == [a, b, c, d, e, f]
+
+copy(arr)
+~~~~~~~~~
+
+*arr* is an array.  *copy* returns a `shallow copy`_ of *arr*.
+
+Equivalency: ::
+
+    copy(arr) == arr.concat()
+
+Possible implementation: ::
+
+    var copy = bind1st(map, itself);
+    var copy = bind2nd(method, select('concat'));
+
+filter(pred, arr)
+~~~~~~~~~~~~~~~~~
+
+*pred* is an `array callback`_ predicate_.  *arr* is an array.  *pred* is
+called once with each element in *arr*.  *filter* returns an array of those
+elements of *arr* for which *pred* returned a value convertible to ``true``.
+
+group_by(fun, arr)
+~~~~~~~~~~~~~~~~~~
+
+*fun* is an `array callback`_, expected to return values convertible to
+integers.  *arr* is an array.  *group_by* calls *fun* once for each element
+in *arr*.  *group_by* returns a (possibly sparse) array such that values
+returned by *fun* are used for keys, and values are arrays of *arr* elements
+which generated that particular key.
+
+map(fun, arr)
+~~~~~~~~~~~~~
+
+*fun* is an `array callback`_.  *arr* is an array.  *fun* is called
+once for each element in *arr*.  *map* returns an array of results.
+
+Example:
+
+Compute Fibonnaci numbers: ::
+
+    var data = [0, 2, 4, 6, 8];
+    var exp = [1, 2, 5, 13, 34];
+    for_(
+        map(fib, data)
+      , function (v, i)
+        {
+            assertEquals(exp[i], v);
+        }
+    );
+
+reduce(fun, arr, init)
+~~~~~~~~~~~~~~~~~~~~~~
+
+*fun* is a binary function, *arr* is an array. *init* is any value.
+*reduce* is a generalization of summation: it computes the sum (or some
+other binary operation) of *init* and all elements of *arr*.
+
+*fun* is not required to be either commutative or associative: the order of
+all of *reduce*'s operations is specified. The result is first initialized
+to *init*. Then, for each element in *arr*, in order from beginning to end,
+it is updated by *result = fun(result, elem)*.
+
+reverse(arr)
+~~~~~~~~~~~~
+
+*arr* is an array.  *reverse* returns a `shallow copy`_ of *arr* with
+elements in reverse order.
+
+slice(arr, start[, end])
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+*arr* is an array, *start* is an integer, zero-based index into *arr*,
+*end* is an integer, zero-based index into *arr*.  *slice* returns
+a `shallow copy`_ of the range denoted by *start*, *end*.
+
+*slice* relies on *arr.slice*, including its behavior when *end* is not
+provided.
+
+Equivalency: ::
+
+    slice(arr, start, end) == arr.slice(start, end)
+
+sorted(arr[, cmp])
+~~~~~~~~~~~~~~~~~~
+
+*arr* is an array, *cmp* is a `comparison function`_.  *sorted* returns
+a `shallow copy`_ of *arr* sorted according to *cmp*.
+
+*sorted* relies on Array.prototype.sort, including its behavior when
+*cmp* is not provided.
+
+take_while(pred, arr)
+~~~~~~~~~~~~~~~~~~~~~
+
+*pred* is an unary predicate.  *arr* is an array.  *take_while* copies
+elements of *arr* until *pred(elem)* returns false.
+
+unique(eqfun, arr)
+~~~~~~~~~~~~~~~~~~
+
+*eqfun* is a binary predicate_.  *arr* is an array.  *unique* returns a
+`shallow copy`_ of *arr* such that every time a consecutive group of
+identical elements appears in *arr*, *unique* copies only the first element.
+
+zip(arrs)
+~~~~~~~~~
+
+*arrs* is an array of arrays.  *zip* returns an array of arrays such
+that the *nth* element contains the *nth* element from each input array.
+The returned array has as many elements as the shortest input array.
+
+Array Generators
+++++++++++++++++
+
+iota(cnt)
+~~~~~~~~~
+
+*cnt* is an integer.  *iota* returns an array of *cnt* integers such that
+*rv[i] == i*. ::
+
+    iota(5) == [0, 1, 2, 3, 4]
+
+range(start, cnt[, step])
+~~~~~~~~~~~~~~~~~~~~~~~~~
+
+*start* is an integer. *cnt* is an integer. *step* is an integer,
+defaults to 1.  *range* returns an array of *cnt* integers such that
+*rv[i] == step * (i + start)*. ::
+
+    range(0, 5, 2) == [0, 2, 4, 6, 8]
+    range(0, 5, 1) == [0, 1, 2, 3, 4]
+    range(0, 5) == [0, 1, 2, 3, 4]
+
+Other
++++++
+
+every(pred, arr)
+~~~~~~~~~~~~~~~~
+
+*arr* is an array, *pred* is an `array callback`_.  *pred* is called
+with each element in *arr* as long as it returns ``true``, until *arr*
+is exhausted or *pred* returns ``false``.  *every* returns ``true``
+if *pred* returned ``true`` for all elements, ``false`` otherwise.
+
+Example:
+
+Test whether all numbers in an array are positive: ::
+
+    var is_pos = bind1st(lt, 0);
+    assertEquals(true, every(is_pos, [1, 2, 3]));
+    assertEquals(false, every(is_pos, [1, -2, 3]));
+
+some(pred, arr)
+~~~~~~~~~~~~~~~
+
+*arr* is an array, *pred* is an `array callback`_.  *pred* is called
+with each element in *arr* as long as it returns ``false`` until *arr*
+is exhausted or *pred* returns ``true``.  *some* returns ``false``
+if *pred* returned ``false`` for all elements, ``true`` otherwise.
+
+Example:
+
+Test whether any element in an array is 0: ::
+
+    var is_0 = bind1st(eq, 0);
+    assertEquals(true, some(is_0, [1, 2, 0, 3]));
+    assertEquals(false, some(is_0, [1, 2, 3]));
+
+find(val, arr)
+~~~~~~~~~~~~~~
+
+*val* is any value, *arr* is an array.  *find* returns the first index
+of *val* in *arr*, -1 if not found.
+
+find_if(pred, arr)
+~~~~~~~~~~~~~~~~~~
+
+*pred* is an `array callback`_, *arr* is an array.  *pred* is called once
+with each element in *arr* until it returns ``true``.  *find_if* returns
+the index of the element in *arr* for which *pred* returned ``true``
+or -1 if there was no such element.
+
+coalesce(values)
+~~~~~~~~~~~~~~~~
+
+*values* is an array. *coalesce* returns first non-null element of *values*,
+or null if no such element is found.
+
+previous(init)
+~~~~~~~~~~~~~~
+
+*init* is any value.  *previous* returns a unary function which returns
+*init* on the first call, and its argument from the previous call on all
+subsequent ones.
+
+
+Operators
+=========
+
+Arithmetic Operations
++++++++++++++++++++++
+
+dec(init)
+~~~~~~~~~~~~
+
+*init* is a number.  *dec* returns a function such that calling it is
+the same as ``--init``.
+
+div(lhs, rhs)
+~~~~~~~~~~~~~
+
+*lhs* is any value.  *rhs* is any value.  *div* is a trivial wrapper around
+the intrinsic / operator.
+
+Equivalency: ::
+
+    div(x, y) == (x / y)
+
+inc(init)
+~~~~~~~~~~~~
+
+*init* is a number.  *inc* returns a function such that calling it is
+the same as ``++init``.
+
+minus(lhs, rhs)
+~~~~~~~~~~~~~~~
+
+*lhs* is any value.  *rhs* is any value.  *minus* is a trivial wrapper around
+the intrinsic - operator.
+
+Equivalency: ::
+
+    minus(x, y) == (x - y)
+
+mod(lhs, rhs)
+~~~~~~~~~~~~~
+
+*lhs* is any value.  *rhs* is any value.  *mod* is a trivial wrapper around
+the intrinsic % operator.
+
+Equivalency: ::
+
+    mod(x, y) == (x % y)
+
+mul(lhs, rhs)
+~~~~~~~~~~~~~
+
+*lhs* is any value.  *rhs* is any value.  *mul* is a trivial wrapper around
+the intrinsic * operator.
+
+Equivalency: ::
+
+    mul(x, y) == (x * y)
+
+neg(v)
+~~~~~~
+
+Equivalency: ::
+
+    neg(v) == (0 - v)
+
+Possible implementation: ::
+
+    var neg = bind1st(minus, 0);
+
+plus(lhs, rhs)
+~~~~~~~~~~~~~~
+
+*lhs* is any value.  *rhs* is any value.  *plus* is a trivial wrapper around
+the intrinsic + operator.
+
+Equivalency: ::
+
+    plus(x, y) == (x + y)
+
+pow(b, x)
+~~~~~~~~~
+
+Equivalency: ::
+
+    pow(x, y) == Math.pow(x, y)
+
+Comparisons
++++++++++++
+
+compare(lhs, rhs)
+~~~~~~~~~~~~~~~~~
+
+*lhs* is any value.  *rhs* is any value.  *compare* returns an integer
+greater than, equal to, or less than 0, according as *lhs* is greater than,
+equal to, or less than *rhs*.
+
+Equivalency: ::
+
+  (compare(lhs, rhs) > 0)  == (lhs > rhs)
+  (compare(lhs, rhs) < 0)  == (lhs < rhs)
+  (compare(lhs, rhs) == 0) == (lhs == rhs)
+
+eq(lhs, rhs)
+~~~~~~~~~~~~
+
+*lhs* is any value, *rhs* is any value.  *eq* returns ``true`` if
+``lhs == rhs`` and ``false`` otherwise.
+
+Equivalency: ::
+
+    eq(lhs, rhs) == (lhs == rhs)
+
+Example:
+
+Find the index of the first zero element in an array: ::
+
+    var arr = range(16, 9, -4);
+    assertEquals(4, find_if(bind2nd(eq, 0), arr));
+
+even(int)
+~~~~~~~~~
+
+*int* is an integer.  *even* returns true if *int* is even, false otherwise.
+
+Possible implementation: ::
+
+    var even = negate(odd);
+
+Example: ::
+
+    var numbers = [ ... ];
+    var evens = filter(even, numbers);
+
+ge(lhs, rhs)
+~~~~~~~~~~~~
+
+Equivalency: ::
+
+    ge(lhs, rhs) == (lhs >= rhs)
+
+Example:
+
+Find the index of the first nonnegative element in an array: ::
+
+    var arr = range(-3, 7);
+    assertEquals(3, find_if(bind2nd(ge, 0), arr));
+
+gt(lhs, rhs)
+~~~~~~~~~~~~
+
+Equivalency: ::
+
+    gt(lhs, rhs) == (lhs > rhs)
+
+Example:
+
+Find the index of the first positive element in an array: ::
+
+    var arr = range(-3, 7);
+    assertEquals(4, find_if(bind2nd(gt, 0), arr));
+
+le(lhs, rhs)
+~~~~~~~~~~~~
+
+Equivalency: ::
+
+    le(lhs, rhs) == (lhs <= rhs)
+
+Example:
+
+Find the index of the first nonpositive element in an array: ::
+
+    var arr = range(7, 7, -2);
+    assertEquals(4, find_if(bind2nd(le, 0), arr));
+
+lt(lhs, rhs)
+~~~~~~~~~~~~
+
+Equivalency: ::
+
+    lt(lhs, rhs) == (lhs < rhs)
+
+Example:
+
+Find the index of the first negative element in an array: ::
+
+    var arr = range(3, 7, -1);
+    assertEquals(4, find_if(bind2nd(lt, 0), arr));
+
+max(lhs, rhs)
+~~~~~~~~~~~~~
+
+*lhs* is any value.  *rhs* is any value.  *max* returns *rhs* iff *lhs* is
+greater than *rhs*, otherwise *lhs*.  Reference types are not copied.
+
+Example:
+
+Find the greatest value in an array: ::
+
+    assertEquals(7, reduce(max, [0, 7, -3, 5], 0));
+
+min(lhs, rhs)
+~~~~~~~~~~~~~
+
+*lhs* is any value.  *rhs* is any value.  *min* returns *rhs* iff *lhs* is
+less than *rhs*, otherwise *lhs*.  Reference types are not copied.
+
+Example:
+
+Find the smallest value in an array: ::
+
+    assertEquals(-3, reduce(min, [0, 7, -3, 5], 0));
+
+odd(int)
+~~~~~~~~
+
+*int* is an integer.  *odd* returns true if *int* is odd, false otherwise.
+
+Possible implementation: ::
+
+    var odd = compose(Boolean, bind2nd(mod, 2));
+
+Example: ::
+
+    var numbers = [ ... ];
+    var odds = filter(odd, numbers);
+
+Logical Operations
+++++++++++++++++++
+
+false_()
+~~~~~~~~
+
+Returns ``false``.
+
+Equivalency: ::
+
+    false_() == false
+
+Possible implementation: ::
+
+    var false_ = negate(true_);
+
+not(val)
+~~~~~~~~
+
+*val* is any value.  *not* returns *val*'s logical complement.
+
+Equivalency: ::
+
+    not(v) == !v
+
+true_()
+~~~~~~~
+
+Returns ``true``.
+
+Equivalency: ::
+
+    true_() == true
+
+Possible implementation: ::
+
+    var true_ = value(true);
+
+Identity Operations
++++++++++++++++++++
+
+$1(...)
+~~~~~~~
+
+*$1* is a variadic function which returns its first argument.
+
+Equivalency: ::
+
+    $1(x, y, z) == x
+
+Possible implementation: ::
+
+    var $1 == project(0);
+
+$2(...)
+~~~~~~~
+
+*$2* is a variadic function which returns its second argument.
+
+Equivalency: ::
+
+    $2(x, y, z) == y
+
+Possible implementation: ::
+
+    var $2 == project(1);
+
+$3(...)
+~~~~~~~
+
+*$3* is a variadic function which returns its third argument.
+
+Equivalency: ::
+
+    $3(x, y, z) == z
+
+Possible implementation: ::
+
+    var $3 == project(2);
+
+itself(val)
+~~~~~~~~~~~
+
+*val* is any value.  *itself* returns *val*.  Reference types are not copied.
+
+::
+
+    itself(v) == v
+
+project(i)
+~~~~~~~~~~
+
+*i* is zero-based argument position.  *project* returns a variadic function
+which returns its *i*'th argument.
+
+Equivalency: ::
+
+    project(i)(x, y, z) == [x, y, z][i]
+
+Possible implementation: ::
+
+    var project = bind(compose, [select, value(argv)]);
+
+select(i)
+~~~~~~~~~
+
+*i* is an array index.  *select* returns a function which takes an array and
+returns its *i*'th member.
+
+Equivalency: ::
+
+    select(i)(arr) == arr[i]
+
+Possible implementation: ::
+
+    var select = bind1st(bind2nd, member);
+
+Class and Object Operations
++++++++++++++++++++++++++++
+
+member(obj, prop)
+~~~~~~~~~~~~~~~~~
+
+*obj* is an array or an object.  *prop* is an array index or property name.
+*member* returns *obj[prop]*.
+
+Equivalency: ::
+
+    member(o, i) == o[i]
+
+Example: ::
+
+    var arr = range(0, 5);
+    assertEquals(5, member(arr, 'length'));
+    assertEquals(3, member(arr, 3));
+
+new_(cls)
+~~~~~~~~~
+
+*cls* is a class.  *new_* returns a variadic function such that calling it with
+arguments *a1, a2, ... aN* is the same as calling *new cls(a1, a2, ... aN)*.
+The highest possible *N* is 10. Calling the function returned from *new_* with
+more than 10 arguments will cause an exception.
+
+Equivalency: ::
+
+    new_(cls)(x, y, z) == (new cls(x, y, z))
+
+Example:
+
+Create Date objects: ::
+
+    var dates = map(
+        new_(Date)
+      , range(1199142000000, 7, 86400000)
+    );
+
+
+.. target-notes::
+.. section-numbering::
+
+.. vim: ft=rst sts=2 sw=2 tw=80
