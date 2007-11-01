@@ -19,7 +19,12 @@ ZETA_JS_INCLUDES=	-f src/base.js \
 			-f src/function.js \
 			-f src/operator.js
 
-all: docs
+ZETA_JS_SOURCES=	src/base.js \
+			src/algorithm.js \
+			src/function.js \
+			src/operator.js
+
+all: docs zeta.js
 
 check:
 	js ${ZETA_JS_INCLUDES} -f tests/tests.js
@@ -47,11 +52,16 @@ docs/reference.html: docs/reference.rest Makefile
 	${ZETA_HTMLIZE_RESTTARGETS} < docs/reference.rest > docs/reference.prehtml
 	${ZETA_RST2HTML} -stg --source-url reference.rest docs/reference.prehtml docs/reference.html
 
-symtab: symbols.js algorithm.js function.js operator.js
-	js ${ZETA_JS_INCLUDES} -f symbols.js | sort > symtab
+symtab: tools/symbols.js src/algorithm.js src/function.js src/operator.js
+	js ${ZETA_JS_INCLUDES} -f tools/symbols.js | sort > symtab
+
+zeta.js: ${ZETA_JS_SOURCES}
+	(for f in ${ZETA_JS_SOURCES}; do \
+		echo "// FILE: $$f"; cat $$f; \
+	done) > zeta.js
 
 clean:
-	rm -f *.prehtml docs/*.prehtml
+	rm -f *.prehtml docs/*.prehtml zeta.js
 
 maint-clean: clean
 	rm -f *.html docs/*.html symtab
