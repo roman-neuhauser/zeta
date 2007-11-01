@@ -31,6 +31,26 @@ _`Shallow copy` is not very deep.
 
 _`Predicate` is a function which returns values convertible to bool.
 
+Conventions
+===========
+
+The Equivalency sections, where present, follow a certain set of rules, most
+of which should be obvious.  These things are worth stressing:
+
+* the ``==`` operators should be interpreted as "is the same as" or "has the
+  same effects" rather than just "returns the same value"; the latter is
+  implied, but merely a subset of the intended meaning
+* argument names *f*, *g*, *h* suggest these arguments are functions, while
+  *x*, *y*, and *z* imply no such constraint
+* function calls with no arguments usually imply nullary functions
+* function calls with one argument usually imply unary functions
+* function calls with two arguments usually imply binary functions
+* function calls with three arguments usually imply variadic functions
+
+The Possible Implementation sections, where included, display a possible
+(usually actual) implementation(s) of the function using other Zeta
+functions.
+
 Functions
 =========
 
@@ -56,7 +76,7 @@ as there are *binders*.
 
 Equivalency: ::
 
-    bind(fun, [$3, $2, $1])(x, y, z) == fun(z, y, x)
+    bind(fun, [f, g, h])(x, y, z) == fun(f(z, y, x), g(z, y, x), h(z, y, x))
 
 bind1st(fun, lhs)
 ~~~~~~~~~~~~~~~~~
@@ -102,9 +122,9 @@ Print numbers raised to the power of 2: ::
 binder(fun)
 ~~~~~~~~~~~
 
-*fun* is a function.  *binder* returns a function which returns *fun*
-with all arguments bound from its argument list.  Returns *fun*'s return
-value.
+*fun* is a function.  *binder* returns a variadic function which returns
+*fun* with all arguments bound from its argument list.  Returns *fun*'s
+return value.
 
 Equivalency: ::
 
@@ -155,8 +175,10 @@ Possible implementation: ::
 method(that, fun)
 ~~~~~~~~~~~~~~~~~
 
-*that* is an object.  *fun* is a function.  *method* returns a function
-which calls *fun* as *that*'s method.  Returns *fun*'s return value.
+*that* is an object.  *fun* is a function.  *method* returns a variadic
+function such that calling it with arguments *a1, a2, ..., aN* is the same
+as calling *fun(a1, a2, ..., aN)* with *this* set to *that*.  Returns *fun*'s
+return value.
 
 Equivalency: ::
 
@@ -165,12 +187,13 @@ Equivalency: ::
 negate(fun)
 ~~~~~~~~~~~
 
-*fun* is a function.  *negate* returns a function such that calling it with
-arguments *a1, a2, ... aN* is the same as calling *!fun(a1, a2, ... aN)*.
+*fun* is a function.  *negate* returns a variadic function such that
+calling it with arguments *a1, a2, ... aN* is the same as calling
+*!fun(a1, a2, ... aN)*.
 
 Equivalency: ::
 
-    negate(f)() == !f()
+    negate(f)(x, y, z) == !f(x, y, z)
 
 Possible implementation: ::
 
@@ -237,12 +260,12 @@ Possible implementation: ::
 use1st(fun)
 ~~~~~~~~~~~
 
-*fun* is a unary function.  *use1st* returns a variadic function which calls
-*fun* with its first argument.  Returns *fun*'s return value.
+*fun* is a unary function.  *use1st* returns a variadic function such that
+calling it with arguments *a1, a2, ... aN* is the same as calling *fun(a1)*.
 
 Equivalency: ::
 
-    use1st(f) == compose(f, $1)
+    use1st(f)(x, y, z) == compose(f, $1)(x, y, z) == f(x)
 
 Possible implementation: ::
 
@@ -251,12 +274,12 @@ Possible implementation: ::
 use2nd(fun)
 ~~~~~~~~~~~
 
-*fun* is a unary function.  *use2nd* returns a variadic function which calls
-*fun* with its second argument.  Returns *fun*'s return value.
+*fun* is a unary function.  *use1st* returns a variadic function such that
+calling it with arguments *a1, a2, ... aN* is the same as calling *fun(a2)*.
 
 Equivalency: ::
 
-    use2nd(f) == compose(f, $2)
+    use2nd(f) == compose(f, $2)(x, y, z) == f(y)
 
 Possible implementation: ::
 
@@ -299,6 +322,10 @@ insert(arr)
 *arr* is an array.  *insert* returns a *function (val, ind)* which
 assigns *val* to *arr[ind]*.
 
+Equivalency: ::
+
+    insert(arr)(v, i) == (arr[i] = v)
+
 nth(arr)
 ~~~~~~~~
 
@@ -335,7 +362,7 @@ Reference types are not copied.
 
 Equivalency: ::
 
-    value(v)() == v
+    value(v)(x, y, z) == v
 
 Other
 +++++
@@ -366,6 +393,16 @@ argv(...)
 *argv* is a variadic function which returns a `shallow copy`_ of its
 *arguments* object as an array.
 
+Equivalency: ::
+
+    args(x, y, z) == [x, y, z]
+
+Possible implementation: ::
+
+    function argv()
+    {
+        return map(itself, arguments);
+    }
 
 Algorithms
 ==========
