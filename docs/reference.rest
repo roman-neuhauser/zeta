@@ -41,7 +41,7 @@ of which should be obvious.  These things are worth stressing:
   same effects" rather than just "returns the same value"; the latter is
   implied, but merely a subset of the intended meaning
 * argument names *f*, *g*, *h* suggest these arguments are functions, while
-  *x*, *y*, and *z* imply no such constraint
+  *a, *b, *c*, and *x*, *y* and *z* imply no such constraint
 * function calls with no arguments usually imply nullary functions
 * function calls with one argument usually imply unary functions
 * function calls with two arguments usually imply binary functions
@@ -76,7 +76,7 @@ as there are *binders*.
 
 Equivalency: ::
 
-    bind(fun, [f, g, h])(x, y, z) == fun(f(z, y, x), g(z, y, x), h(z, y, x))
+    bind(fun, [f, g, h])(x, y, z) == fun(f(x, y, z), g(x, y, z), h(x, y, z))
 
 bind1st(fun, lhs)
 ~~~~~~~~~~~~~~~~~
@@ -128,7 +128,7 @@ return value.
 
 Equivalency: ::
 
-    binder(fun)(x, y, z) == bind(fun, map(value, [z, y, x]))
+    binder(fun)(x, y, z)(a, b, c) == bind(fun, map(value, [z, y, x]))(a, b, c)
 
 compose(f, g)
 ~~~~~~~~~~~~~
