@@ -37,6 +37,10 @@ Prerequisities
 
 * JavaScript 1.5+
 
+Zeta is developed and tested on FreeBSD 6 with SpiderMonkey_ 1.5.
+
+.. _SpiderMonkey: http://www.mozilla.org/js/spidermonkey/
+
 
 Downloads
 =========
@@ -69,15 +73,24 @@ All Zeta releases can be found in the `download directory`_.
 Build and Installation
 ======================
 
+Build
++++++
+
+Zeta source code is distributed among several files (all in the `src`_
+directory).  You can use individual files (but note that `base.js`_ is
+needed by all other files), or create a single file containing all of
+Zeta by running ``make zeta.js`` in the top directory.
+
+.. _base.js: src/base.js
+
+Install
++++++++
+
 Web servers (and even more so *non-web* uses of JavaScript/ECMA-262) are
 an area too volatile to warrant a vendor-provided installation mechanism.
-Most of the task is left as an excercise for the user's software
-comfiguration management process.  Zeta should be seen as a static library,
+This task is left as an excercise for the user's software configuration
+management process.  Zeta can (and should) be seen as a static library,
 and this position is therefore fully justified.
-
-Zeta is developed and tested on FreeBSD 6 with SpiderMonkey_ 1.5.
-
-.. _SpiderMonkey: http://www.mozilla.org/js/spidermonkey/
 
 Running the test suite
 ++++++++++++++++++++++
