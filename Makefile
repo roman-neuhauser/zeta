@@ -56,7 +56,8 @@ symtab: tools/symbols.js src/algorithm.js src/function.js src/operator.js
 	js ${ZETA_JS_INCLUDES} -f tools/symbols.js | sort > symtab
 
 zeta.js: ${ZETA_JS_SOURCES}
-	(for f in ${ZETA_JS_SOURCES}; do \
+	(echo "// === GENERATED FILE, DO NOT EDIT ==="; echo; \
+	for f in ${ZETA_JS_SOURCES}; do \
 		echo "// FILE: $$f"; cat $$f; \
 	done) > zeta.js
 
