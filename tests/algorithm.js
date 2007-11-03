@@ -336,6 +336,22 @@ function testTakeWhile() // {{{
     );
 } // }}}
 
+function testTakeWhileSparseInput() // {{{
+{
+    var data = range(0, 5);
+    delete data[1];
+    delete data[3];
+    var rv = take_while(bind1st(gt, 5), data);
+    assertEquals(3, rv.length);
+    for_(
+        range(0, 3, 2)
+      , function (v, i)
+        {
+            assertEquals(v, rv[i]);
+        }
+    );
+} // }}}
+
 tests.push(
     testFor_
   , testWhile_
@@ -365,6 +381,7 @@ tests.push(
   , testGroup_by
   , testReduce
   , testTakeWhile
+  , testTakeWhileSparseInput
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

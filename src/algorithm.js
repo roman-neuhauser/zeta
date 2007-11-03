@@ -184,8 +184,12 @@ function group_by(f, arr) // {{{
 function take_while(p, arr) // {{{
 {
     var rv = [];
-    for (var i = 0; i < arr.length; ++i) {
-        if (i in arr && !p(arr[i])) {
+    var len = arr.length;
+    for (var i = 0; i < len; ++i) {
+        if (!(i in arr)) {
+            continue;
+        }
+        if (!p(arr[i])) {
             break;
         }
         rv.push(arr[i]);
