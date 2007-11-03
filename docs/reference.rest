@@ -320,7 +320,7 @@ insert(arr)
 ~~~~~~~~~~~
 
 *arr* is an array.  *insert* returns a *function (val, ind)* which
-assigns *val* to *arr[ind]*.
+assigns *val* to *arr[ind]*.  Returns *val*.
 
 Equivalency: ::
 

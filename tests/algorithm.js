@@ -218,8 +218,10 @@ function testSlice() // {{{
 function testInsert() // {{{
 {
     var rv = [];
-    insert(rv)('omg', 2);
+    var ins = insert(rv);
+    ins('omg', 2);
     assertEquals('omg', rv[2]);
+    assertEquals('wtf', ins('wtf', 0));
 } // }}}
 
 function testChain() // {{{

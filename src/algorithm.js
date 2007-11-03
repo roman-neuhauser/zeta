@@ -137,7 +137,7 @@ function insert(arr) // {{{
 {
     return function (v, i)
     {
-        arr[i] = v;
+        return arr[i] = v;
     }
 } // }}}
 
