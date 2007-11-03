@@ -294,7 +294,8 @@ conjoin(fs)
 *fs* is an array of functions.  *conjoin* returns a variadic predicate_
 which calls each function in *fs* in turn relaying arguments until one
 returns false or until *fs* is exhausted.  Returns false if one of the
-functions returned false, otherwise true.
+functions returned false, otherwise returns the return value of the last
+*fs* element.
 
 This is a functional generalization of the *&&* operator.
 
@@ -308,7 +309,8 @@ disjoin(fs)
 *fs* is an array of functions.  *disjoin* returns a variadic predicate_
 which calls each function in *fs* in turn relaying arguments until one
 returns true or until *fs* is exhausted.  Returns true if one of the
-functions returned true, otherwise false.
+functions returned true, otherwise returns the return value of the
+successful *fs* element.
 
 This is a functional generalization of the *||* operator.
 

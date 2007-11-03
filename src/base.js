@@ -116,6 +116,12 @@ function value(v) // {{{
     }
 } // }}}
 
+var true_ = value(true);
+
+var negate = bind1st(compose, not);
+
+var false_ = negate(true_);
+
 var select = bind1st(bind2nd, member);
 
 var project = bind(compose, [select, value(argv)]);

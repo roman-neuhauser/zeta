@@ -110,10 +110,6 @@ function mod(lhs, rhs) // {{{
 
 var pow = method(Math, Math.pow);
 
-var true_ = value(true);
-
-var false_ = negate(true_);
-
 var neg = bind1st(minus, 0);
 
 function eq(lhs, rhs) // {{{

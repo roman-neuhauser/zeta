@@ -70,7 +70,14 @@ function testMethod() // {{{
     assertEquals(3, g(' '));
 } // }}}
 
-function testConjoin() // {{{
+function testOperatorAndReturnValue() // {{{
+{
+    assertEquals(false, (false && null));
+    assertEquals(4, (true && 4));
+    assertEquals(true, (4 && true));
+} // }}}
+
+function testConjoinShortCircuit() // {{{
 {
     var rv = [];
     var f = push(rv);
@@ -82,7 +89,21 @@ function testConjoin() // {{{
     assertEquals(4, rv.length);
 } // }}}
 
-function testDisjoin() // {{{
+function testConjoinReturnValue() // {{{
+{
+    assertEquals(true, conjoin([true_, true_])());
+    assertEquals(false, conjoin([true_, $1])(null));
+    assertEquals(true, conjoin([$1, true_])(4));
+    assertEquals(8, conjoin([true_, $1])(8));
+} // }}}
+
+function testOperatorOrReturnValue() // {{{
+{
+    assertEquals(false, (null || false));
+    assertEquals(null, (false || null));
+} // }}}
+
+function testDisjoinShortCircuit() // {{{
 {
     var rv = [];
     var f = push(rv);
@@ -90,6 +111,14 @@ function testDisjoin() // {{{
     assertEquals(0, rv.length);
     disjoin([false_, false_, f])(1, 2);
     assertEquals(2, rv.length);
+} // }}}
+
+function testDisjoinReturnValue() // {{{
+{
+    assertEquals(true, disjoin([false_, true_])());
+    assertEquals(false, disjoin([false_, $1])(null));
+    assertEquals(4, disjoin([$1, false_])(4));
+    assertEquals(8, disjoin([false_, $1])(8));
 } // }}}
 
 function testBinder() // {{{
@@ -196,8 +225,12 @@ tests.push(
   , testApply
   , testSpread
   , testMethod
-  , testConjoin
-  , testDisjoin
+  , testOperatorAndReturnValue
+  , testConjoinShortCircuit
+  , testConjoinReturnValue
+  , testOperatorOrReturnValue
+  , testDisjoinShortCircuit
+  , testDisjoinReturnValue
   , testSelect
   , testProject
   , test$1

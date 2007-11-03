@@ -22,39 +22,30 @@
 // $HeadURL$
 // $Id$
 
-function conjoin(fs) // {{{
+function __ZETA__shortcircuit(test, short_, full) // {{{
 {
-    return function ()
+    return function (fs)
     {
-        for (var i = 0; i < fs.length; ++i) {
-            if (!(i in fs)) {
-                continue;
+        return function ()
+        {
+            var rv = false;
+            for (var i = 0; i < fs.length; ++i) {
+                if (!(i in fs)) {
+                    continue;
+                }
+                var f = spread(fs[i]);
+                if (test(rv = f(arguments))) {
+                    return short_(rv);
+                }
             }
-            var f = spread(fs[i]);
-            if (!f(arguments)) {
-                return false;
-            }
+            return full(rv);
         }
-        return true;
     }
 } // }}}
 
-function disjoin(fs) // {{{
-{
-    return function ()
-    {
-        for (var i = 0; i < fs.length; ++i) {
-            if (!(i in fs)) {
-                continue;
-            }
-            var f = spread(fs[i]);
-            if (f(arguments)) {
-                return true;
-            }
-        }
-        return false;
-    }
-} // }}}
+var conjoin = __ZETA__shortcircuit(not, false_, itself);
+
+var disjoin = __ZETA__shortcircuit(itself, itself, false_);
 
 var use1st = bind2nd(compose, $1);
 
@@ -77,8 +68,6 @@ function previous(v) // {{{
         return values.shift();
     }
 } // }}}
-
-var negate = bind1st(compose, not);
 
 var nth = bind1st(bind1st, member);
 
