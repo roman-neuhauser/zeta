@@ -57,7 +57,7 @@ function find(v, arr) // {{{
 
 function coalesce(vs) // {{{
 {
-    var i = find_if(compose(not, bind1st(eq, null)), vs);
+    var i = find_if(negate(bind1st(eq, null)), vs);
     if (-1 == i) {
         return null;
     }
@@ -149,15 +149,15 @@ function chain(arrs) // {{{
 
 function zip(arrs) // {{{
 {
-    if (!arrs.length) {
-        return [];
-    }
     return map(
         bind(map, [compose(select, $2), value(arrs)])
       , range(
             0
-          , reduce(
-                min, map(select('length'), arrs)
+          , !arrs.length
+            ? 0
+            : reduce(
+                min
+              , map(select('length'), arrs)
               , Number.POSITIVE_INFINITY
             )
         )
@@ -167,17 +167,11 @@ function zip(arrs) // {{{
 function group_by(f, arr) // {{{
 {
     var rv = [];
-    for_(
-        arr
-      , function (v, i, a)
-        {
-            var key = Number(f(v, i, a));
-            if (!(key in rv)) {
-                rv[key] = [];
-            }
-            rv[key].push(v);
-        }
-    );
+    var store = function (key, v)
+    {
+        (rv[key] || (rv[key] = [])).push(v);
+    }
+    for_(arr, bind(store, [to_num(f), $1]));
     return rv;
 } // }}}
 
