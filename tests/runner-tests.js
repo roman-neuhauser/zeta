@@ -40,10 +40,12 @@ defTest('testRunTestSuccess' // {{{
     assertEquals(0, log.length);
 }); // }}}
 
-function failingAssertion() // {{{
+var failingAssertion = testDef( // {{{
+'failingAssertion',
+function ()
 {
-    this.assertEquals(0, 1);
-} // }}}
+    assertEquals(0, 1);
+}); // }}}
 
 defTest('testRunTestFailure' // {{{
 , tests
@@ -54,11 +56,7 @@ defTest('testRunTestFailure' // {{{
     {
         log.push(v);
     }
-    this.test = function (f)
-    {
-        return runTest(logger, f);
-    }
-    var rv = this.test(failingAssertion);
+    var rv = runTest(logger, failingAssertion);
     assertEquals(1, rv);
     assertEquals(1, log.length);
     assertEquals(
@@ -89,32 +87,6 @@ defTest('testAssertEqualsFailureThrowsAssertion' // {{{
         throw e;
     }
     fail("did not throw");
-}); // }}}
-
-defTest('testTestCaseRunCallsConstructorArgument' // {{{
-, tests
-, function ()
-{
-    var exp = "omg wtf";
-    var f = function ()
-    {
-        return exp;
-    }
-    assertEquals(exp, new TestCase(f).run());
-}); // }}}
-
-defTest('testTestCaseFailingAssertEqualsThrowsAssertion' // {{{
-, tests
-, function ()
-{
-    try {
-        new TestCase(failingAssertion).run();
-    } catch (e) {
-        if (e instanceof Assertion) {
-            return;
-        }
-        throw e;
-    }
 }); // }}}
 
 defTest('testTestDef' // {{{

@@ -99,20 +99,6 @@ function runTests(output, tests) // {{{
     return rv;
 } // }}}
 
-function TestCase(testMethod) // {{{
-{
-    this.assertEquals = function (exp, act)
-    {
-        if (exp !== act) {
-            throw new Assertion(exp, act);
-        }
-    }
-    this.run = function ()
-    {
-        return testMethod.apply(this);
-    }
-} // }}}
-
 function testDef(name, f) // {{{
 {
     return {
