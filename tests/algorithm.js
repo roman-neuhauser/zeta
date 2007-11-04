@@ -309,13 +309,18 @@ function testZipDifferentLengths2() // {{{
 
 function testGroup_by() // {{{
 {
-    var data = range(1, 4);
+    var data = range(11, 7);
     var rv = group_by(even, data);
     assertEquals(2, rv.length);
-    assertEquals(1, rv[0][0]);
-    assertEquals(3, rv[0][1]);
-    assertEquals(2, rv[1][0]);
-    assertEquals(4, rv[1][1]);
+    assertEquals(4, rv[0].length);
+    assertEquals(3, rv[1].length);
+    assertEquals(11, rv[0][0]);
+    assertEquals(13, rv[0][1]);
+    assertEquals(15, rv[0][2]);
+    assertEquals(17, rv[0][3]);
+    assertEquals(12, rv[1][0]);
+    assertEquals(14, rv[1][1]);
+    assertEquals(16, rv[1][2]);
 } // }}}
 
 function testReduce() // {{{
