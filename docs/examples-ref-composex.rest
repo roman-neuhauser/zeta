@@ -1,0 +1,297 @@
+=============================================================================
+                         Refactoring *composex(fs)*
+=============================================================================
+-----------------------------------------------------------------------------
+                             Zeta Usage Examples
+-----------------------------------------------------------------------------
+
+:Author: Roman Neuhauser
+:Contact: neuhauser@sigpipe.cz
+:Copyright: This document is in the public domain.
+:HeadURL: $HeadURL$
+:Id: $Id$
+
+.. contents::
+
+Introduction
+============
+
+This article introduces a few elements of Zeta through several refactorings
+of an implementation of the *composex* function generator.  Unlike other
+Zeta Usage Examples, this one assumes some prior knowledge. Specifically,
+you should be acquainted with *for_* and *compose*. `Refactoring
+unique(pred, arr)`_ covers these two functions in depth.  This article
+skims over *for_* while the *compose* discussion jumps right to the
+arithmetic properties of functions.
+
+.. _Refactoring unique(pred, arr): examples-ref-unique.rest
+
+The `Zeta Library Reference`_ has this description of *composex*:
+
+  *composex(fs)*
+
+  *fs* is an array of functions.  *composex* returns a variadic function such
+  that calling it with arguments *a1, a2, ..., aN* is the same as calling
+  *fs[0](fs[1](...fs[fs.length - 1](a1, a2, ... aN)))*.
+
+  *composex* is a generalization of the *compose* function adapter.
+
+.. _Zeta Library Reference: reference.rest
+
+Setup
+=====
+
+Version 0
++++++++++
+
+The version we start with is listed below.
+
+::
+
+    01  function composex(fs)
+    02  {
+    03      var len = fs.length;
+    04      return function ()
+    05      {
+    06          var tmp = arguments;
+    07          for (var i = len - 1; i > -1; --i) {
+    08              if (!(i in fs)) {
+    09                  continue;
+    10              }
+    11              var f = fs[i];
+    12              tmp = [f.apply(f, tmp)];
+    13          }
+    14          return tmp[tmp.length - 1];
+    15      }
+    16  }
+
+
+Comments
+++++++++
+
+These things are worth noting:
+
+* The array is traversed top-down because the functions in *f(g(h(...)))*
+  must be evaluated from inside out.
+* Line 12 uses *apply* to serve both the innermost, variadic function, and
+  the other, unary ones.  *tmp* points to *arguments* on the first pass, and
+  contains *[rv]* on subsequent passes; *rv* denotes the previous (inner)
+  function's return value.
+* The inner function will simply return its last argument if *composex* was
+  called with an empty array.  This makes *composex([])(a, b, c)* behave the
+  same as *(a, b, c)*.
+
+Objections
+++++++++++
+
+...
+
+Refactorings
+============
+
+*for_(arr, op)*, *reverse(arr)*
++++++++++++++++++++++++++++++++
+
+The loop translates to a *for_* call quite effortlessly, the only hurdle is
+reversing the *fs* array.  Here's a cure:
+
+  *reverse(arr)*
+
+  *arr* is an array.  *reverse* returns a `shallow copy`_ of *arr* with
+  elements in reverse order.
+
+.. _shallow copy: reference.rest#shallow-copy
+
+::
+
+    function composex(fs)
+    {
+        fs = reverse(fs);
+        return function ()
+        {
+            var tmp = arguments;
+            for_(
+                fs
+              , function (f)
+                {
+                    tmp = [f.apply(f, tmp)];
+                }
+            );
+            return tmp[tmp.length - 1];
+        }
+    }
+
+Replace *for_* with higher abstraction
+++++++++++++++++++++++++++++++++++++++
+
+*for_* does reduce the clutter, but it's still a low-level operation, and
+should be reserved for the occasional special case not covered by any of the
+higher-level algorithms.  *composex* corresponds exactly to one of the
+common (and prepackaged) algorithms, *reduce* to be precise, so let's see it
+go.
+
+*compose(f, g)*
+~~~~~~~~~~~~~~~
+
+The rest of this article builds on the observation that function composition
+is like addition in that composition of functions *f* and *g*:
+
+* produces their "sum": *f(g(x)) == (f + g)(x)*
+
+* is associative: *(f + (g + h)) == ((f + g) + h)* ::
+
+    var gh = function (x)
+    {
+        return g(h(x));
+    }
+    var fg = function (x)
+    {
+        return f(g(x));
+    }
+    f(g(h(x))) == f(gh(x)) == fg(h(x));
+
+    compose(f, compose(g, h))(x) == compose(compose(f, g), h)(x)
+
+where both *gh* and *fg* (and their *compose*'d counterparts) can be seen as
+intermediate sums.
+
+Unlike addition, composition is not commutative: *f(g(v)) != g(f(v))*.
+
+So, if the inner function is a sum of the whole *fs* array, we just need
+to accumulate elements of the array with *compose*: ::
+
+    function composex(fs)
+    {
+        var composed = <INIT>;
+        for_(
+            fs
+          , function (f)
+            {
+                composed = compose(composed, f);
+            }
+        );
+        return composed;
+    }
+
+*composed* aggregates functions from *fs* into a function which calls: ::
+
+    <INIT>(
+        fs[0](
+            fs[1](
+                fs[2](
+                    ...
+                )
+            )
+        )
+    )
+
+This code produces the same results as the `Version 0`_, except the refactored
+code performs the traversal once, while the original postponed the logic
+until runtime.
+
+*reduce(fun, arr, init)*
+~~~~~~~~~~~~~~~~~~~~~~~~
+
+Accumulation (((a[0] + a[1]) + a[2]) + ... + a[N]) is very common.  Zeta
+offers it in a generalized form, the *reduce* function:
+
+  *reduce(fun, arr, init)*
+
+  *fun* is a binary function, *arr* is an array. *init* is any value.
+  *reduce* is a generalization of summation: it computes the sum (or some
+  other binary operation) of *init* and all elements of *arr*.
+
+  *fun* is not required to be either commutative or associative: the
+  order of all of *reduce*'s operations is specified. The result is first
+  initialized to *init*. Then, for each element in *arr*, in order from
+  beginning to end, it is updated by *result = fun(result, elem)*.
+
+One possible *reduce* implementation looks very much like our *composex*: ::
+
+    function reduce(f, arr, init)
+    {
+        var rv = init;
+        for_(
+            arr
+          , function (v)
+            {
+                rv = f(rv, v);
+            }
+        );
+        return rv;
+    }
+
+The code implodes as the implementation is replaced with delegation: ::
+
+    function composex(fs)
+    {
+        return reduce(compose, fs, <INIT>);
+    }
+
+Now for the ``<INIT>`` placeholder.  It must return its last argument if
+*fs* is empty, or *fs[0]*'s return value.  In other words, it must *always*
+return its last argument: the first argument is also the last one if it's
+the only one.
+
+Such a function is easy to fabricate: ::
+
+    function last()
+    {
+        return arguments[arguments.length - 1];
+    }
+
+but we don't have to, since Zeta includes it already, called *$N*:
+
+  *$N(...)*
+
+  *$N* is a variadic function which returns its last argument.
+
+Voila: ::
+
+    function composex(fs)
+    {
+        return reduce(compose, fs, $N);
+    }
+
+Conclusion
+==========
+
+We started with ::
+
+    function composex(fs)
+    {
+        var len = fs.length;
+        return function ()
+        {
+            var tmp = arguments;
+            for (var i = len - 1; i > -1; --i) {
+                if (!(i in fs)) {
+                    continue;
+                }
+                var f = fs[i];
+                tmp = [f.apply(f, tmp)];
+            }
+            return tmp[tmp.length - 1];
+        }
+    }
+
+* 16 lines
+* 21 symbols, 4 local (excl. formal parameters)
+* 33 expressions
+* 11 statements (incl. compound statements)
+* 2 branch points
+
+And arrived at ::
+
+    function composex(fs)
+    {
+        return reduce(compose, fs, $N);
+    }
+
+* 4 lines
+* 7 symbols, 0 local (excl. formal parameters)
+* 5 expressions
+* 1 statement
+* 0 branch points
+
+.. vim: ft=rst tw=80

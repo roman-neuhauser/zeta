@@ -34,29 +34,12 @@ of the *unique* algorithm.
 
 .. _Refactoring unique(eqfun, arr): examples-ref-unique.rest
 
-::
+Refactoring *composex(fs)*
+==========================
 
-    var composex = bind(
-        reduce
-      , [value(compose), $1, value(itself)]
-    );
+`Refactoring composex(fs)`_ builds on the material presented in `Refactoring
+unique(eqfun, arr)`_.
 
-    function composex(fs)
-    {
-        fs = reverse(fs);
-        return function ()
-        {
-            var tmp = arguments;
-            for_(
-                fs
-              , function (f)
-                {
-                    tmp = [apply(f, tmp)];
-                }
-            );
-            return tmp[0];
-        }
-    }
-
+.. _Refactoring composex(fs): examples-ref-composex.rest
 
 .. vim: ft=rst tw=80

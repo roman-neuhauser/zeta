@@ -30,7 +30,8 @@ check:
 	js ${ZETA_JS_INCLUDES} -f tests/tests.js
 
 docs: README.html docs/examples.html docs/examples-ref-minmax.html \
-	docs/examples-ref-unique.html docs/reference.html
+	docs/examples-ref-composex.html docs/examples-ref-unique.html \
+	docs/reference.html
 
 README.html: README.rest Makefile
 	${ZETA_HTMLIZE_RESTTARGETS} < README.rest > README.prehtml
@@ -47,6 +48,10 @@ docs/examples-ref-unique.html: docs/examples-ref-unique.rest Makefile
 docs/examples-ref-minmax.html: docs/examples-ref-minmax.rest Makefile
 	${ZETA_HTMLIZE_RESTTARGETS} < docs/examples-ref-minmax.rest > docs/examples-ref-minmax.prehtml
 	${ZETA_RST2HTML} -stg --source-url examples-ref-minmax.rest docs/examples-ref-minmax.prehtml docs/examples-ref-minmax.html
+
+docs/examples-ref-composex.html: docs/examples-ref-composex.rest Makefile
+	${ZETA_HTMLIZE_RESTTARGETS} < docs/examples-ref-composex.rest > docs/examples-ref-composex.prehtml
+	${ZETA_RST2HTML} -stg --source-url examples-ref-composex.rest docs/examples-ref-composex.prehtml docs/examples-ref-composex.html
 
 docs/reference.html: docs/reference.rest Makefile
 	${ZETA_HTMLIZE_RESTTARGETS} < docs/reference.rest > docs/reference.prehtml
