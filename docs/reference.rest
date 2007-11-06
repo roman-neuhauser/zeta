@@ -651,11 +651,12 @@ with each element in *arr* until it returns ``true``.  *find_if* returns
 the index of the element in *arr* for which *pred* returned ``true``
 or -1 if there was no such element.
 
-coalesce(values)
-~~~~~~~~~~~~~~~~
+coalesce(values[, dflt])
+~~~~~~~~~~~~~~~~~~~~~~~~
 
-*values* is an array. *coalesce* returns first non-null element of *values*,
-or null if no such element is found.
+*values* is an array.  *dflt* is an optional default return value.
+*coalesce* returns first non-null element of *values*, or, if no such
+element is found, *dflt* when given, and ``null`` otherwise.
 
 previous(init)
 ~~~~~~~~~~~~~~

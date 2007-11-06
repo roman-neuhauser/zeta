@@ -94,6 +94,7 @@ function testCoalesce() // {{{
     assertEquals('hello', coalesce([null, undefined, 'hello']));
     assertEquals(null, coalesce([null, undefined]));
     assertEquals(0, coalesce([null, undefined, 0, 1]));
+    assertEquals('fubar', coalesce([null, undefined], 'fubar'));
 } // }}}
 
 function testIota() // {{{

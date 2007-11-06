@@ -55,11 +55,11 @@ function find(v, arr) // {{{
     return find_if(bind1st(eq, v), arr);
 } // }}}
 
-function coalesce(vs) // {{{
+function coalesce(vs, dflt) // {{{
 {
     var i = find_if(negate(bind1st(eq, null)), vs);
     if (-1 == i) {
-        return null;
+        return 1 < arguments.length ? dflt : null;
     }
     return vs[i];
 } // }}}
