@@ -216,6 +216,9 @@ function testComposex() // {{{
     assertEquals(f(5), composex([itself, f])(5));
     assertEquals(g(f(5)), composex([g, f])(5));
     assertEquals(h(g(f(5))), composex([h, g, f])(5));
+
+    assertEquals(33, composex([])(11, 22, 33));
+    assertEquals(undefined, composex([])());
 } // }}}
 
 tests.push(

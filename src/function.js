@@ -71,6 +71,9 @@ function previous(v) // {{{
 
 var nth = bind1st(bind1st, member);
 
-var composex = bind(reduce, [value(compose), $1, value(itself)]);
+function composex(fs)
+{
+    return reduce(compose, fs, $N);
+}
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
