@@ -132,6 +132,11 @@ var $2 = project(1);
 
 var $3 = project(2);
 
+function $N()
+{
+    return arguments[arguments.length - 1];
+}
+
 function for_(arr, f) // {{{
 {
     // arr.forEach(f) not in SpiderMonkey 1.5

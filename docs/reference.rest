@@ -972,6 +972,15 @@ Possible implementation: ::
 
     var $3 == project(2);
 
+$N(...)
+~~~~~~~
+
+*$N* is a variadic function which returns its last argument.
+
+Equivalency: ::
+
+    $N(x, y, z) == z
+
 itself(val)
 ~~~~~~~~~~~
 
