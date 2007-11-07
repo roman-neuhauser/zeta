@@ -191,5 +191,15 @@ function take_while(p, arr) // {{{
     return rv;
 } // }}}
 
+function join(a, sep) // {{{
+{
+    return a.join(sep);
+} // }}}
+
+function split(s, sep) // {{{
+{
+    return s.split(sep);
+} // }}}
+
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

@@ -360,6 +360,29 @@ function testTakeWhileSparseInput() // {{{
     );
 } // }}}
 
+function testJoin() // {{{
+{
+    assertEquals('', join([], ''));
+    assertEquals('', join([]));
+    assertEquals('', join(['']));
+    assertEquals('x', join(['', ''], 'x'));
+} // }}}
+
+function testSplit() // {{{
+{
+    var empty = split('', '');
+    assertEquals(true, empty instanceof Array);
+    assertEquals(0, empty.length);
+
+    var s = 'abcd';
+    var a = split(s, '');
+    assertEquals(s.length, a.length);
+    assertEquals('a', a[0]);
+    assertEquals('b', a[1]);
+    assertEquals('c', a[2]);
+    assertEquals('d', a[3]);
+} // }}}
+
 tests.push(
     testFor_
   , testWhile_
@@ -390,6 +413,8 @@ tests.push(
   , testReduce
   , testTakeWhile
   , testTakeWhileSparseInput
+  , testJoin
+  , testSplit
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
