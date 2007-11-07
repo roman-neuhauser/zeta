@@ -19,10 +19,10 @@ Introduction
 This article introduces a few elements of Zeta through several refactorings
 of an implementation of the *composex* function generator.  Unlike other
 Zeta Usage Examples, this one assumes some prior knowledge. Specifically,
-you should be acquainted with *for_* and *compose*. `Refactoring
-unique(pred, arr)`_ covers these two functions in depth.  This article
-skims over *for_* while the *compose* discussion jumps right to the
-arithmetic properties of functions.
+you should be acquainted with *for_* and *compose*.  `Refactoring
+unique(pred, arr)`_ explains these two functions in a (hopefully)
+approachable manner.  This article skims over *for_* while the *compose*
+discussion jumps right to the arithmetic properties of functions.
 
 .. _Refactoring unique(pred, arr): examples-ref-unique.rest
 
@@ -84,7 +84,38 @@ These things are worth noting:
 Objections
 ++++++++++
 
-...
+The simplest form of the *for* loop, from zero to the end of the array, is
+bad enough with all its chatter. ::
+
+    var len = arr.length;
+    for (var i = 0; i < arr.length; ++i) {
+        if (!(i in arr)) {
+            continue;
+        }
+        var elem = arr[i];
+        ...
+    }
+
+Other traversals make things even worse, such code is prone to error during
+writing, and misinterpretation during reading.  Suddenly you cannot just
+skim over the code and be sure it doesn't under- or overrun the array. ::
+
+    for (var i = arr.length - 1; i > -1; --i) {
+        if (!(i in arr)) {
+            continue;
+        }
+        var elem = arr[i];
+        ...
+    }
+
+You must actually read the code, and that's time and energy better spent on
+other parts of the software.
+
+*for_* is just the beginning of the story.  Most loops can be (more or less)
+easily replaced with one of the standard array algorithms: *filter*,
+*find_if*, *map*, *reduce*, *take_while*...  Reliance on standard
+implementations greatly reduces your chances of introducing a bug, simply
+because the code is written only once.
 
 Refactorings
 ============
@@ -276,9 +307,9 @@ We started with ::
     }
 
 * 16 lines
-* 21 symbols, 4 local (excl. formal parameters)
+* 25 symbols, 4 local (excl. formal parameters)
 * 33 expressions
-* 11 statements (incl. compound statements)
+* 15 statements (incl. compound statements)
 * 2 branch points
 
 And arrived at ::
@@ -291,7 +322,7 @@ And arrived at ::
 * 4 lines
 * 7 symbols, 0 local (excl. formal parameters)
 * 5 expressions
-* 1 statement
+* 3 statements
 * 0 branch points
 
 .. vim: ft=rst tw=80
