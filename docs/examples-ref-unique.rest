@@ -42,25 +42,25 @@ The version we start with is listed below.
 
 ::
 
-    function unique(eqfun, arr)
-    {
-        var first = true;
-        var prev = undefined;
-        var rv = [];
-        var len = arr.length;
-        for (var i = 0; i < len; ++i) {
-            if (!(i in arr)) {
-                continue;
-            }
-            var val = arr[i];
-            if (first || !eqfun(val, prev)) {
-                rv.push(val);
-                first = false;
-            }
-            prev = val;
-        }
-        return rv;
-    }
+    01	function unique(eqfun, arr)
+    02	{
+    03	    var first = true;
+    04	    var prev = undefined;
+    05	    var rv = [];
+    06	    var len = arr.length;
+    07	    for (var i = 0; i < len; ++i) {
+    08	        if (!(i in arr)) {
+    09	            continue;
+    10	        }
+    11	        var val = arr[i];
+    12	        if (first || !eqfun(val, prev)) {
+    13	            rv.push(val);
+    14	            first = false;
+    15	        }
+    16	        prev = val;
+    17	    }
+    18	    return rv;
+    19	}
 
 Comments
 ~~~~~~~~
@@ -651,10 +651,10 @@ Let's look at the starting version again: ::
         return rv;
     }
 
-* 15 lines
-* 23 symbols, 6 local (excl. formal parameters)
+* 18 lines
+* 25 symbols, 6 local (excl. formal parameters)
 * 25 expressions
-* 15 statements (incl. compound statements)
+* 16 statements (incl. compound statements)
 * 3 branch points
 
 The final version: ::
@@ -670,10 +670,10 @@ The final version: ::
         );
     }
 
-* 7 lines
-* 12 symbols, 0 local (excl. formal parameters)
+* 10 lines
+* 14 symbols, 0 local (excl. formal parameters)
 * 14 expressions
-* 1 statement
+* 2 statements
 * 0 branch points
 
 
