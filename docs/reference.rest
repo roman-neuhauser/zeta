@@ -64,10 +64,9 @@ bind(fun, binders)
 ~~~~~~~~~~~~~~~~~~
 
 *fun* is a function.  *binders* is an array of functions.
-*bind* returns a variadic function.  This function calls each element
-of *binders* relaying arguments, and collects the return values.
-*fun* is then called with positional arguments supplied from the
-collected returns.  Returns *fun*'s return value.
+*bind* returns a variadic function such that calling it with arguments
+*a1, a2, ..., aN* (*args* for brevity) is the same as calling
+*fun(binders[0](args), binders[1](args) ... binders[binders.length - 1](args))*.
 
 In other words, *bind* returns a function which wraps *fun*, *bind*'s
 first argument.  When called, the wrapper returned from *bind* doesn't
