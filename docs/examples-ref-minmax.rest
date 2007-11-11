@@ -23,13 +23,13 @@ The `Zeta Library Reference`_ carries these descriptions of *max* and *min*:
 
   *max(lhs, rhs)*
 
-  *lhs* is any value.  *rhs* is any value.  *max* returns *rhs* iff *lhs* is
-  greater than *rhs*, otherwise *lhs*.  Reference types are not copied.
+  *lhs* is any value.  *rhs* is any value.  *max* returns *rhs* iff *rhs* is
+  greater than *lhs*, otherwise *lhs*.  Reference types are not copied.
 
   *min(lhs, rhs)*
 
-  *lhs* is any value.  *rhs* is any value.  *min* returns *rhs* iff *lhs* is
-  less than *rhs*, otherwise *lhs*.  Reference types are not copied.
+  *lhs* is any value.  *rhs* is any value.  *min* returns *rhs* iff *rhs* is
+  less than *lhs*, otherwise *lhs*.  Reference types are not copied.
 
 .. _Zeta Library Reference: reference.rest
 .. _shallow copy: reference.rest#shallow-copy
