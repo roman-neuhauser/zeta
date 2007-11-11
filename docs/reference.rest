@@ -81,6 +81,9 @@ Equivalency: ::
 
     bind(fun, [f, g, h])(x, y, z) == fun(f(x, y, z), g(x, y, z), h(x, y, z))
 
+See Also: `$1`_, `$2`_, `$3`_, `argv`_, `bind1st`_, `bind2nd`_, `binder`_,
+`value`_.
+
 bind1st(fun, lhs)
 ~~~~~~~~~~~~~~~~~
 
@@ -91,6 +94,8 @@ Returns *fun*'s return value.
 Equivalency: ::
 
     bind1st(fun, lhs)(rhs) == fun(lhs, rhs)
+
+See Also: `bind`_, `bind2nd`_, `binder`_.
 
 Example:
 
@@ -111,6 +116,8 @@ Returns *fun*'s return value.
 Equivalency: ::
 
     bind2nd(fun, rhs)(lhs) == fun(lhs, rhs)
+
+See Also: `bind`_, `bind1st`_, `binder`_.
 
 Example:
 
@@ -133,6 +140,8 @@ Equivalency: ::
 
     binder(fun)(x, y, z)(a, b, c) == bind(fun, map(value, [z, y, x]))(a, b, c)
 
+See Also: `$1`_, `$2`_, `$3`_, `argv`_, `bind`_, `bind1st`_, `bind2nd`_.
+
 compose(f, g)
 ~~~~~~~~~~~~~
 
@@ -143,6 +152,9 @@ that calling it with arguments *a1, a2, ..., aN* is the same as calling
 Equivalency: ::
 
     compose(f, g)(x, y, z) == f(g(x, y, z))
+
+See Also: `$1`_, `$2`_, `$3`_, `argv`_, `bind`_, `bind1st`_, `bind2nd`_,
+`binder`_, `composex`_.
 
 Possible implementation: ::
 
@@ -171,6 +183,9 @@ Equivalency: ::
 
     composex([f, g, h])(x, y, z) == f(g(h(x, y, z)))
 
+See Also: `$1`_, `$2`_, `$3`_, `bind`_, `bind1st`_, `bind2nd`_, `binder`_,
+`compose`_.
+
 Possible implementation: ::
 
     var composex = bind(reduce, [value(compose), $1, value(itself)]);
@@ -198,6 +213,8 @@ Equivalency: ::
 
     negate(f)(x, y, z) == !f(x, y, z)
 
+See Also: `not`_.
+
 Possible implementation: ::
 
     var negate = bind1st(compose, not);
@@ -212,6 +229,8 @@ array.  Returns *fun*'s return value.
 Equivalency: ::
 
     spread(fun)([x, y, z]) == fun(x, y, z)
+
+See Also: `apply`_.
 
 Possible implementation: ::
 
@@ -241,6 +260,8 @@ Equivalency: ::
 
     to_bool(f)(x, y, z) == Boolean(f(x, y, z))
 
+See Also: `compose`_.
+
 Possible implementation: ::
 
     var to_bool = bind1st(compose, Boolean);
@@ -255,6 +276,8 @@ calling it with arguments *a1, a2, ... aN* is the same as calling
 Equivalency: ::
 
     to_num(f)(x, y, z) == Number(f(x, y, z))
+
+See Also: `compose`_.
 
 Possible implementation: ::
 
@@ -274,6 +297,8 @@ Possible implementation: ::
 
     var use1st = bind2nd(compose, $1);
 
+See Also: `$1`_, `$2`_, `$3`_, `argv`_, `compose`_, `use2nd`_.
+
 use2nd(fun)
 ~~~~~~~~~~~
 
@@ -283,6 +308,8 @@ calling it with arguments *a1, a2, ... aN* is the same as calling *fun(a2)*.
 Equivalency: ::
 
     use2nd(f)(x, y, z) == compose(f, $2)(x, y, z) == f(y)
+
+See Also: `$1`_, `$2`_, `$3`_, `argv`_, `compose`_, `use1st`_.
 
 Possible implementation: ::
 
@@ -306,6 +333,8 @@ Equivalency: ::
 
     conjoin([f, g, h])(x, y, z) == (f(x, y, z) && g(x, y, z) && h(x, y, z))
 
+See Also: `disjoin`_.
+
 disjoin(fs)
 ~~~~~~~~~~~
 
@@ -321,6 +350,8 @@ Equivalency: ::
 
     disjoin([f, g, h])(x, y, z) == (f(x, y, z) || g(x, y, z) || h(x, y, z))
 
+See Also: `conjoin`_.
+
 insert(arr)
 ~~~~~~~~~~~
 
@@ -331,6 +362,8 @@ Equivalency: ::
 
     insert(arr)(v, i) == (arr[i] = v)
 
+See Also: `push`_.
+
 nth(arr)
 ~~~~~~~~
 
@@ -340,6 +373,8 @@ returns *arr[ind]*.
 Equivalency: ::
 
     nth(arr)(i) == arr[i]
+
+See Also: `member`_, `project`_, `select`_.
 
 Possible implementation: ::
 
@@ -359,6 +394,8 @@ Possible implementation: ::
 
     var push = bind(method, [$1, select('push')]);
 
+See Also: `insert`_, `member`_.
+
 value(val)
 ~~~~~~~~~~
 
@@ -368,6 +405,8 @@ Reference types are not copied.
 Equivalency: ::
 
     value(v)(x, y, z) == v
+
+See Also: `false_`_, `itself`_, `true_`_.
 
 Other
 +++++
@@ -381,6 +420,8 @@ arguments supplied from *args*.  *apply* returns *fun*'s return value.
 Equivalency: ::
 
     apply(fun, [x, y, z]) == fun(x, y, z)
+
+See Also: `spread`_.
 
 Example: ::
 
@@ -401,6 +442,8 @@ argv(...)
 Equivalency: ::
 
     args(x, y, z) == [x, y, z]
+
+See Also: `$1`_, `$2`_, `$3`_, `use1st`_, `use2nd`_.
 
 Possible implementation: ::
 
@@ -480,6 +523,8 @@ filter(pred, arr)
 called once with each element in *arr*.  *filter* returns an array of those
 elements of *arr* for which *pred* returned a value convertible to ``true``.
 
+See Also: `copy`_, `map`_, `unique`_.
+
 group_by(fun, arr)
 ~~~~~~~~~~~~~~~~~~
 
@@ -494,6 +539,8 @@ map(fun, arr)
 
 *fun* is an `array callback`_.  *arr* is an array.  *fun* is called
 once for each element in *arr*.  *map* returns an array of results.
+
+See Also: `copy`_, `filter`_, `reduce`_.
 
 Example:
 
@@ -673,7 +720,7 @@ Arithmetic Operations
 +++++++++++++++++++++
 
 dec(init)
-~~~~~~~~~~~~
+~~~~~~~~~
 
 *init* is a number.  *dec* returns a function such that calling it is
 the same as ``--init``.
@@ -689,7 +736,7 @@ Equivalency: ::
     div(x, y) == (x / y)
 
 inc(init)
-~~~~~~~~~~~~
+~~~~~~~~~
 
 *init* is a number.  *inc* returns a function such that calling it is
 the same as ``++init``.
@@ -768,6 +815,8 @@ Equivalency: ::
   (compare(lhs, rhs) < 0)  == (lhs < rhs)
   (compare(lhs, rhs) == 0) == (lhs == rhs)
 
+See Also: `max`_, `min`_.
+
 eq(lhs, rhs)
 ~~~~~~~~~~~~
 
@@ -789,6 +838,8 @@ even(int)
 ~~~~~~~~~
 
 *int* is an integer.  *even* returns true if *int* is even, false otherwise.
+
+See Also: `odd`_.
 
 Possible implementation: ::
 
@@ -861,6 +912,8 @@ max(lhs, rhs)
 *lhs* is any value.  *rhs* is any value.  *max* returns *rhs* iff *lhs* is
 greater than *rhs*, otherwise *lhs*.  Reference types are not copied.
 
+See Also: `compare`_, `min`_.
+
 Example:
 
 Find the greatest value in an array: ::
@@ -873,6 +926,8 @@ min(lhs, rhs)
 *lhs* is any value.  *rhs* is any value.  *min* returns *rhs* iff *lhs* is
 less than *rhs*, otherwise *lhs*.  Reference types are not copied.
 
+See Also: `compare`_, `max`_.
+
 Example:
 
 Find the smallest value in an array: ::
@@ -883,6 +938,8 @@ odd(int)
 ~~~~~~~~
 
 *int* is an integer.  *odd* returns true if *int* is odd, false otherwise.
+
+See Also: `even`_.
 
 Possible implementation: ::
 
@@ -905,6 +962,8 @@ Equivalency: ::
 
     false_() == false
 
+See Also: `true_`_, `value`_.
+
 Possible implementation: ::
 
     var false_ = negate(true_);
@@ -918,6 +977,8 @@ Equivalency: ::
 
     not(v) == !v
 
+See Also: `negate`_.
+
 true_()
 ~~~~~~~
 
@@ -926,6 +987,8 @@ Returns ``true``.
 Equivalency: ::
 
     true_() == true
+
+See Also: `false_`_, `value`_.
 
 Possible implementation: ::
 
@@ -943,6 +1006,8 @@ Equivalency: ::
 
     $1(x, y, z) == x
 
+See Also: `$2`_, `$3`_, `itself`_.
+
 Possible implementation: ::
 
     var $1 == project(0);
@@ -956,6 +1021,8 @@ Equivalency: ::
 
     $2(x, y, z) == y
 
+See Also: `$1`_, `$3`_.
+
 Possible implementation: ::
 
     var $2 == project(1);
@@ -968,6 +1035,8 @@ $3(...)
 Equivalency: ::
 
     $3(x, y, z) == z
+
+See Also: `$1`_, `$2`_.
 
 Possible implementation: ::
 
@@ -987,9 +1056,11 @@ itself(val)
 
 *val* is any value.  *itself* returns *val*.  Reference types are not copied.
 
-::
+Equivalency: ::
 
     itself(v) == v
+
+See Also: `$1`_, `value`_.
 
 project(i)
 ~~~~~~~~~~
@@ -1005,6 +1076,8 @@ Possible implementation: ::
 
     var project = bind(compose, [select, value(argv)]);
 
+See Also: `project`_.
+
 select(i)
 ~~~~~~~~~
 
@@ -1014,6 +1087,8 @@ returns its *i*'th member.
 Equivalency: ::
 
     select(i)(arr) == arr[i]
+
+See Also: `nth`_, `project`_.
 
 Possible implementation: ::
 
@@ -1031,6 +1106,8 @@ member(obj, prop)
 Equivalency: ::
 
     member(o, i) == o[i]
+
+See Also: `nth`_.
 
 Example: ::
 
@@ -1060,7 +1137,45 @@ Create Date objects: ::
     );
 
 
-.. target-notes::
 .. section-numbering::
+
+.. _$1: $1(...)_
+.. _$2: $2(...)_
+.. _$3: $3(...)_
+.. _apply: apply(fun, args)_
+.. _argv: argv(...)_
+.. _bind1st: bind1st(fun, lhs)_
+.. _bind2nd: bind2nd(fun, rhs)_
+.. _binder: binder(fun)_
+.. _bind: bind(fun, binders)_
+.. _compare: compare(lhs, rhs)_
+.. _compose: compose(f, g)_
+.. _composex: composex(fs)_
+.. _conjoin: conjoin(fs)_
+.. _copy: copy(arr)_
+.. _disjoin: disjoin(fs)_
+.. _even: even(int)_
+.. _false_: false_()_
+.. _filter: filter(pred, arr)_
+.. _insert: insert(arr)_
+.. _itself: itself(val)_
+.. _map: map(fun, arr)_
+.. _max: max(lhs, rhs)_
+.. _member: member(obj, prop)_
+.. _min: min(lhs, rhs)_
+.. _negate: negate(fun)_
+.. _not: not(val)_
+.. _nth: nth(arr)_
+.. _odd: odd(int)_
+.. _project: project(int)_
+.. _push: push(arr)_
+.. _reduce: reduce(fun, arr, init)_
+.. _select: select(int)_
+.. _spread: spread(fun)_
+.. _true_: true_()_
+.. _unique: unique(arr)_
+.. _use1st: use1st(fun)_
+.. _use2nd: use2nd(fun)_
+.. _value: value(v)_
 
 .. vim: ft=rst sts=2 sw=2 tw=80
