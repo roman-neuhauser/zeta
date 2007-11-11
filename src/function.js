@@ -76,4 +76,8 @@ function composex(fs)
     return reduce(compose, fs, $N);
 }
 
+var joiner = bind1st(bind2nd, join);
+
+var splitter = bind1st(bind2nd, split);
+
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

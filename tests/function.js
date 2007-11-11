@@ -119,6 +119,7 @@ function testDisjoinReturnValue() // {{{
     assertEquals(false, disjoin([false_, $1])(null));
     assertEquals(4, disjoin([$1, false_])(4));
     assertEquals(8, disjoin([false_, $1])(8));
+    assertEquals('0', disjoin([false_, $1])('0'));
 } // }}}
 
 function testBinder() // {{{
@@ -221,6 +222,24 @@ function testComposex() // {{{
     assertEquals(undefined, composex([])());
 } // }}}
 
+function testJoiner() // {{{
+{
+    assertEquals('a-b-c', joiner('-')(['a', 'b', 'c']));
+} // }}}
+
+function testSplitter() // {{{
+{
+    var exp = ['a', 'b', 'c'];
+    var rv = splitter('-')('a-b-c');
+    for_(
+        exp
+      , function (v, i)
+        {
+            assertEquals(v, rv[i]);
+        }
+    );
+} // }}}
+
 tests.push(
     testItself
   , testValue
@@ -245,6 +264,8 @@ tests.push(
   , testUse2nd
   , testNth
   , testComposex
+  , testJoiner
+  , testSplitter
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

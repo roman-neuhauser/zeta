@@ -189,6 +189,25 @@ Possible implementation: ::
 
     var composex = bind(reduce, [value(compose), $1, value(itself)]);
 
+join(arr[, sep])
+~~~~~~~~~~~~~~~~
+
+*arr* is an array.  *sep* is any value, defaults to a comma.  *join*
+returns a string of all *arr* elements with *sep* between every two
+elements.  *join* relies on *arr.join*, including its behavior when *sep*
+is omitted.
+
+Equivalency: ::
+
+    join(arr, sep) == arr.join(sep)
+    join(arr) == arr.join()
+
+See Also: `joiner`_, `split`_.
+
+Example: ::
+
+    assertEquals('a-b-c', join(['a', 'b', 'c'], '-'));
+
 method(that, fun)
 ~~~~~~~~~~~~~~~~~
 
@@ -217,6 +236,28 @@ See Also: `not`_.
 Possible implementation: ::
 
     var negate = bind1st(compose, not);
+
+split(str[, sep])
+~~~~~~~~~~~~~~~~~
+
+*str* is an array.  *sep* is any value.  *split* returns an array of all
+maximal nonoverlapping *str* substrings separated with *sep*.  *split*
+relies on *str.split*, including its behavior when *sep* is omitted.
+
+Equivalency: ::
+
+    split(str, sep) == str.split(sep)
+    split(str) == str.split()
+
+See Also: `join`_, `joiner`_, `splitter`_.
+
+Example: ::
+
+    var rv = split('a-b-c', '-');
+    assertEquals(3, rv.length);
+    assertEquals('a', rv[0]);
+    assertEquals('b', rv[1]);
+    assertEquals('c', rv[2]);
 
 spread(fun)
 ~~~~~~~~~~~
@@ -363,6 +404,22 @@ Equivalency: ::
 
 See Also: `push`_.
 
+joiner(sep)
+~~~~~~~~~~~
+
+*sep* is any value.  *joiner* returns a unary function such that calling
+it with argument *arr* is the same as calling *join(arr, sep)*.
+
+Equivalency: ::
+
+    joiner(sep)(arr) == bind2nd(join, sep)(arr) == join(arr, sep)
+
+See Also: `join`_, `split`_, `splitter`_.
+
+Possible implementation: ::
+
+    var joiner = bind1st(bind2nd, join);
+
 nth(arr)
 ~~~~~~~~
 
@@ -394,6 +451,22 @@ Possible implementation: ::
     var push = bind(method, [$1, select('push')]);
 
 See Also: `insert`_, `member`_.
+
+splitter(sep)
+~~~~~~~~~~~~~
+
+*sep* is any value.  *splitter* returns a unary function such that calling
+it with argument *arr* is the same as calling *split(arr, sep)*.
+
+See Also: `join`_, `joiner`_, `split`_.
+
+Equivalency: ::
+
+    splitter(sep)(arr) == bind2nd(split, sep)(arr) == split(arr, sep)
+
+Possible implementation: ::
+
+    var splitter = bind1st(bind2nd, split);
 
 value(val)
 ~~~~~~~~~~
@@ -1174,6 +1247,8 @@ Create Date objects: ::
 .. _filter: filter(pred, arr)_
 .. _insert: insert(arr)_
 .. _itself: itself(val)_
+.. _join: join(arr, sep)_
+.. _joiner: joiner(sep)_
 .. _map: map(fun, arr)_
 .. _max: max(lhs, rhs)_
 .. _member: member(obj, prop)_
@@ -1186,6 +1261,8 @@ Create Date objects: ::
 .. _push: push(arr)_
 .. _reduce: reduce(fun, arr, init)_
 .. _select: select(int)_
+.. _split: split(str, sep)_
+.. _splitter: splitter(sep)_
 .. _spread: spread(fun)_
 .. _true_: true_()_
 .. _unique: unique(arr)_

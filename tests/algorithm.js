@@ -368,6 +368,13 @@ function testJoin() // {{{
     assertEquals('x', join(['', ''], 'x'));
 } // }}}
 
+function testJoinDefaultSep() // {{{
+{
+    assertEquals('', join([]));
+    assertEquals('', join(['']));
+    assertEquals('a,b,c', join(['a', 'b', 'c']));
+} // }}}
+
 function testSplit() // {{{
 {
     var empty = split('', '');
@@ -381,6 +388,19 @@ function testSplit() // {{{
     assertEquals('b', a[1]);
     assertEquals('c', a[2]);
     assertEquals('d', a[3]);
+} // }}}
+
+function testSplitDefaultSep() // {{{
+{
+    var empty = split('');
+    assertEquals(true, empty instanceof Array);
+    assertEquals(1, empty.length);
+    assertEquals('', empty[0]);
+
+    var s = 'abcd';
+    var a = split(s);
+    assertEquals(1, a.length);
+    assertEquals(s, a[0]);
 } // }}}
 
 tests.push(
@@ -414,7 +434,9 @@ tests.push(
   , testTakeWhile
   , testTakeWhileSparseInput
   , testJoin
+  , testJoinDefaultSep
   , testSplit
+  , testSplitDefaultSep
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
