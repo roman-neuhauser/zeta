@@ -839,6 +839,10 @@ even(int)
 
 *int* is an integer.  *even* returns true if *int* is even, false otherwise.
 
+Equivalency: ::
+
+    even(int) == (0 == (int % 2))
+
 See Also: `odd`_.
 
 Possible implementation: ::
@@ -909,8 +913,12 @@ Find the index of the first negative element in an array: ::
 max(lhs, rhs)
 ~~~~~~~~~~~~~
 
-*lhs* is any value.  *rhs* is any value.  *max* returns *rhs* iff *lhs* is
-greater than *rhs*, otherwise *lhs*.  Reference types are not copied.
+*lhs* is any value.  *rhs* is any value.  *max* returns *rhs* iff *rhs* is
+greater than *lhs*, otherwise *lhs*.  Reference types are not copied.
+
+Equivalency: ::
+
+    max(lhs, rhs) == (lhs < rhs) ? rhs : lhs
 
 See Also: `compare`_, `min`_.
 
@@ -923,8 +931,12 @@ Find the greatest value in an array: ::
 min(lhs, rhs)
 ~~~~~~~~~~~~~
 
-*lhs* is any value.  *rhs* is any value.  *min* returns *rhs* iff *lhs* is
-less than *rhs*, otherwise *lhs*.  Reference types are not copied.
+*lhs* is any value.  *rhs* is any value.  *min* returns *rhs* iff *rhs* is
+less than *lhs*, otherwise *lhs*.  Reference types are not copied.
+
+Equivalency: ::
+
+    min(lhs, rhs) == (lhs > rhs) ? rhs : lhs
 
 See Also: `compare`_, `max`_.
 
@@ -939,11 +951,15 @@ odd(int)
 
 *int* is an integer.  *odd* returns true if *int* is odd, false otherwise.
 
+Equivalency: ::
+
+    odd(int) == (0 != (int % 2))
+
 See Also: `even`_.
 
 Possible implementation: ::
 
-    var odd = compose(Boolean, bind2nd(mod, 2));
+    var odd = to_bool(bind2nd(mod, 2));
 
 Example: ::
 
