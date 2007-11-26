@@ -103,6 +103,8 @@ function div(lhs, rhs) // {{{
     return lhs / rhs;
 } // }}}
 
+var intdiv = compose(Math.floor, div);
+
 function mod(lhs, rhs) // {{{
 {
     return lhs % rhs;

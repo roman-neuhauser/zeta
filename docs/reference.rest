@@ -820,6 +820,8 @@ div(lhs, rhs)
 *lhs* is any value.  *rhs* is any value.  *div* is a trivial wrapper around
 the intrinsic / operator.
 
+See Also: `intdiv`_.
+
 Equivalency: ::
 
     div(x, y) == (x / y)
@@ -829,6 +831,22 @@ inc(init)
 
 *init* is a number.  *inc* returns a function such that calling it is
 the same as ``++init``.
+
+intdiv(lhs, rhs)
+~~~~~~~~~~~~~~~~
+
+*lhs* is a number.  *rhs* is a number.  *intdiv* returns the floored
+quotient of *lhs* and *rhs*.
+
+See Also: `div`_.
+
+Equivalency: ::
+
+    intdiv(lhs, rhs) == Math.floor(lhs / rhs)
+
+Possible implementation: ::
+
+    var intdiv = compose(Math.floor, div);
 
 minus(lhs, rhs)
 ~~~~~~~~~~~~~~~

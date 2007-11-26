@@ -53,6 +53,14 @@ function testMul() // {{{
 function testDiv() // {{{
 {
     assertEquals(3, div(24, 8));
+    assertEquals(3.14, div(9.42, 3));
+} // }}}
+
+function testIntdiv() // {{{
+{
+    assertEquals(6, intdiv(24, 4));
+    assertEquals(4, intdiv(9.99, 2));
+    assertEquals(1, intdiv(4, 2.3));
 } // }}}
 
 function testMod() // {{{
@@ -233,6 +241,7 @@ tests.push(
   , testMinus
   , testMul
   , testDiv
+  , testIntdiv
   , testMod
   , testPow
   , testNot
