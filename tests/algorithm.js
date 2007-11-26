@@ -403,6 +403,11 @@ function testSplitDefaultSep() // {{{
     assertEquals(s, a[0]);
 } // }}}
 
+function testInner_product() // {{{
+{
+    assertEquals(2 * 3 + 4 * 5, inner_product([2, 4], [3, 5]));
+} // }}}
+
 tests.push(
     testFor_
   , testWhile_
@@ -437,6 +442,7 @@ tests.push(
   , testJoinDefaultSep
   , testSplit
   , testSplitDefaultSep
+  , testInner_product
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

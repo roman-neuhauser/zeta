@@ -605,6 +605,19 @@ Possible implementation: ::
     var copy = bind1st(map, itself);
     var copy = bind2nd(method, select('concat'));
 
+inner_product(lhs, rhs)
+~~~~~~~~~~~~~~~~~~~~~~~
+
+*lhs* is an array of numbers.  *rhs* is an array of numbers.  *inner_product*
+returns the sum of multiplications of respective elements of *lhs* and *rhs*.
+
+More precisely, *inner_product*  first initializes *result* with 0, and then,
+for each pair *lhs[i], rhs[i]*, *rv* is updated with *rv + lhs[i] * rhs[i]*.
+
+Example: ::
+
+    assertEquals(35, inner_product([1, 3], [5, 10]));
+
 filter(pred, arr)
 ~~~~~~~~~~~~~~~~~
 

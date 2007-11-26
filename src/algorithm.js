@@ -104,6 +104,16 @@ function reduce(f, arr, init) // {{{
     return rv;
 } // }}}
 
+function inner_product(lhs, rhs) // {{{
+{
+    return reduce(
+        plus
+      , map(spread(mul), zip([lhs, rhs]))
+      , 0
+    );
+}
+ // }}}
+
 function slice(arr, start, end) // {{{
 {
     return apply(
