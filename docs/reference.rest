@@ -1278,10 +1278,12 @@ Create Date objects: ::
 .. _conjoin: conjoin(fs)_
 .. _copy: copy(arr)_
 .. _disjoin: disjoin(fs)_
+.. _div: div(lhs, rhs)_
 .. _even: even(int)_
 .. _false_: false_()_
 .. _filter: filter(pred, arr)_
 .. _insert: insert(arr)_
+.. _intdiv: intdiv(lhs, rhs)_
 .. _itself: itself(val)_
 .. _join: join(arr, sep)_
 .. _joiner: joiner(sep)_
