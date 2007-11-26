@@ -106,6 +106,8 @@ function bind(f, binders) // {{{
     }
 } // }}}
 
+var collect = bind2nd(compose, argv);
+
 var spread = bind1st(bind1st, apply);
 
 function value(v) // {{{

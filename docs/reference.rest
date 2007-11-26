@@ -141,6 +141,23 @@ Equivalency: ::
 
 See Also: `$1`_, `$2`_, `$3`_, `argv`_, `bind`_, `bind1st`_, `bind2nd`_.
 
+collect(fun)
+~~~~~~~~~~~~
+
+*fun* is a unary function.  *collect* returns a variadic function such
+that calling it with arguments *a1, a2, ..., aN* is the same as calling
+*fun([a1, a2, ..., aN])*.  Returns *fun*'s return value.
+
+Equivalency: ::
+
+    collect(fun)(x, y, z) == fun([x, y, z])
+
+See Also: `apply`_, `spread`_.
+
+Possible implementation: ::
+
+    var collect = bind2nd(compose, argv);
+
 compose(f, g)
 ~~~~~~~~~~~~~
 
@@ -270,7 +287,7 @@ Equivalency: ::
 
     spread(fun)([x, y, z]) == fun(x, y, z)
 
-See Also: `apply`_.
+See Also: `apply`_, `collect`_.
 
 Possible implementation: ::
 
@@ -1236,6 +1253,7 @@ Create Date objects: ::
 .. _bind2nd: bind2nd(fun, rhs)_
 .. _binder: binder(fun)_
 .. _bind: bind(fun, binders)_
+.. _collect: collect(fun)_
 .. _compare: compare(lhs, rhs)_
 .. _compose: compose(f, g)_
 .. _composex: composex(fs)_

@@ -56,6 +56,23 @@ function testSpread() // {{{
     assertEquals(7, spread(plus)([2, 5]));
 } // }}}
 
+function testCollect() // {{{
+{
+    var args = [3, 4, 5];
+    var f = collect(itself);
+    var rv = f.apply(f, args);
+    assertEquals(true, rv instanceof Array);
+    for_(
+        args
+      , function (v, i)
+        {
+            assertEquals(v, rv[i]);
+        }
+    );
+
+    assertEquals(0, f().length);
+} // }}}
+
 function testMethod() // {{{
 {
     var s = 'omg wtf';
@@ -246,6 +263,7 @@ tests.push(
   , testCompose
   , testApply
   , testSpread
+  , testCollect
   , testMethod
   , testOperatorAndReturnValue
   , testConjoinShortCircuit
