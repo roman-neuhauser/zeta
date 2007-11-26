@@ -17,7 +17,7 @@ Introduction
 ============
 
 This article introduces a few elements of Zeta through several refactorings
-of an implementation of the *composex* function generator.  Unlike other
+of an implementation of the *composex* function adapter.  Unlike other
 Zeta Usage Examples, this one assumes some prior knowledge. Specifically,
 you should be acquainted with *for_* and *compose*.  `Refactoring
 unique(pred, arr)`_ explains these two functions in a (hopefully)
