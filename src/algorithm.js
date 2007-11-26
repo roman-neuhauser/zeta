@@ -66,6 +66,8 @@ function coalesce(vs, dflt) // {{{
 
 var copy = bind1st(map, itself);
 
+var keys = bind1st(map, $2);
+
 function reverse(arr) // {{{
 {
     var rv = copy(arr);

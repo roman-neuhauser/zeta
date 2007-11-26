@@ -150,6 +150,29 @@ function testCopy() // {{{
     assertEquals(data[3], rv[3]);
 } // }}}
 
+function testKeys() // {{{
+{
+    var data = range(1, 10);
+    for_(
+        data
+      , function (v, i)
+        {
+            if (even(i)) {
+                delete data[i];
+            }
+        }
+    );
+    var rv = keys(data);
+    assertEquals(data.length / 2, rv.length);
+    for_(
+        range(1, 5, 2)
+      , function (v, i)
+        {
+            assertEquals(v, rv[i]);
+        }
+    );
+} // }}}
+
 function testReverse() // {{{
 {
     var data = range(0, 3);
@@ -422,6 +445,7 @@ tests.push(
   , testFind_if
   , testFind
   , testCopy
+  , testKeys
   , testReverse
   , testPrevious
   , testUnique

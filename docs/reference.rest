@@ -636,6 +636,16 @@ in *arr*.  *group_by* returns a (possibly sparse) array such that values
 returned by *fun* are used for keys, and values are arrays of *arr* elements
 which generated that particular key.
 
+keys(arr)
+~~~~~~~~~
+
+*arr* is an array.  *keys* returns an array of indexes in *arr* which have
+values assigned to them.
+
+Possible implementation: ::
+
+    var keys = bind1st(map, $2);
+
 map(fun, arr)
 ~~~~~~~~~~~~~
 
