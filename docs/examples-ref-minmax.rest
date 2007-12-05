@@ -359,7 +359,7 @@ it as *composex*:
     {
         return bind(
             member
-          , [argv, composex(Number, Boolean, pred)]
+          , [argv, composex([Number, Boolean, pred])]
         );
     }
         
