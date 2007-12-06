@@ -391,6 +391,7 @@ The only problem is getting *for_* to call *maybepush(val, prev(val))*. ::
                 rv.push(val);
             }
         }
+        // for_(arr, ???);
 
 It's always possible (and easy, if tiresome) to write such an adapter by
 hand, but that can lead to excessive code: ::
@@ -477,7 +478,7 @@ Another problem is the explicit presence of a common code structure, even
 if our code uses *for_*: ::
 
     for (var i = 0; i < a1.len; ++i) {
-        if (condition) {
+        if (test_using_any_of(a1[i], i, a1) {
             a2.push(a1[i]);
         }
     }
@@ -569,7 +570,7 @@ This is the functional || operator:
   returns true or until *fs* is exhausted.  Returns true if one of the
   functions returned true, otherwise false.
 
-And this is what remains of *test*: ::
+And this is what remains of *test* when we use *disjoin*: ::
 
         var test = disjoin([first, different]);
 
