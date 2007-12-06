@@ -217,5 +217,10 @@ var joiner = bind1st(bind2nd, join);
 
 var splitter = bind1st(bind2nd, split);
 
+var chunk = bind( // {{{
+    group_by
+  , [use2nd(bind1st(bind2nd, intdiv)), $1]
+); // }}}
+
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

@@ -426,6 +426,20 @@ function testSplitDefaultSep() // {{{
     assertEquals(s, a[0]);
 } // }}}
 
+function testChunk() // {{{
+{
+    var rv = chunk(range(0, 10), 3);
+    assertEquals(3, rv[0].length);
+    assertEquals(3, rv[1].length);
+    assertEquals(3, rv[2].length);
+    assertEquals(1, rv[3].length);
+    assertEquals(0, rv[0][0]);
+    assertEquals(1, rv[0][1]);
+    // ...
+    assertEquals(8, rv[2][2]);
+    assertEquals(9, rv[3][0]);
+} // }}}
+
 function testInner_product() // {{{
 {
     assertEquals(2 * 3 + 4 * 5, inner_product([2, 4], [3, 5]));
@@ -459,6 +473,7 @@ tests.push(
   , testZipDifferentLengths1
   , testZipDifferentLengths2
   , testGroup_by
+  , testChunk
   , testReduce
   , testTakeWhile
   , testTakeWhileSparseInput

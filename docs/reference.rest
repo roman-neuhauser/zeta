@@ -591,6 +591,14 @@ Equivalency: ::
 
     chain([[a, b, c], [d, e, f]]) == [a, b, c, d, e, f]
 
+chunk(arr, sz)
+~~~~~~~~~~~~~~
+
+*arr* is an array.  *sz* is an integer.  *chunk* returns *arr* split into
+chunks of *sz* elements each.  The last chunk may contain fewer elements.
+
+See Also: `group_by`_.
+
 copy(arr)
 ~~~~~~~~~
 
@@ -1309,6 +1317,7 @@ Create Date objects: ::
 .. _even: `even(int)`_
 .. _false_: `false`_()_
 .. _filter: `filter(pred, arr)`_
+.. _group_by: `group_by(fun, arr)`_
 .. _insert: `insert(arr)`_
 .. _intdiv: `intdiv(lhs, rhs)`_
 .. _itself: `itself(val)`_
