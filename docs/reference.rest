@@ -642,6 +642,10 @@ keys(arr)
 *arr* is an array.  *keys* returns an array of indexes in *arr* which have
 values assigned to them.
 
+Equivalency: ::
+
+    keys(arr) == map($2, arr)
+
 Possible implementation: ::
 
     var keys = bind1st(map, $2);
