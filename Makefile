@@ -15,14 +15,14 @@ ZETA_HTMLIZE_RESTTARGETS=sed \
 	-e '/^\.\. /s/\.rest/.html/'
 
 ZETA_JS_INCLUDES=	-f src/base.js \
-			-f src/algorithm.js \
+			-f src/operator.js \
 			-f src/function.js \
-			-f src/operator.js
+			-f src/algorithm.js
 
 ZETA_JS_SOURCES=	src/base.js \
-			src/algorithm.js \
+			src/operator.js \
 			src/function.js \
-			src/operator.js
+			src/algorithm.js
 
 all: docs zeta.js
 
