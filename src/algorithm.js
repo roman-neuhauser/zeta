@@ -222,5 +222,6 @@ var chunk = bind( // {{{
   , [use2nd(bind1st(bind2nd, intdiv)), $1]
 ); // }}}
 
+var fill = bind(map, [use2nd(value), iota]);
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

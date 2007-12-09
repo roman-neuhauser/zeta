@@ -754,6 +754,18 @@ Example: ::
 Array Generators
 ++++++++++++++++
 
+fill(cnt, val)
+~~~~~~~~~~~~~~
+
+*cnt* is a natural number.  *val* is any value.  *fill* returns an array
+of *cnt* elements with *val* for values.  Reference types are not copied.
+
+See Also: `iota`_, `map`_.
+
+Possible implementation: ::
+
+    var fill = bind(map, [use2nd(value), iota]);
+
 iota(cnt)
 ~~~~~~~~~
 
@@ -1320,6 +1332,7 @@ Create Date objects: ::
 .. _group_by: `group_by(fun, arr)`_
 .. _insert: `insert(arr)`_
 .. _intdiv: `intdiv(lhs, rhs)`_
+.. _iota: `iota(cnt)`_
 .. _itself: `itself(val)`_
 .. _join: `join(arr[, sep])`_
 .. _joiner: `joiner(sep)`_

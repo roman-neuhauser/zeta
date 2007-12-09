@@ -440,6 +440,19 @@ function testChunk() // {{{
     assertEquals(9, rv[3][0]);
 } // }}}
 
+function testFill() // {{{
+{
+    var rv = fill(10, 'omg');
+    assertEquals(10, rv.length);
+    for_(
+        iota(10)
+      , function (i)
+        {
+            assertEquals('omg', rv[i]);
+        }
+    );
+} // }}}
+
 function testInner_product() // {{{
 {
     assertEquals(2 * 3 + 4 * 5, inner_product([2, 4], [3, 5]));
@@ -455,6 +468,7 @@ tests.push(
   , testPush
   , testCoalesce
   , testIota
+  , testFill
   , testFibonacci
   , testFind_if
   , testFind
