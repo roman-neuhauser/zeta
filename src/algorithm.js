@@ -224,4 +224,14 @@ var chunk = bind( // {{{
 
 var fill = bind(map, [use2nd(value), iota]);
 
+function items(obj) // {{{
+{
+    var rv = [];
+    for (var i in obj) {
+        rv.push([i, obj[i]]);
+    }
+    return rv;
+} // }}}
+
+
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

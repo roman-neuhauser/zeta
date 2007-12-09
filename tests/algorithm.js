@@ -458,6 +458,29 @@ function testInner_product() // {{{
     assertEquals(2 * 3 + 4 * 5, inner_product([2, 4], [3, 5]));
 } // }}}
 
+function testItems() // {{{
+{
+    var rv = items({
+        foo: 20
+      , bar: 30
+      , baz: 40
+    });
+    var exp = [
+        ['foo', 20],
+        ['bar', 30],
+        ['baz', 40],
+    ];
+    assertEquals(exp.length, rv.length);
+    for_(
+        exp
+      , function (v, i)
+        {
+            assertEquals(v[0], rv[i][0]);
+            assertEquals(v[1], rv[i][1]);
+        }
+    );
+} // }}}
+
 tests.push(
     testFor_
   , testWhile_
@@ -496,6 +519,7 @@ tests.push(
   , testSplit
   , testSplitDefaultSep
   , testInner_product
+  , testItems
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

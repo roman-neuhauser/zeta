@@ -644,6 +644,15 @@ in *arr*.  *group_by* returns a (possibly sparse) array such that values
 returned by *fun* are used for keys, and values are arrays of *arr* elements
 which generated that particular key.
 
+items(obj)
+~~~~~~~~~~
+
+*obj* is an object.  *items* returns an array of *obj*'s *[key, value]* pairs.
+
+Equivalency: ::
+
+    items({a: 10, b: 20, c: 30}) == [['a', 10], ['b', 20], ['c', 30]]
+
 keys(arr)
 ~~~~~~~~~
 
