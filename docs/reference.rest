@@ -699,7 +699,7 @@ Equivalency: ::
 
     product([x, y, z]) == reduce(mul, [x, y, z], 1) == x * y * z
 
-See Also: `reduce`_.
+See Also: `reduce`_, `sum`_.
 
 reduce(fun, arr, init)
 ~~~~~~~~~~~~~~~~~~~~~~
