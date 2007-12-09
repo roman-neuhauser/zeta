@@ -689,6 +689,18 @@ Compute Fibonnaci numbers: ::
         }
     );
 
+product(arr)
+~~~~~~~~~~~~
+
+*arr* is an array.  *product* returns the result of multiplication of all
+*arr* elements.
+
+Equivalency: ::
+
+    product([x, y, z]) == reduce(mul, [x, y, z], 1) == x * y * z
+
+See Also: `reduce`_.
+
 reduce(fun, arr, init)
 ~~~~~~~~~~~~~~~~~~~~~~
 

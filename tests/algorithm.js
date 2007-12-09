@@ -426,6 +426,12 @@ function testSplitDefaultSep() // {{{
     assertEquals(s, a[0]);
 } // }}}
 
+function testProduct() // {{{
+{
+    assertEquals(3 * 20 * 100, product([3, 20, 100]));
+    assertEquals(0, product([]));
+} // }}}
+
 function testChunk() // {{{
 {
     var rv = chunk(range(0, 10), 3);
@@ -512,6 +518,7 @@ tests.push(
   , testGroup_by
   , testChunk
   , testReduce
+  , testProduct
   , testTakeWhile
   , testTakeWhileSparseInput
   , testJoin

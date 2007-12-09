@@ -159,6 +159,15 @@ function chain(arrs) // {{{
     return reduce(method(tmp, tmp.concat), arrs, []);
 } // }}}
 
+function product(arr) // {{{
+{
+    return reduce(
+        mul
+      , chain([arr, [Number(Boolean(arr.length))]])
+      , 1
+    );
+} // }}}
+
 function zip(arrs) // {{{
 {
     return map(
