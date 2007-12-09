@@ -742,6 +742,18 @@ a `shallow copy`_ of *arr* sorted according to *cmp*.
 *sorted* relies on Array.prototype.sort, including its behavior when
 *cmp* is not provided.
 
+sum(arr)
+~~~~~~~~
+
+*arr* is an array.  *sum* returns the result of addition of all
+*arr* elements.
+
+Equivalency: ::
+
+    sum([x, y, z]) == reduce(plus, [x, y, z], 1) == x + y + z
+
+See Also: `product`_, `reduce`_.
+
 take_while(pred, arr)
 ~~~~~~~~~~~~~~~~~~~~~
 
@@ -1365,6 +1377,7 @@ Create Date objects: ::
 .. _not: `not(val)`_
 .. _nth: `nth(arr)`_
 .. _odd: `odd(int)`_
+.. _product: `product(arr)`_
 .. _project: `project(i)`_
 .. _push: `push(arr)`_
 .. _reduce: `reduce(fun, arr, init)`_

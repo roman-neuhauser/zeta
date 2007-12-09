@@ -432,6 +432,11 @@ function testProduct() // {{{
     assertEquals(0, product([]));
 } // }}}
 
+function testSum() // {{{
+{
+    assertEquals(123, sum([3, 20, 100]));
+} // }}}
+
 function testChunk() // {{{
 {
     var rv = chunk(range(0, 10), 3);
@@ -519,6 +524,7 @@ tests.push(
   , testChunk
   , testReduce
   , testProduct
+  , testSum
   , testTakeWhile
   , testTakeWhileSparseInput
   , testJoin

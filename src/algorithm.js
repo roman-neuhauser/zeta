@@ -168,6 +168,11 @@ function product(arr) // {{{
     );
 } // }}}
 
+function sum(arr) // {{{
+{
+    return reduce(plus, arr, 0);
+} // }}}
+
 function zip(arrs) // {{{
 {
     return map(
