@@ -179,5 +179,16 @@ function compare(lhs, rhs) // {{{
     return 0;
 } // }}}
 
+function is_a(val, cls) // {{{
+{
+    return val instanceof cls;
+} // }}}
+
+var is_null = bind1st(eq, null);
+
+var type_of = function (v)
+{
+    return typeof(v);
+}
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

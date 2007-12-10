@@ -236,6 +236,50 @@ function testTo_num() // {{{
     assertEquals(0.1, to_num(itself)('0.1'));
 } // }}}
 
+function testIs_a() // {{{
+{
+    var data = [
+        [false, new Number(1), String],
+        [false, new Number(1), RegExp],
+        [true, new Number(1), Number],
+        [true, new String('abc'), String],
+    ];
+    for_(
+        data
+      , spread(function (exp, val, cls)
+        {
+            assertEquals(exp, is_a(val, cls));
+        })
+    );
+} // }}}
+
+function testIs_null() // {{{
+{
+    var data = [
+        [false, 1],
+        [false, 0],
+        [true, null],
+        [true, undefined],
+    ];
+    for_(
+        data
+      , spread(function (exp, val, cls)
+        {
+            assertEquals(exp, null == val);
+            assertEquals(null == val, is_null(val, cls));
+        })
+    );
+} // }}}
+
+function testType_of() // {{{
+{
+    assertEquals('string', type_of('hello'));
+    assertEquals('object', type_of([]));
+    assertEquals('object', type_of({}));
+    assertEquals('object', type_of(null));
+    assertEquals('undefined', type_of(undefined));
+} // }}}
+
 tests.push(
     testPlus
   , testMinus
@@ -265,6 +309,9 @@ tests.push(
   , testMember
   , testTo_bool
   , testTo_num
+  , testIs_a
+  , testIs_null
+  , testType_of
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
