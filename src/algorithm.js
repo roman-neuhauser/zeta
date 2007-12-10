@@ -163,8 +163,8 @@ function product(arr) // {{{
 {
     return reduce(
         mul
-      , chain([arr, [Number(Boolean(arr.length))]])
-      , 1
+      , arr
+      , Number(Boolean(arr.length))
     );
 } // }}}
 
