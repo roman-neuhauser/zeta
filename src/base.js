@@ -74,6 +74,8 @@ function method(that, f) // {{{
     }
 } // }}}
 
+var length = bind2nd(member, 'length');
+
 function map(f, arr) // {{{
 {
     var rv = [];

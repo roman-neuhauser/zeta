@@ -191,4 +191,6 @@ var type_of = function (v)
     return typeof(v);
 }
 
+var empty = bind(eq, [value(0), length]);
+
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

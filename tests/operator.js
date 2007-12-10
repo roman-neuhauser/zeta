@@ -280,6 +280,19 @@ function testType_of() // {{{
     assertEquals('undefined', type_of(undefined));
 } // }}}
 
+function testLength() // {{{
+{
+    assertEquals(0, length([]));
+    assertEquals(1, length([0]));
+    assertEquals(2, length([0, 0]));
+    assertEquals(3, length([0, 0, 0]));
+} // }}}
+
+function testEmpty() // {{{
+{
+    assertEquals(true, empty([]));
+} // }}}
+
 tests.push(
     testPlus
   , testMinus
@@ -312,6 +325,8 @@ tests.push(
   , testIs_a
   , testIs_null
   , testType_of
+  , testLength
+  , testEmpty
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
