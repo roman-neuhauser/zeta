@@ -1385,6 +1385,7 @@ Create Date objects: ::
 .. _split: `split(str[, sep])`_
 .. _splitter: `splitter(sep)`_
 .. _spread: `spread(fun)`_
+.. _sum: `sum(arr)`_
 .. _true_: `true`_()_
 .. _unique: `unique(eqfun, arr)`_
 .. _use1st: `use1st(fun)`_
