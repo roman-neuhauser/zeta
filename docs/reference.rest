@@ -653,6 +653,8 @@ Equivalency: ::
 
     items({a: 10, b: 20, c: 30}) == [['a', 10], ['b', 20], ['c', 30]]
 
+See Also: `properties`_.
+
 keys(arr)
 ~~~~~~~~~
 
@@ -700,6 +702,13 @@ Equivalency: ::
     product([x, y, z]) == reduce(mul, [x, y, z], 1) == x * y * z
 
 See Also: `reduce`_, `sum`_.
+
+properties(obj)
+~~~~~~~~~~~~~~~
+
+*obj* is an object.  *properties* returns an array of *obj*'s property names.
+
+See Also: `items`_.
 
 reduce(fun, arr, init)
 ~~~~~~~~~~~~~~~~~~~~~~
@@ -1430,6 +1439,7 @@ See Also: `is_a`_.
 .. _intdiv: `intdiv(lhs, rhs)`_
 .. _iota: `iota(cnt)`_
 .. _is_a: `is_a(val, cls)`_
+.. _items: `items(obj)`_
 .. _itself: `itself(val)`_
 .. _join: `join(arr[, sep])`_
 .. _joiner: `joiner(sep)`_
@@ -1444,6 +1454,7 @@ See Also: `is_a`_.
 .. _odd: `odd(int)`_
 .. _product: `product(arr)`_
 .. _project: `project(i)`_
+.. _properties: `properties(obj)`_
 .. _push: `push(arr)`_
 .. _reduce: `reduce(fun, arr, init)`_
 .. _select: `select(i)`_

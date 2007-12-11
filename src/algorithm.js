@@ -247,5 +247,7 @@ function items(obj) // {{{
     return rv;
 } // }}}
 
+var properties = bind(map, [value(select(0)), items]);
+
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

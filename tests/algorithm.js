@@ -492,6 +492,25 @@ function testItems() // {{{
     );
 } // }}}
 
+function testProperties() // {{{
+{
+    var o = {
+        foo: 'omg'
+      , bar: 'wtf'
+      , baz: 'qux'
+    };
+    var exp = ['foo', 'bar', 'baz'];
+    var rv = properties(o);
+    assertEquals(exp.length, rv.length);
+    for_(
+        exp
+      , function (name, i)
+        {
+            assertEquals(name, rv[i]);
+        }
+    );
+} // }}}
+
 tests.push(
     testFor_
   , testWhile_
@@ -533,6 +552,7 @@ tests.push(
   , testSplitDefaultSep
   , testInner_product
   , testItems
+  , testProperties
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
