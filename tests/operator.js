@@ -293,6 +293,23 @@ function testEmpty() // {{{
     assertEquals(true, empty([]));
 } // }}}
 
+function testIn() // {{{
+{
+    var o = { foo : 'bar' };
+    var data = [
+        [true, 'foo'],
+        [false, 'bar'],
+        [false, 'qux'],
+    ];
+    for_(
+        data
+      , spread(bind(
+            assertEquals
+          , [$1, use2nd(bind2nd(in_, o))]
+        ))
+    );
+} // }}}
+
 tests.push(
     testPlus
   , testMinus
@@ -327,6 +344,7 @@ tests.push(
   , testType_of
   , testLength
   , testEmpty
+  , testIn
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

@@ -193,4 +193,9 @@ var type_of = function (v)
 
 var empty = bind(eq, [value(0), length]);
 
+function in_(ind, arr) // {{{
+{
+    return (ind in arr);
+} // }}}
+
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

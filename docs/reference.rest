@@ -1349,6 +1349,18 @@ Possible implementation: ::
 
     var empty = bind(eq, [value(0), length]);
 
+in_(prop, obj)
+~~~~~~~~~~~~~~
+
+*prop* is an object property name or array index.  *obj* is an object or
+array.  *in_* returns true if and only if *prop in obj* is true.
+
+Equivalency: ::
+
+    in_(foo, bar) == (foo in bar)
+
+See Also: `member`_.
+
 length(arr)
 ~~~~~~~~~~~
 
