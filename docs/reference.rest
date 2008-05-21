@@ -382,13 +382,13 @@ conjoin(fs)
 which calls each function in *fs* in turn relaying arguments until one
 returns false or until *fs* is exhausted.  Returns false if one of the
 functions returned false, otherwise returns the return value of the last
-*fs* element.
+*fs* element.  Returns ``true`` if *fs* is empty.
 
 This is a functional generalization of the *&&* operator.
 
 Equivalency: ::
 
-    conjoin([f, g, h])(x, y, z) == (f(x, y, z) && g(x, y, z) && h(x, y, z))
+    conjoin([f, g, h])(x, y, z) == true && (f(x, y, z) && g(x, y, z) && h(x, y, z))
 
 See Also: `disjoin`_.
 
@@ -399,13 +399,13 @@ disjoin(fs)
 which calls each function in *fs* in turn relaying arguments until one
 returns true or until *fs* is exhausted.  Returns true if one of the
 functions returned true, otherwise returns the return value of the
-successful *fs* element.
+successful *fs* element.  Returns ``false`` if *fs* is empty.
 
 This is a functional generalization of the *||* operator.
 
 Equivalency: ::
 
-    disjoin([f, g, h])(x, y, z) == (f(x, y, z) || g(x, y, z) || h(x, y, z))
+    disjoin([f, g, h])(x, y, z) == false || (f(x, y, z) || g(x, y, z) || h(x, y, z))
 
 See Also: `conjoin`_.
 
@@ -837,6 +837,7 @@ every(pred, arr)
 with each element in *arr* as long as it returns ``true``, until *arr*
 is exhausted or *pred* returns ``false``.  *every* returns ``true``
 if *pred* returned ``true`` for all elements, ``false`` otherwise.
+Returns ``true`` if *arr* is empty.
 
 Example:
 
@@ -853,6 +854,7 @@ some(pred, arr)
 with each element in *arr* as long as it returns ``false`` until *arr*
 is exhausted or *pred* returns ``true``.  *some* returns ``false``
 if *pred* returned ``false`` for all elements, ``true`` otherwise.
+Returns ``false`` if *arr* is empty.
 
 Example:
 

@@ -106,6 +106,16 @@ function testConjoinShortCircuit() // {{{
     assertEquals(4, rv.length);
 } // }}}
 
+function testConjoinOfNoPredicatesIsTrue()
+{
+    assertEquals(true, conjoin([])());
+}
+
+function testDisjoinOfNoPredicatesIsFalse()
+{
+    assertEquals(false, disjoin([])());
+}
+
 function testConjoinReturnValue() // {{{
 {
     assertEquals(true, conjoin([true_, true_])());
@@ -267,10 +277,12 @@ tests.push(
   , testMethod
   , testOperatorAndReturnValue
   , testConjoinShortCircuit
+  , testConjoinOfNoPredicatesIsTrue
   , testConjoinReturnValue
   , testOperatorOrReturnValue
   , testDisjoinShortCircuit
   , testDisjoinReturnValue
+  , testDisjoinOfNoPredicatesIsFalse
   , testSelect
   , testProject
   , test$1

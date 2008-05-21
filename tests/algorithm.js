@@ -66,13 +66,42 @@ function testMap() // {{{
 function testEvery() // {{{
 {
     assertEquals(true, every(true_, range(0, 5)));
+    assertEquals(true, every(true_, []));
+    assertEquals(true, every(false_, []));
     //assertEquals(true, every(bind1st(gt, 5), range(0, 5)));
+} // }}}
+
+function testEveryShortCircuit() // {{{
+{
+    var f = inc(0);
+    var s = function (v)
+    {
+        f();
+        return 3 == v;
+    };
+    var rv = some(s, range(1, 5))
+    assertEquals(4, f());
 } // }}}
 
 function testSome() // {{{
 {
     assertEquals(false, some(bind1st(le, 5), range(0, 5)));
+    assertEquals(false, some(true_, []));
+    assertEquals(false, some(false_, []));
     assertEquals(true, some(odd, range(0, 5)));
+} // }}}
+
+function testSomeShortCircuit() // {{{
+{
+    var f = inc(0);
+    var s = function (v)
+    {
+        f();
+        return 3 == v ? 69 : false;
+    };
+    var rv = some(s, range(1, 5))
+    assertEquals(4, f());
+    assertEquals(69, rv);
 } // }}}
 
 function testFilter() // {{{
@@ -516,7 +545,9 @@ tests.push(
   , testWhile_
   , testMap
   , testEvery
+  , testEveryShortCircuit
   , testSome
+  , testSomeShortCircuit
   , testFilter
   , testPush
   , testCoalesce

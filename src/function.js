@@ -22,13 +22,13 @@
 // $HeadURL$
 // $Id$
 
-function __ZETA__shortcircuit(test, short_, full) // {{{
+function __ZETA__shortcircuit(ifempty, test, short_, full) // {{{
 {
     return function (fs)
     {
         return function ()
         {
-            var rv = false;
+            var rv = ifempty;
             for (var i = 0; i < fs.length; ++i) {
                 if (!(i in fs)) {
                     continue;
@@ -43,9 +43,9 @@ function __ZETA__shortcircuit(test, short_, full) // {{{
     }
 } // }}}
 
-var conjoin = __ZETA__shortcircuit(not, false_, itself);
+var conjoin = __ZETA__shortcircuit(true, not, false_, itself);
 
-var disjoin = __ZETA__shortcircuit(itself, itself, false_);
+var disjoin = __ZETA__shortcircuit(false, itself, itself, false_);
 
 var use1st = bind2nd(compose, $1);
 
