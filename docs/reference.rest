@@ -409,6 +409,37 @@ Equivalency: ::
 
 See Also: `conjoin`_.
 
+ifte(p, t, f)
+~~~~~~~~~~~~~
+
+*p* is a `predicate`_.  *t* is a function.  *f* is a function.
+*ifte* returns a variadic function such that calling it with arguments
+*a1, a2, ... aN* is the same as calling *t(a1, a2, ... aN)* or
+*f(a1, a2, ... aN)*, depending on the value of *p(a1, a2, ... aN)*.
+
+Equivalency: ::
+
+    ifte(p, t, f) == function ()
+    {
+        if (apply(p, arguments)) {
+            return apply(t, arguments);
+        } else {
+            return apply(f, arguments);
+        }
+    }
+
+Possible implementation: ::
+
+    var ifte = function (p, t, f)
+    {
+        return function ()
+        {
+            var c = bind2nd(apply, arguments);
+
+            return c(c(p) ? t : f)
+        }
+    }
+
 insert(arr)
 ~~~~~~~~~~~
 

@@ -76,5 +76,14 @@ function composex(fs)
     return reduce(compose, fs, $N);
 }
 
+var ifte = function (p, t, f) // {{{
+{
+    return function ()
+    {
+        var c = bind2nd(apply, arguments);
+
+        return c(c(p) ? t : f)
+    }
+} // }}}
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

@@ -267,6 +267,15 @@ function testSplitter() // {{{
     );
 } // }}}
 
+function testIfte() // {{{
+{
+    var f = ifte(Boolean, itself, bind2nd(minus, 3));
+    for_(
+        [[2, 2], [-7, -7], [-3, 0]]
+      , spread(bind(assertEquals, [$1, use2nd(f)]))
+    );
+} // }}}
+
 tests.push(
     testItself
   , testValue
@@ -296,6 +305,7 @@ tests.push(
   , testComposex
   , testJoiner
   , testSplitter
+  , testIfte
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
