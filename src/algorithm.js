@@ -153,11 +153,17 @@ function insert(arr) // {{{
     }
 } // }}}
 
-function chain(arrs) // {{{
+function chain2(l, r) // {{{
 {
-    var tmp = [];
-    return reduce(method(tmp, tmp.concat), arrs, []);
+    return l.concat(r);
 } // }}}
+
+var chainv = bind(
+    reduce
+  , [value(chain2), argv, list]
+);
+
+var chain = spread(chainv);
 
 function product(arr) // {{{
 {

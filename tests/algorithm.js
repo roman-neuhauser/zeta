@@ -277,15 +277,39 @@ function testInsert() // {{{
     assertEquals('wtf', ins('wtf', 0));
 } // }}}
 
+function _testChainData(c, l) // {{{
+{
+    var d = [];
+    for (var i = 0; i < c; ++i) {
+        d[i] = range(i * l, l);
+    }
+    return d;
+} // }}}
+
+function test_testChainData() // {{{
+{
+    var rv = _testChainData(3, 2);
+    assertEquals(3, rv.length);
+    for_(rv, bind(assertEquals, [value(2), length]));
+    for_(rv, function (a, i)
+    {
+        for_(a, function (v, j, a)
+        {
+            assertEquals(i * length(a) + j, v);
+        })
+    });
+} // }}}
+
+function _testChain(f, c, l) // {{{
+{
+    var rv = f(_testChainData(c, l));
+    assertEquals(c * l, rv.length);
+    for_(rv, bind(assertEquals, [$2, $1]));
+} // }}}
+
 function testChain() // {{{
 {
-    var data = [
-        range(0, 5),
-        range(5, 5),
-    ];
-    var rv = chain(data);
-    assertEquals(10, rv.length);
-    for_(rv, bind(assertEquals, [$2, $1]));
+    _testChain(chain, 3, 5);
 } // }}}
 
 function testZip() // {{{

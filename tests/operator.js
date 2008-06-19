@@ -310,6 +310,23 @@ function testIn() // {{{
     );
 } // }}}
 
+function testList() // {{{
+{
+    var x = list();
+    x.push(2);
+
+    assertEquals(1, x.length);
+    assertEquals(2, x[0]);
+
+    var y = list();
+
+    assertEquals(0, y.length);
+
+    var z = list(2, 'x', {});
+
+    assertEquals(0, z.length);
+} // }}}
+
 tests.push(
     testPlus
   , testMinus
@@ -345,6 +362,7 @@ tests.push(
   , testLength
   , testEmpty
   , testIn
+  , testList
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

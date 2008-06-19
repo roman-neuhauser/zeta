@@ -160,4 +160,9 @@ function while_(cond, f) // {{{
     }
 } // }}}
 
+function list()
+{
+    return [];
+}
+
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
