@@ -307,9 +307,19 @@ function _testChain(f, c, l) // {{{
     for_(rv, bind(assertEquals, [$2, $1]));
 } // }}}
 
+function testChain2() // {{{
+{
+    _testChain(bind1st(apply, chain2), 2, 6);
+} // }}}
+
 function testChain() // {{{
 {
     _testChain(chain, 3, 5);
+} // }}}
+
+function testChainv() // {{{
+{
+    _testChain(bind1st(apply, chainv), 4, 4);
 } // }}}
 
 function testZip() // {{{
@@ -589,7 +599,10 @@ tests.push(
   , testSortedCmp
   , testSlice
   , testInsert
+  , test_testChainData
+  , testChain2
   , testChain
+  , testChainv
   , testZip
   , testZipEmptyArgument
   , testZipDifferentLengths1
