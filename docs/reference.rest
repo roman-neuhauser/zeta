@@ -206,6 +206,13 @@ Possible implementation: ::
 
     var composex = bind(reduce, [value(compose), $1, value(itself)]);
 
+curry(f, v)
+~~~~~~~~~~~
+
+*f* is a function, *v* is a value.  *curry* returns a variadic function
+such that calling it with arguments *a1, a2, ... aN* is the same as calling
+*f(v, a1, a2, ... aN)*. 
+
 join(arr[, sep])
 ~~~~~~~~~~~~~~~~
 
@@ -629,6 +636,12 @@ chunk(arr, sz)
 chunks of *sz* elements each.  The last chunk may contain fewer elements.
 
 See Also: `group_by`_.
+
+cons(v, a)
+~~~~~~~~~~
+
+*a* is an array.  *v* is a value.  *cons* returns a `shallow copy`_ of *a*
+with *v* prepended.
 
 copy(arr)
 ~~~~~~~~~
