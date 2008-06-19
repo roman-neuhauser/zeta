@@ -59,6 +59,14 @@ function binder(f) // {{{
     }
 } // }}}
 
+var curry = function (f, v) // {{{
+{
+    return compose(
+        spread(f)
+      , collect(bind1st(cons, v))
+    );
+} // }}}
+
 function previous(v) // {{{
 {
     var values = [v];

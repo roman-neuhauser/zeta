@@ -158,6 +158,8 @@ function chain2(l, r) // {{{
     return l.concat(r);
 } // }}}
 
+var cons = bind(chain2, [use1st(argv), $2]);
+
 var chainv = bind(
     reduce
   , [value(chain2), argv, list]

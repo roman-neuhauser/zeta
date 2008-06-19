@@ -574,6 +574,15 @@ function testProperties() // {{{
     );
 } // }}}
 
+function testCons() // {{{
+{
+    var rv = cons(2, [4, 6]);
+    assertEquals(3, rv.length);
+    assertEquals(2, rv[0]);
+    assertEquals(4, rv[1]);
+    assertEquals(6, rv[2]);
+} // }}}
+
 tests.push(
     testFor_
   , testWhile_
@@ -621,6 +630,7 @@ tests.push(
   , testInner_product
   , testItems
   , testProperties
+  , testCons
 );
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

@@ -157,6 +157,16 @@ function testBinder() // {{{
     assertEquals(4, rv.length);
 } // }}}
 
+function testCurry() // {{{
+{
+    var f = curry(curry(argv, 7), 8);
+    var rv = f(9);
+    assertEquals(3, rv.length)
+    assertEquals(7, rv[0])
+    assertEquals(8, rv[1])
+    assertEquals(9, rv[2])
+} // }}}
+
 function testSelect() // {{{
 {
     var data = ['foo', 'bar', 'baz'];
@@ -299,6 +309,7 @@ tests.push(
   , testBind2nd
   , testBind
   , testBinder
+  , testCurry
   , testUse1st
   , testUse2nd
   , testNth
