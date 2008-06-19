@@ -314,12 +314,7 @@ function testChain2() // {{{
 
 function testChain() // {{{
 {
-    _testChain(chain, 3, 5);
-} // }}}
-
-function testChainv() // {{{
-{
-    _testChain(bind1st(apply, chainv), 4, 4);
+    _testChain(bind1st(apply, chain), 4, 4);
 } // }}}
 
 function testZip() // {{{
@@ -611,7 +606,6 @@ tests.push(
   , test_testChainData
   , testChain2
   , testChain
-  , testChainv
   , testZip
   , testZipEmptyArgument
   , testZipDifferentLengths1

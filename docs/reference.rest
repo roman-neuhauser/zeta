@@ -620,14 +620,15 @@ while_(cond, fun)
 Array Transformations
 +++++++++++++++++++++
 
-chain(arrs)
-~~~~~~~~~~~
+chain(...)
+~~~~~~~~~~
 
-*arrs* is an array of arrays.  *chain* returns a concatenation of *arrs*.
+*...* represents variable number of arrays.  *chain* returns a concatenation
+of all arrays in *...*.
 
 Equivalency: ::
 
-    chain([[a, b, c], [d, e, f]]) == [a, b, c, d, e, f]
+    chain([a, b, c], [d, e, f]) == [a, b, c, d, e, f]
 
 chunk(arr, sz)
 ~~~~~~~~~~~~~~

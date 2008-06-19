@@ -160,12 +160,10 @@ function chain2(l, r) // {{{
 
 var cons = bind(chain2, [use1st(argv), $2]);
 
-var chainv = bind(
+var chain = bind(
     reduce
   , [value(chain2), argv, list]
 );
-
-var chain = spread(chainv);
 
 function product(arr) // {{{
 {
