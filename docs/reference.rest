@@ -744,7 +744,8 @@ product(arr)
 
 Equivalency: ::
 
-    product([x, y, z]) == reduce(mul, [x, y, z], 1) == x * y * z
+    product([x, y, z]) == reduce(mul, [x, y, z], 1) == 1 * x * y * z
+    product([]) == reduce(mul, [], 1) == 1
 
 See Also: `reduce`_, `sum`_.
 
@@ -804,7 +805,8 @@ sum(arr)
 
 Equivalency: ::
 
-    sum([x, y, z]) == reduce(plus, [x, y, z], 1) == x + y + z
+    sum([x, y, z]) == reduce(plus, [x, y, z], 0) == 0 + x + y + z
+    sum([]) == reduce(plus, [], 0) == 0
 
 See Also: `product`_, `reduce`_.
 

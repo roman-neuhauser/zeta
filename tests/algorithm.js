@@ -487,7 +487,7 @@ function testSplitDefaultSep() // {{{
 function testProduct() // {{{
 {
     assertEquals(3 * 20 * 100, product([3, 20, 100]));
-    assertEquals(0, product([]));
+    assertEquals(1, product([]));
 } // }}}
 
 function testSum() // {{{

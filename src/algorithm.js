@@ -167,11 +167,7 @@ var chain = bind(
 
 function product(arr) // {{{
 {
-    return reduce(
-        mul
-      , arr
-      , Number(Boolean(arr.length))
-    );
+    return reduce(mul, arr, 1);
 } // }}}
 
 function sum(arr) // {{{
