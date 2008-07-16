@@ -37,6 +37,7 @@ function testNew_() // {{{
 
 function testPlus() // {{{
 {
+    assertEquals('abc', plus('ab', 'c'));
     assertEquals(42, plus(40, 2));
 } // }}}
 
@@ -67,10 +68,18 @@ function testMod() // {{{
 {
     assertEquals(0, mod(2, 2));
     assertEquals(1, mod(3, 2));
+    assertEquals(2, mod(8, 3));
+    assertEquals(3, mod(9, 6));
 } // }}}
 
 function testPow() // {{{
 {
+    assertEquals(0, pow(0, 2));
+    assertEquals(0, pow(0, 1));
+    assertEquals(1, pow(0, 0));
+    assertEquals(1, pow(2, 0));
+    assertEquals(2, pow(2, 1));
+    assertEquals(4, pow(2, 2));
     assertEquals(8, pow(2, 3));
     assertEquals(9, pow(3, 2));
 } // }}}
@@ -107,6 +116,7 @@ function testEq() // {{{
 {
     assertEquals(true, eq(0, 0));
     assertEquals(true, eq(1, 1));
+    assertEquals(false, eq(1, -1));
     assertEquals(false, eq(1, 0));
 } // }}}
 
@@ -114,6 +124,7 @@ function testLt() // {{{
 {
     assertEquals(true, lt(-1, 0));
     assertEquals(true, lt(0, 1));
+    assertEquals(false, lt(0, -1));
     assertEquals(false, lt(1, 1));
     assertEquals(false, lt(1, 0));
 } // }}}
