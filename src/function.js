@@ -22,7 +22,7 @@
 // $HeadURL$
 // $Id$
 
-function __ZETA__shortcircuit(ifempty, test, short_, full) // {{{
+var __ZETA__shortcircuit = function (ifempty, test, short_, full) // {{{
 {
     return function (fs)
     {
@@ -51,7 +51,7 @@ var use1st = bind2nd(compose, $1);
 
 var use2nd = bind2nd(compose, $2);
 
-function binder(f) // {{{
+var binder = function (f) // {{{
 {
     return function ()
     {
@@ -67,7 +67,7 @@ var curry = function (f, v) // {{{
     );
 } // }}}
 
-function previous(v) // {{{
+var previous = function (v) // {{{
 {
     var values = [v];
     return function (v)
@@ -79,7 +79,7 @@ function previous(v) // {{{
 
 var nth = bind1st(bind1st, member);
 
-function composex(fs)
+var composex = function (fs)
 {
     return reduce(compose, fs, $N);
 }

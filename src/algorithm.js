@@ -22,24 +22,24 @@
 // $HeadURL$
 // $Id$
 
-function filter(p, arr) // {{{
+var filter = function (p, arr) // {{{
 {
     var rv = [];
     for_(arr, conjoin([p, compose(push(rv), $1)]));
     return rv;
 } // }}}
 
-function every(p, arr) // {{{
+var every = function (p, arr) // {{{
 {
     return conjoin(map(binder(p), arr))();
 } // }}}
 
-function some(p, arr) // {{{
+var some = function (p, arr) // {{{
 {
     return disjoin(map(binder(p), arr))();
 } // }}}
 
-function find_if(p, arr) // {{{
+var find_if = function (p, arr) // {{{
 {
     var len = arr.length;
     for (var i = 0; i < len; ++i) {
@@ -50,12 +50,12 @@ function find_if(p, arr) // {{{
     return -1;
 } // }}}
 
-function find(v, arr) // {{{
+var find = function (v, arr) // {{{
 {
     return find_if(bind1st(eq, v), arr);
 } // }}}
 
-function coalesce(vs, dflt) // {{{
+var coalesce = function (vs, dflt) // {{{
 {
     var i = find_if(negate(bind1st(eq, null)), vs);
     if (-1 == i) {
@@ -68,21 +68,21 @@ var copy = bind1st(map, itself);
 
 var keys = bind1st(map, $2);
 
-function reverse(arr) // {{{
+var reverse = function (arr) // {{{
 {
     var rv = copy(arr);
     rv.reverse();
     return rv;
 } // }}}
 
-function sorted(arr, cmp) // {{{
+var sorted = function (arr, cmp) // {{{
 {
     var rv = copy(arr);
     rv.sort.apply(rv, slice(copy(arguments), 1));
     return rv;
 } // }}}
 
-function unique(eqfun, arr) // {{{
+var unique = function (eqfun, arr) // {{{
 {
     return filter(
         bind(
@@ -93,7 +93,7 @@ function unique(eqfun, arr) // {{{
     );
 } // }}}
 
-function reduce(f, arr, init) // {{{
+var reduce = function (f, arr, init) // {{{
 {
     var rv = init;
     for_(
@@ -106,7 +106,7 @@ function reduce(f, arr, init) // {{{
     return rv;
 } // }}}
 
-function inner_product(lhs, rhs) // {{{
+var inner_product = function (lhs, rhs) // {{{
 {
     return reduce(
         plus
@@ -116,7 +116,7 @@ function inner_product(lhs, rhs) // {{{
 }
  // }}}
 
-function slice(arr, start, end) // {{{
+var slice = function (arr, start, end) // {{{
 {
     return apply(
         method(arr, arr.slice)
@@ -124,7 +124,7 @@ function slice(arr, start, end) // {{{
     );
 } // }}}
 
-function iota(cnt) // {{{
+var iota = function (cnt) // {{{
 {
     var rv = [];
     while_(
@@ -134,7 +134,7 @@ function iota(cnt) // {{{
     return rv;
 } // }}}
 
-function range(start, cnt, step) // {{{
+var range = function (start, cnt, step) // {{{
 {
     return map(
         compose(
@@ -145,7 +145,7 @@ function range(start, cnt, step) // {{{
     );
 } // }}}
 
-function insert(arr) // {{{
+var insert = function (arr) // {{{
 {
     return function (v, i)
     {
@@ -153,7 +153,7 @@ function insert(arr) // {{{
     }
 } // }}}
 
-function chain2(l, r) // {{{
+var chain2 = function (l, r) // {{{
 {
     return l.concat(r);
 } // }}}
@@ -165,17 +165,17 @@ var chain = bind(
   , [value(chain2), argv, list]
 );
 
-function product(arr) // {{{
+var product = function (arr) // {{{
 {
     return reduce(mul, arr, 1);
 } // }}}
 
-function sum(arr) // {{{
+var sum = function (arr) // {{{
 {
     return reduce(plus, arr, 0);
 } // }}}
 
-function zip(arrs) // {{{
+var zip = function (arrs) // {{{
 {
     return map(
         bind(map, [compose(select, $2), value(arrs)])
@@ -192,7 +192,7 @@ function zip(arrs) // {{{
     );
 } // }}}
 
-function group_by(f, arr) // {{{
+var group_by = function (f, arr) // {{{
 {
     var rv = [];
     var store = function (key, v)
@@ -203,7 +203,7 @@ function group_by(f, arr) // {{{
     return rv;
 } // }}}
 
-function take_while(p, arr) // {{{
+var take_while = function (p, arr) // {{{
 {
     var rv = [];
     var len = arr.length;
@@ -219,12 +219,12 @@ function take_while(p, arr) // {{{
     return rv;
 } // }}}
 
-function join(a, sep) // {{{
+var join = function (a, sep) // {{{
 {
     return a.join(sep);
 } // }}}
 
-function split(s, sep) // {{{
+var split = function (s, sep) // {{{
 {
     return s.split(sep);
 } // }}}
@@ -240,7 +240,7 @@ var chunk = bind( // {{{
 
 var fill = bind(map, [use2nd(value), iota]);
 
-function items(obj) // {{{
+var items = function (obj) // {{{
 {
     var rv = [];
     for (var i in obj) {

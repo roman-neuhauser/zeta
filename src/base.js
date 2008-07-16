@@ -22,17 +22,17 @@
 // $HeadURL$
 // $Id$
 
-function apply(f, args) // {{{
+var apply = function (f, args) // {{{
 {
     return f.apply(f, args);
 } // }}}
 
-function argv() // {{{
+var argv = function () // {{{
 {
     return map(itself, arguments);
 } // }}}
 
-function bind1st(f, lhs) // {{{
+var bind1st = function (f, lhs) // {{{
 {
     return function (rhs)
     {
@@ -40,7 +40,7 @@ function bind1st(f, lhs) // {{{
     }
 } // }}}
 
-function bind2nd(f, rhs) // {{{
+var bind2nd = function (f, rhs) // {{{
 {
     return function (lhs)
     {
@@ -48,7 +48,7 @@ function bind2nd(f, rhs) // {{{
     }
 } // }}}
 
-function compose(f, g) // {{{
+var compose = function (f, g) // {{{
 {
     return function()
     {
@@ -56,17 +56,17 @@ function compose(f, g) // {{{
     }
 } // }}}
 
-function itself(v) // {{{
+var itself = function (v) // {{{
 {
     return v;
 } // }}}
 
-function member(o, i) // {{{
+var member = function (o, i) // {{{
 {
     return o[i];
 } // }}}
 
-function method(that, f) // {{{
+var method = function (that, f) // {{{
 {
     return function ()
     {
@@ -76,25 +76,37 @@ function method(that, f) // {{{
 
 var length = bind2nd(member, 'length');
 
-function map(f, arr) // {{{
+var for_ = function (arr, f) // {{{
+{
+    // arr.forEach(f) not in SpiderMonkey 1.5
+
+    var len = arr.length;
+    for (var i = 0; i < len; ++i) {
+        if (i in arr) {
+            f(arr[i], i, arr);
+        }
+    }
+} // }}}
+
+var map = function (f, arr) // {{{
 {
     var rv = [];
     for_(arr, compose(push(rv), f));
     return rv;
 } // }}}
 
-function not(v) // {{{
+var not = function (v) // {{{
 {
     return !v;
 } // }}}
 
 //var push = bind(method, [$1, select('push')]);
-function push(arr) // {{{
+var push = function (arr) // {{{
 {
     return method(arr, arr.push);
 } // }}}
 
-function bind(f, binders) // {{{
+var bind = function (f, binders) // {{{
 {
     return function ()
     {
@@ -112,7 +124,7 @@ var collect = bind2nd(compose, argv);
 
 var spread = bind1st(bind1st, apply);
 
-function value(v) // {{{
+var value = function (v) // {{{
 {
     return function ()
     {
@@ -136,31 +148,19 @@ var $2 = project(1);
 
 var $3 = project(2);
 
-function $N()
+var $N = function ()
 {
     return arguments[arguments.length - 1];
 }
 
-function for_(arr, f) // {{{
-{
-    // arr.forEach(f) not in SpiderMonkey 1.5
-
-    var len = arr.length;
-    for (var i = 0; i < len; ++i) {
-        if (i in arr) {
-            f(arr[i], i, arr);
-        }
-    }
-} // }}}
-
-function while_(cond, f) // {{{
+var while_ = function (cond, f) // {{{
 {
     while (cond()) {
         f();
     }
 } // }}}
 
-function list()
+var list = function ()
 {
     return [];
 }

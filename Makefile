@@ -1,6 +1,8 @@
 # $HeadURL$
 # $Id$
 
+ZETA_AWK?=	awk
+
 ZETA_RST2HTML= rst2html=$$(for n in rst2html.py rst2html; do \
 	   which $$n && break; \
 	done || true 2>/dev/null); \
@@ -26,8 +28,8 @@ ZETA_JS_SOURCES=	src/base.js \
 
 all: docs zeta.js
 
-check:
-	js ${ZETA_JS_INCLUDES} -f tests/tests.js
+check: zeta.js
+	js -f zeta.js -f tests/tests.js
 
 docs: README.html docs/examples.html docs/examples-ref-minmax.html \
 	docs/examples-ref-composex.html docs/examples-ref-unique.html \
@@ -57,14 +59,14 @@ docs/reference.html: docs/reference.rest Makefile
 	${ZETA_HTMLIZE_RESTTARGETS} < docs/reference.rest > docs/reference.prehtml
 	${ZETA_RST2HTML} -stg --source-url reference.rest docs/reference.prehtml docs/reference.html
 
-symtab: tools/symbols.js src/algorithm.js src/function.js src/operator.js
+symtab: tools/symbols.js ${ZETA_JS_SOURCES}
 	js ${ZETA_JS_INCLUDES} -f tools/symbols.js | sort > symtab
 
-zeta.js: ${ZETA_JS_SOURCES}
-	(echo "// === GENERATED FILE, DO NOT EDIT ==="; echo; \
-	for f in ${ZETA_JS_SOURCES}; do \
-		echo "// FILE: $$f"; cat $$f; \
-	done) > zeta.js
+zeta.js: tools/zeta.awk symtab ${ZETA_JS_SOURCES}
+	${ZETA_AWK} \
+	    -v SYMBOLS=symtab \
+	    -f tools/zeta.awk \
+	    ${ZETA_JS_SOURCES} > zeta.js
 
 clean:
 	rm -f *.prehtml docs/*.prehtml zeta.js

@@ -22,6 +22,8 @@
 // $HeadURL$
 // $Id$
 
+$$IMPORT_ZETA_INTO$$(this);
+
 load("tests/runner.js");
 
 var tests = [];

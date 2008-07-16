@@ -26,7 +26,7 @@ var to_bool = bind1st(compose, Boolean);
 
 var to_num = bind1st(compose, Number);
 
-function new_(cls) // {{{
+var new_ = function (cls) // {{{
 {
     var constructors = [ // {{{
         function ()
@@ -83,29 +83,29 @@ function new_(cls) // {{{
     } // }}}
 } // }}}
 
-function plus(lhs, rhs) // {{{
+var plus = function (lhs, rhs) // {{{
 {
     return lhs + rhs;
 } // }}}
 
-function minus(lhs, rhs) // {{{
+var minus = function (lhs, rhs) // {{{
 {
     return lhs - rhs;
 } // }}}
 
-function mul(lhs, rhs) // {{{
+var mul = function (lhs, rhs) // {{{
 {
     return lhs * rhs;
 } // }}}
 
-function div(lhs, rhs) // {{{
+var div = function (lhs, rhs) // {{{
 {
     return lhs / rhs;
 } // }}}
 
 var intdiv = compose(Math.floor, div);
 
-function mod(lhs, rhs) // {{{
+var mod = function (lhs, rhs) // {{{
 {
     return lhs % rhs;
 } // }}}
@@ -114,32 +114,32 @@ var pow = method(Math, Math.pow);
 
 var neg = bind1st(minus, 0);
 
-function eq(lhs, rhs) // {{{
+var eq = function (lhs, rhs) // {{{
 {
     return lhs == rhs;
 } // }}}
 
-function lt(lhs, rhs) // {{{
+var lt = function (lhs, rhs) // {{{
 {
     return lhs < rhs;
 } // }}}
 
-function gt(lhs, rhs) // {{{
+var gt = function (lhs, rhs) // {{{
 {
     return lhs > rhs;
 } // }}}
 
-function le(lhs, rhs) // {{{
+var le = function (lhs, rhs) // {{{
 {
     return lhs <= rhs;
 } // }}}
 
-function ge(lhs, rhs) // {{{
+var ge = function (lhs, rhs) // {{{
 {
     return lhs >= rhs;
 } // }}}
 
-function inc(init) // {{{
+var inc = function (init) // {{{
 {
     return function ()
     {
@@ -147,7 +147,7 @@ function inc(init) // {{{
     }
 } // }}}
 
-function dec(init) // {{{
+var dec = function (init) // {{{
 {
     return function ()
     {
@@ -159,7 +159,7 @@ var odd = compose(Boolean, bind2nd(mod, 2));
 
 var even = negate(odd);
 
-function minmax(p) // {{{
+var minmax = function (p) // {{{
 {
     return bind(member, [argv, to_num(to_bool(p))]);
 } // }}}
@@ -168,7 +168,7 @@ var min = minmax(gt);
 
 var max = minmax(lt);
 
-function compare(lhs, rhs) // {{{
+var compare = function (lhs, rhs) // {{{
 {
     if (lhs < rhs) {
         return -1;
@@ -179,7 +179,7 @@ function compare(lhs, rhs) // {{{
     return 0;
 } // }}}
 
-function is_a(val, cls) // {{{
+var is_a = function (val, cls) // {{{
 {
     return val instanceof cls;
 } // }}}
@@ -193,7 +193,7 @@ var type_of = function (v)
 
 var empty = bind(eq, [value(0), length]);
 
-function in_(ind, arr) // {{{
+var in_ = function (ind, arr) // {{{
 {
     return (ind in arr);
 } // }}}

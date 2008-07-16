@@ -95,11 +95,50 @@ This task is left as an excercise for the user's software configuration
 management process.  Zeta can (and should) be seen as a static library,
 and this position is therefore fully justified.
 
+``zeta.js`` contains a single unary function, ``$$IMPORT_ZETA_INTO$$``
+which creates the library proper.  The function takes an object, the
+scope into which Zeta is to be imported.
+
+``$$IMPORT_ZETA_INTO$$`` protects Zeta from other code and vice versa as
+much as possible, and gives you the freedom to import the library into
+any scope.
+
+For example, `tests/browser.html`_, the browser interface to Zeta's test
+suite loads the library into the current ``window`` with ::
+
+  <script type="text/javascript" src="../zeta.js"></script>
+  ...
+  <script type="text/javascript">
+      $$IMPORT_ZETA_INTO$$(this);
+      runTests(print, tests);
+  </script>
+
+Zeta is most convenient as a set of global functions (imported into
+``window``), but can be also put in a namespace with eg. ::
+ 
+  <script type="text/javascript">
+      Z = {};
+      $$IMPORT_ZETA_INTO$$(Z);
+  </script>
+
+The above creates a global namespace ``Z`` and puts all Zeta functions
+in it.  Namespacing clutters the resulting code considerably and is not
+recommended, but may be the only way to get Zeta into legacy code, which
+is why this provision exists.
+
+For a transition period, this will reference all members of ``Z`` in the
+current ``window`` (or the global namespace): ::
+
+  Z.for_each(Z, Z.insert(window));
+
 Running the test suite
 ++++++++++++++++++++++
 
 Zeta's test suite can be exercised by running ``make check`` in the top
-directory.
+directory, or by loading `tests/browser.html`_ in one of supported
+browsers.
+
+.. _tests/browser.html: tests/browser.html
 
 Reference
 =========
