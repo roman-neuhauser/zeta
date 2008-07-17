@@ -22,7 +22,9 @@
 // $HeadURL$
 // $Id$
 
-function testRefApply() // {{{
+defTest('testRefApply'
+, tests
+, function() // {{{
 {
     var args = [
         [],
@@ -35,9 +37,11 @@ function testRefApply() // {{{
         dates
       , true_ //compose(print, $1)
     );
-} // }}}
+}); // }}}
 
-function testRefBind2nd() // {{{
+defTest('testRefBind2nd'
+, tests
+, function() // {{{
 {
     var rv = map(bind2nd(pow, 2), range(0, 4));
     assertEquals(4, rv.length);
@@ -45,9 +49,11 @@ function testRefBind2nd() // {{{
     assertEquals(1, rv[1]);
     assertEquals(4, rv[2]);
     assertEquals(9, rv[3]);
-} // }}}
+}); // }}}
 
-function testRefMap() // {{{
+defTest('testRefMap'
+, tests
+, function() // {{{
 {
     var data = [0, 2, 4, 6, 8];
     var exp = [1, 2, 5, 13, 34];
@@ -58,82 +64,86 @@ function testRefMap() // {{{
             assertEquals(exp[i], v);
         }
     );
-} // }}}
+}); // }}}
 
-function testRefCompose() // {{{
+defTest('testRefCompose'
+, tests
+, function() // {{{
 {
     var arr = [2, 'f', 0, 1, -3];
     assertEquals(2, find_if(compose(not, Boolean), arr));
-} // }}}
+}); // }}}
 
-function testRefEvery() // {{{
+defTest('testRefEvery'
+, tests
+, function() // {{{
 {
     var is_pos = bind1st(lt, 0);
     assertEquals(true, every(is_pos, [1, 2, 3]));
     assertEquals(false, every(is_pos, [1, -2, 3]));
-} // }}}
+}); // }}}
 
-function testRefSome() // {{{
+defTest('testRefSome'
+, tests
+, function() // {{{
 {
     var is_0 = bind1st(eq, 0);
     assertEquals(true, some(is_0, [0, 1, 2, 3]));
     assertEquals(false, some(is_0, [1, 2, 3]));
-} // }}}
+}); // }}}
 
-function testRefEq() // {{{
+defTest('testRefEq'
+, tests
+, function() // {{{
 {
     var arr = range(16, 9, -4);
     assertEquals(4, find_if(bind2nd(eq, 0), arr));
-} // }}}
+}); // }}}
 
-function testRefGe() // {{{
+defTest('testRefGe'
+, tests
+, function() // {{{
 {
     var arr = range(-3, 7);
     assertEquals(3, find_if(bind2nd(ge, 0), arr));
-} // }}}
+}); // }}}
 
-function testRefGt() // {{{
+defTest('testRefGt'
+, tests
+, function() // {{{
 {
     var arr = range(-3, 7);
     assertEquals(4, find_if(bind2nd(gt, 0), arr));
-} // }}}
+}); // }}}
 
-function testRefLe() // {{{
+defTest('testRefLe'
+, tests
+, function() // {{{
 {
     var arr = range(7, 7, -2);
     assertEquals(4, find_if(bind2nd(le, 0), arr));
-} // }}}
+}); // }}}
 
-function testRefLt() // {{{
+defTest('testRefLt'
+, tests
+, function() // {{{
 {
     var arr = range(3, 7, -1);
     assertEquals(4, find_if(bind2nd(lt, 0), arr));
-} // }}}
+}); // }}}
 
-function testRefMax() // {{{
+defTest('testRefMax'
+, tests
+, function() // {{{
 {
     assertEquals(7, reduce(max, [0, 7, -3, 5], 0));
-} // }}}
+}); // }}}
 
-function testRefMin() // {{{
+defTest('testRefMin'
+, tests
+, function() // {{{
 {
     assertEquals(-3, reduce(min, [0, 7, -3, 5], 0));
-} // }}}
-
-tests.push(
-    testRefApply
-  , testRefBind2nd
-  , testRefMap
-  , testRefCompose
-  , testRefEvery
-  , testRefSome
-  , testRefEq
-  , testRefGe
-  , testRefGt
-  , testRefLe
-  , testRefLt
-  , testRefMax
-  , testRefMin
-);
+}); // }}}
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

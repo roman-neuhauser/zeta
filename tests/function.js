@@ -22,17 +22,23 @@
 // $HeadURL$
 // $Id$
 
-function testItself() // {{{
+defTest('testItself'
+, tests
+, function() // {{{
 {
     assertEquals(42, itself(42));
-} // }}}
+}); // }}}
 
-function testValue() // {{{
+defTest('testValue'
+, tests
+, function() // {{{
 {
     assertEquals(42, value(42)());
-} // }}}
+}); // }}}
 
-function testCompose() // {{{
+defTest('testCompose'
+, tests
+, function() // {{{
 {
     var generator = function (rhs)
     {
@@ -44,19 +50,25 @@ function testCompose() // {{{
     var f = generator("wtf");
     var g = generator(" ");
     assertEquals("omg wtf", compose(f, g)("omg"));
-} // }}}
+}); // }}}
 
-function testApply() // {{{
+defTest('testApply'
+, tests
+, function() // {{{
 {
     assertEquals(7, apply(plus, [2, 5]));
-} // }}}
+}); // }}}
 
-function testSpread() // {{{
+defTest('testSpread'
+, tests
+, function() // {{{
 {
     assertEquals(7, spread(plus)([2, 5]));
-} // }}}
+}); // }}}
 
-function testCollect() // {{{
+defTest('testCollect'
+, tests
+, function() // {{{
 {
     var args = [3, 4, 5];
     var f = collect(itself);
@@ -71,9 +83,11 @@ function testCollect() // {{{
     );
 
     assertEquals(0, f().length);
-} // }}}
+}); // }}}
 
-function testMethod() // {{{
+defTest('testMethod'
+, tests
+, function() // {{{
 {
     var s = 'omg wtf';
     var a = [];
@@ -85,16 +99,20 @@ function testMethod() // {{{
     assertEquals(s, a[0]);
 
     assertEquals(3, g(' '));
-} // }}}
+}); // }}}
 
-function testOperatorAndReturnValue() // {{{
+defTest('testOperatorAndReturnValue'
+, tests
+, function() // {{{
 {
     assertEquals(false, (false && null));
     assertEquals(4, (true && 4));
     assertEquals(true, (4 && true));
-} // }}}
+}); // }}}
 
-function testConjoinShortCircuit() // {{{
+defTest('testConjoinShortCircuit'
+, tests
+, function() // {{{
 {
     var rv = [];
     var f = push(rv);
@@ -104,33 +122,43 @@ function testConjoinShortCircuit() // {{{
     assertEquals(1, rv.length);
     conjoin([true_, true_, f])(1, 2, 3);
     assertEquals(4, rv.length);
-} // }}}
+}); // }}}
 
-function testConjoinOfNoPredicatesIsTrue()
+defTest('testConjoinOfNoPredicatesIsTrue'
+, tests
+, function()
 {
     assertEquals(true, conjoin([])());
-}
+});
 
-function testDisjoinOfNoPredicatesIsFalse()
+defTest('testDisjoinOfNoPredicatesIsFalse'
+, tests
+, function()
 {
     assertEquals(false, disjoin([])());
-}
+});
 
-function testConjoinReturnValue() // {{{
+defTest('testConjoinReturnValue'
+, tests
+, function() // {{{
 {
     assertEquals(true, conjoin([true_, true_])());
     assertEquals(false, conjoin([true_, $1])(null));
     assertEquals(true, conjoin([$1, true_])(4));
     assertEquals(8, conjoin([true_, $1])(8));
-} // }}}
+}); // }}}
 
-function testOperatorOrReturnValue() // {{{
+defTest('testOperatorOrReturnValue'
+, tests
+, function() // {{{
 {
     assertEquals(false, (null || false));
     assertEquals(null, (false || null));
-} // }}}
+}); // }}}
 
-function testDisjoinShortCircuit() // {{{
+defTest('testDisjoinShortCircuit'
+, tests
+, function() // {{{
 {
     var rv = [];
     var f = push(rv);
@@ -138,26 +166,32 @@ function testDisjoinShortCircuit() // {{{
     assertEquals(0, rv.length);
     disjoin([false_, false_, f])(1, 2);
     assertEquals(2, rv.length);
-} // }}}
+}); // }}}
 
-function testDisjoinReturnValue() // {{{
+defTest('testDisjoinReturnValue'
+, tests
+, function() // {{{
 {
     assertEquals(true, disjoin([false_, true_])());
     assertEquals(false, disjoin([false_, $1])(null));
     assertEquals(4, disjoin([$1, false_])(4));
     assertEquals(8, disjoin([false_, $1])(8));
     assertEquals('0', disjoin([false_, $1])('0'));
-} // }}}
+}); // }}}
 
-function testBinder() // {{{
+defTest('testBinder'
+, tests
+, function() // {{{
 {
     var rv = [];
     var f = binder(push(rv));
     apply(f, range(0, 4))();
     assertEquals(4, rv.length);
-} // }}}
+}); // }}}
 
-function testCurry() // {{{
+defTest('testCurry'
+, tests
+, function() // {{{
 {
     var f = curry(curry(argv, 7), 8);
     var rv = f(9);
@@ -165,9 +199,11 @@ function testCurry() // {{{
     assertEquals(7, rv[0])
     assertEquals(8, rv[1])
     assertEquals(9, rv[2])
-} // }}}
+}); // }}}
 
-function testSelect() // {{{
+defTest('testSelect'
+, tests
+, function() // {{{
 {
     var data = ['foo', 'bar', 'baz'];
     for_(
@@ -177,9 +213,11 @@ function testSelect() // {{{
             assertEquals(v, select(i)(a));
         }
     );
-} // }}}
+}); // }}}
 
-function testProject() // {{{
+defTest('testProject'
+, tests
+, function() // {{{
 {
     var data = ['foo', 'bar', 'baz'];
     for_(
@@ -189,53 +227,67 @@ function testProject() // {{{
             assertEquals(v, apply(project(i), a));
         }
     );
-} // }}}
+}); // }}}
 
-function test$1() // {{{
+defTest('test$1'
+, tests
+, function() // {{{
 {
     var args = ['foo', 'bar', 'baz'];
     assertEquals('foo', $1('foo', 'bar', 'baz'));
-} // }}}
+}); // }}}
 
-function testBind1st() // {{{
+defTest('testBind1st'
+, tests
+, function() // {{{
 {
     var f = bind1st(minus, 10);
     assertEquals(5, f(5));
     assertEquals(3, f(7));
     assertEquals(-10, f(20));
-} // }}}
+}); // }}}
 
-function testBind2nd() // {{{
+defTest('testBind2nd'
+, tests
+, function() // {{{
 {
     var f = bind2nd(minus, 10);
     assertEquals(-5, f(5));
     assertEquals(-3, f(7));
     assertEquals(10, f(20));
-} // }}}
+}); // }}}
 
-function testBind() // {{{
+defTest('testBind'
+, tests
+, function() // {{{
 {
     assertEquals(11, bind(value(11), [])(3, 5));
     assertEquals(2, bind(minus, [$2, $1])(3, 5));
-} // }}}
+}); // }}}
 
-function testUse1st() // {{{
+defTest('testUse1st'
+, tests
+, function() // {{{
 {
     var rv = use1st(argv)(3, 4, 5);
     assertEquals(1, rv.length);
     assertEquals(3, rv[0]);
     assertEquals(1, use1st(itself)(1, 2, 3));
-} // }}}
+}); // }}}
 
-function testUse2nd() // {{{
+defTest('testUse2nd'
+, tests
+, function() // {{{
 {
     var rv = use2nd(argv)(3, 4, 5);
     assertEquals(1, rv.length);
     assertEquals(4, rv[0]);
     assertEquals(2, use2nd(itself)(1, 2, 3));
-} // }}}
+}); // }}}
 
-function testNth() // {{{
+defTest('testNth'
+, tests
+, function() // {{{
 {
     var a = range(0, 5);
     assertEquals(a[3], nth(a)(3));
@@ -244,9 +296,11 @@ function testNth() // {{{
     var o = { foo : 'bar' };
     assertEquals(o.foo, nth(o)('foo'));
     assertEquals(undefined, nth(o)('qux'));
-} // }}}
+}); // }}}
 
-function testComposex() // {{{
+defTest('testComposex'
+, tests
+, function() // {{{
 {
     var f = bind1st(mul, 10000);
     var g = bind1st(plus, 1000)
@@ -257,14 +311,18 @@ function testComposex() // {{{
 
     assertEquals(33, composex([])(11, 22, 33));
     assertEquals(undefined, composex([])());
-} // }}}
+}); // }}}
 
-function testJoiner() // {{{
+defTest('testJoiner'
+, tests
+, function() // {{{
 {
     assertEquals('a-b-c', joiner('-')(['a', 'b', 'c']));
-} // }}}
+}); // }}}
 
-function testSplitter() // {{{
+defTest('testSplitter'
+, tests
+, function() // {{{
 {
     var exp = ['a', 'b', 'c'];
     var rv = splitter('-')('a-b-c');
@@ -275,48 +333,17 @@ function testSplitter() // {{{
             assertEquals(v, rv[i]);
         }
     );
-} // }}}
+}); // }}}
 
-function testIfte() // {{{
+defTest('testIfte'
+, tests
+, function() // {{{
 {
     var f = ifte(Boolean, itself, bind2nd(minus, 3));
     for_(
         [[2, 2], [-7, -7], [-3, 0]]
       , spread(bind(assertEquals, [$1, use2nd(f)]))
     );
-} // }}}
-
-tests.push(
-    testItself
-  , testValue
-  , testCompose
-  , testApply
-  , testSpread
-  , testCollect
-  , testMethod
-  , testOperatorAndReturnValue
-  , testConjoinShortCircuit
-  , testConjoinOfNoPredicatesIsTrue
-  , testConjoinReturnValue
-  , testOperatorOrReturnValue
-  , testDisjoinShortCircuit
-  , testDisjoinReturnValue
-  , testDisjoinOfNoPredicatesIsFalse
-  , testSelect
-  , testProject
-  , test$1
-  , testBind1st
-  , testBind2nd
-  , testBind
-  , testBinder
-  , testCurry
-  , testUse1st
-  , testUse2nd
-  , testNth
-  , testComposex
-  , testJoiner
-  , testSplitter
-  , testIfte
-);
+}); // }}}
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

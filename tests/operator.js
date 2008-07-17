@@ -22,7 +22,9 @@
 // $HeadURL$
 // $Id$
 
-function testNew_() // {{{
+defTest('testNew_'
+, tests
+, function() // {{{
 {
     var a = new_(Array)(1, 2, 3);
     assertEquals(3, a.length);
@@ -33,46 +35,60 @@ function testNew_() // {{{
     assertEquals(42, new_(Number)(42).valueOf());
     assertEquals('hello', new_(String)('hello').toString());
     assertEquals('hello', new(String)('hello').toString());
-} // }}}
+}); // }}}
 
-function testPlus() // {{{
+defTest('testPlus'
+, tests
+, function() // {{{
 {
     assertEquals('abc', plus('ab', 'c'));
     assertEquals(42, plus(40, 2));
-} // }}}
+}); // }}}
 
-function testMinus() // {{{
+defTest('testMinus'
+, tests
+, function() // {{{
 {
     assertEquals(38, minus(40, 2));
-} // }}}
+}); // }}}
 
-function testMul() // {{{
+defTest('testMul'
+, tests
+, function() // {{{
 {
     assertEquals(24, mul(3, 8));
-} // }}}
+}); // }}}
 
-function testDiv() // {{{
+defTest('testDiv'
+, tests
+, function() // {{{
 {
     assertEquals(3, div(24, 8));
     assertEquals(3.14, div(9.42, 3));
-} // }}}
+}); // }}}
 
-function testIntdiv() // {{{
+defTest('testIntdiv'
+, tests
+, function() // {{{
 {
     assertEquals(6, intdiv(24, 4));
     assertEquals(4, intdiv(9.99, 2));
     assertEquals(1, intdiv(4, 2.3));
-} // }}}
+}); // }}}
 
-function testMod() // {{{
+defTest('testMod'
+, tests
+, function() // {{{
 {
     assertEquals(0, mod(2, 2));
     assertEquals(1, mod(3, 2));
     assertEquals(2, mod(8, 3));
     assertEquals(3, mod(9, 6));
-} // }}}
+}); // }}}
 
-function testPow() // {{{
+defTest('testPow'
+, tests
+, function() // {{{
 {
     assertEquals(0, pow(0, 2));
     assertEquals(0, pow(0, 1));
@@ -82,9 +98,11 @@ function testPow() // {{{
     assertEquals(4, pow(2, 2));
     assertEquals(8, pow(2, 3));
     assertEquals(9, pow(3, 2));
-} // }}}
+}); // }}}
 
-function testNot() // {{{
+defTest('testNot'
+, tests
+, function() // {{{
 {
     assertEquals(false, not(true));
     assertEquals(true, not(false));
@@ -93,67 +111,85 @@ function testNot() // {{{
     assertEquals(false, not(3));
     assertEquals(true, not(0));
     assertEquals(true, not(null));
-} // }}}
+}); // }}}
 
-function testTrue_() // {{{
+defTest('testTrue_'
+, tests
+, function() // {{{
 {
     assertEquals(true, true_());
-} // }}}
+}); // }}}
 
-function testFalse_() // {{{
+defTest('testFalse_'
+, tests
+, function() // {{{
 {
     assertEquals(false, false_());
-} // }}}
+}); // }}}
 
-function testNeg() // {{{
+defTest('testNeg'
+, tests
+, function() // {{{
 {
     assertEquals(0, neg(0));
     assertEquals(1, neg(-1));
     assertEquals(-3, neg(3));
-} // }}}
+}); // }}}
 
-function testEq() // {{{
+defTest('testEq'
+, tests
+, function() // {{{
 {
     assertEquals(true, eq(0, 0));
     assertEquals(true, eq(1, 1));
     assertEquals(false, eq(1, -1));
     assertEquals(false, eq(1, 0));
-} // }}}
+}); // }}}
 
-function testLt() // {{{
+defTest('testLt'
+, tests
+, function() // {{{
 {
     assertEquals(true, lt(-1, 0));
     assertEquals(true, lt(0, 1));
     assertEquals(false, lt(0, -1));
     assertEquals(false, lt(1, 1));
     assertEquals(false, lt(1, 0));
-} // }}}
+}); // }}}
 
-function testGt() // {{{
+defTest('testGt'
+, tests
+, function() // {{{
 {
     assertEquals(false, gt(-1, 0));
     assertEquals(false, gt(0, 1));
     assertEquals(false, gt(1, 1));
     assertEquals(true, gt(1, 0));
-} // }}}
+}); // }}}
 
-function testLe() // {{{
+defTest('testLe'
+, tests
+, function() // {{{
 {
     assertEquals(true, le(-1, 0));
     assertEquals(true, le(0, 1));
     assertEquals(true, le(1, 1));
     assertEquals(false, le(1, 0));
-} // }}}
+}); // }}}
 
-function testGe() // {{{
+defTest('testGe'
+, tests
+, function() // {{{
 {
     assertEquals(false, ge(-1, 0));
     assertEquals(false, ge(0, 1));
     assertEquals(true, ge(1, 1));
     assertEquals(true, ge(1, 0));
-} // }}}
+}); // }}}
 
-function testDec() // {{{
+defTest('testDec'
+, tests
+, function() // {{{
 {
     var i = dec(2);
     var j = dec(20);
@@ -163,9 +199,11 @@ function testDec() // {{{
     assertEquals(18, j());
     assertEquals(-1, i());
     assertEquals(17, j());
-} // }}}
+}); // }}}
 
-function testInc() // {{{
+defTest('testInc'
+, tests
+, function() // {{{
 {
     var i = inc(2);
     var j = inc(9);
@@ -173,54 +211,68 @@ function testInc() // {{{
     assertEquals(10, j());
     assertEquals(4, i());
     assertEquals(11, j());
-} // }}}
+}); // }}}
 
-function testOdd() // {{{
+defTest('testOdd'
+, tests
+, function() // {{{
 {
     assertEquals(false, odd(0));
     assertEquals(false, odd(2));
     assertEquals(true, odd(1));
     assertEquals(true, odd(3));
-} // }}}
+}); // }}}
 
-function testEven() // {{{
+defTest('testEven'
+, tests
+, function() // {{{
 {
     assertEquals(true, even(0));
     assertEquals(true, even(2));
     assertEquals(false, even(1));
     assertEquals(false, even(3));
-} // }}}
+}); // }}}
 
-function testMinMax() // {{{
+defTest('testMinMax'
+, tests
+, function() // {{{
 {
     var a = ['a'];
     var b = ['b'];
     assertEquals(b, minmax(true_)(a, b));
     assertEquals(a, minmax(false_)(a, b));
-} // }}}
+}); // }}}
 
-function testMin() // {{{
+defTest('testMin'
+, tests
+, function() // {{{
 {
     assertEquals(3, min(3, 5));
     assertEquals(5, min(7, 5));
     assertEquals(1, min(1, 1));
-} // }}}
+}); // }}}
 
-function testMax() // {{{
+defTest('testMax'
+, tests
+, function() // {{{
 {
     assertEquals(5, max(3, 5));
     assertEquals(7, max(7, 5));
     assertEquals(1, max(1, 1));
-} // }}}
+}); // }}}
 
-function testCompare() // {{{
+defTest('testCompare'
+, tests
+, function() // {{{
 {
     assertEquals(true, 0 > compare(-1, 0));
     assertEquals(true, 0 < compare(1, 0));
     assertEquals(true, 0 == compare(1, 1));
-} // }}}
+}); // }}}
 
-function testMember() // {{{
+defTest('testMember'
+, tests
+, function() // {{{
 {
     var a = range(0, 5);
     assertEquals(a[3], member(a, 3));
@@ -229,25 +281,31 @@ function testMember() // {{{
     var o = { foo : 'bar' };
     assertEquals(o.foo, member(o, 'foo'));
     assertEquals(undefined, member(o, 'qux'));
-} // }}}
+}); // }}}
 
-function testTo_bool() // {{{
+defTest('testTo_bool'
+, tests
+, function() // {{{
 {
     assertEquals(true, to_bool(itself)(-1));
     assertEquals(true, to_bool(itself)(1));
     assertEquals(false, to_bool(itself)(0));
-} // }}}
+}); // }}}
 
-function testTo_num() // {{{
+defTest('testTo_num'
+, tests
+, function() // {{{
 {
     assertEquals(1, to_num(itself)(true));
     assertEquals(1, to_num(itself)('1'));
     assertEquals(0, to_num(itself)(false));
     assertEquals(0, to_num(itself)('0'));
     assertEquals(0.1, to_num(itself)('0.1'));
-} // }}}
+}); // }}}
 
-function testIs_a() // {{{
+defTest('testIs_a'
+, tests
+, function() // {{{
 {
     var data = [
         [false, new Number(1), String],
@@ -262,9 +320,11 @@ function testIs_a() // {{{
             assertEquals(exp, is_a(val, cls));
         })
     );
-} // }}}
+}); // }}}
 
-function testIs_null() // {{{
+defTest('testIs_null'
+, tests
+, function() // {{{
 {
     var data = [
         [false, 1],
@@ -280,31 +340,39 @@ function testIs_null() // {{{
             assertEquals(null == val, is_null(val, cls));
         })
     );
-} // }}}
+}); // }}}
 
-function testType_of() // {{{
+defTest('testType_of'
+, tests
+, function() // {{{
 {
     assertEquals('string', type_of('hello'));
     assertEquals('object', type_of([]));
     assertEquals('object', type_of({}));
     assertEquals('object', type_of(null));
     assertEquals('undefined', type_of(undefined));
-} // }}}
+}); // }}}
 
-function testLength() // {{{
+defTest('testLength'
+, tests
+, function() // {{{
 {
     assertEquals(0, length([]));
     assertEquals(1, length([0]));
     assertEquals(2, length([0, 0]));
     assertEquals(3, length([0, 0, 0]));
-} // }}}
+}); // }}}
 
-function testEmpty() // {{{
+defTest('testEmpty'
+, tests
+, function() // {{{
 {
     assertEquals(true, empty([]));
-} // }}}
+}); // }}}
 
-function testIn() // {{{
+defTest('testIn'
+, tests
+, function() // {{{
 {
     var o = { foo : 'bar' };
     var data = [
@@ -319,9 +387,11 @@ function testIn() // {{{
           , [$1, use2nd(bind2nd(in_, o))]
         ))
     );
-} // }}}
+}); // }}}
 
-function testList() // {{{
+defTest('testList'
+, tests
+, function() // {{{
 {
     var x = list();
     x.push(2);
@@ -336,44 +406,6 @@ function testList() // {{{
     var z = list(2, 'x', {});
 
     assertEquals(0, z.length);
-} // }}}
-
-tests.push(
-    testPlus
-  , testMinus
-  , testMul
-  , testDiv
-  , testIntdiv
-  , testMod
-  , testPow
-  , testNot
-  , testTrue_
-  , testFalse_
-  , testNeg
-  , testEq
-  , testLt
-  , testGt
-  , testLe
-  , testGe
-  , testDec
-  , testInc
-  , testOdd
-  , testEven
-  , testMinMax
-  , testMin
-  , testMax
-  , testCompare
-  , testNew_
-  , testMember
-  , testTo_bool
-  , testTo_num
-  , testIs_a
-  , testIs_null
-  , testType_of
-  , testLength
-  , testEmpty
-  , testIn
-  , testList
-);
+}); // }}}
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

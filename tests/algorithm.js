@@ -22,7 +22,9 @@
 // $HeadURL$
 // $Id$
 
-function testFor_() // {{{
+defTest('testFor_'
+, tests
+, function() // {{{
 {
     var data = [];
     data[1] = 'foo';
@@ -38,9 +40,11 @@ function testFor_() // {{{
     assertEquals('foo', log[0]);
     assertEquals('bar', log[1]);
     assertEquals('qux', log[2]);
-} // }}}
+}); // }}}
 
-function testPush() // {{{
+defTest('testPush'
+, tests
+, function() // {{{
 {
     var a = [];
     var p = push(a);
@@ -49,29 +53,37 @@ function testPush() // {{{
     p(0, 0);
     assertEquals(3, a.length);
     assertEquals(5, p(0, 0));
-} // }}}
+}); // }}}
 
-function testWhile_() // {{{
+defTest('testWhile_'
+, tests
+, function() // {{{
 {
     var p = inc(0);
     while_(dec(10), p)
     assertEquals(10, p());
-} // }}}
+}); // }}}
 
-function testMap() // {{{
+defTest('testMap'
+, tests
+, function() // {{{
 {
     assertEquals(3, map(value(3), [0, 1, 2])[0]);
-} // }}}
+}); // }}}
 
-function testEvery() // {{{
+defTest('testEvery'
+, tests
+, function() // {{{
 {
     assertEquals(true, every(true_, range(0, 5)));
     assertEquals(true, every(true_, []));
     assertEquals(true, every(false_, []));
     //assertEquals(true, every(bind1st(gt, 5), range(0, 5)));
-} // }}}
+}); // }}}
 
-function testEveryShortCircuit() // {{{
+defTest('testEveryShortCircuit'
+, tests
+, function() // {{{
 {
     var f = inc(0);
     var s = function (v)
@@ -81,17 +93,21 @@ function testEveryShortCircuit() // {{{
     };
     var rv = some(s, range(1, 5))
     assertEquals(4, f());
-} // }}}
+}); // }}}
 
-function testSome() // {{{
+defTest('testSome'
+, tests
+, function() // {{{
 {
     assertEquals(false, some(bind1st(le, 5), range(0, 5)));
     assertEquals(false, some(true_, []));
     assertEquals(false, some(false_, []));
     assertEquals(true, some(odd, range(0, 5)));
-} // }}}
+}); // }}}
 
-function testSomeShortCircuit() // {{{
+defTest('testSomeShortCircuit'
+, tests
+, function() // {{{
 {
     var f = inc(0);
     var s = function (v)
@@ -102,9 +118,11 @@ function testSomeShortCircuit() // {{{
     var rv = some(s, range(1, 5))
     assertEquals(4, f());
     assertEquals(69, rv);
-} // }}}
+}); // }}}
 
-function testFilter() // {{{
+defTest('testFilter'
+, tests
+, function() // {{{
 {
     var rv = filter(odd, [1, 2, 3, 4, 5]);
     var exp = [1, 3, 5];
@@ -116,17 +134,21 @@ function testFilter() // {{{
             assertEquals(v, rv[i]);
         }
     );
-} // }}}
+}); // }}}
 
-function testCoalesce() // {{{
+defTest('testCoalesce'
+, tests
+, function() // {{{
 {
     assertEquals('hello', coalesce([null, undefined, 'hello']));
     assertEquals(null, coalesce([null, undefined]));
     assertEquals(0, coalesce([null, undefined, 0, 1]));
     assertEquals('fubar', coalesce([null, undefined], 'fubar'));
-} // }}}
+}); // }}}
 
-function testIota() // {{{
+defTest('testIota'
+, tests
+, function() // {{{
 {
     var data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     assertEquals(10, range(0, 10).length);
@@ -137,9 +159,9 @@ function testIota() // {{{
             assertEquals(v, range(0, 10)[i]);
         }
     );
-} // }}}
+}); // }}}
 
-function fib(n) // {{{
+function fib (n) // {{{
 {
     if (0 == n || 1 == n) {
         return 1;
@@ -147,7 +169,9 @@ function fib(n) // {{{
     return fib(n - 1) + fib(n - 2);
 } // }}}
 
-function testFibonacci() // {{{
+defTest('testFibonacci'
+, tests
+, function() // {{{
 {
     assertEquals(1, fib(0));
     assertEquals(1, fib(1));
@@ -156,19 +180,25 @@ function testFibonacci() // {{{
     assertEquals(5, fib(4));
     assertEquals(8, fib(5));
     assertEquals(13, fib(6));
-} // }}}
+}); // }}}
 
-function testFind_if() // {{{
+defTest('testFind_if'
+, tests
+, function() // {{{
 {
     assertEquals(1, find_if(even, range(1, 4)));
-} // }}}
+}); // }}}
 
-function testFind() // {{{
+defTest('testFind'
+, tests
+, function() // {{{
 {
     assertEquals(3, find(4, range(1, 4)));
-} // }}}
+}); // }}}
 
-function testCopy() // {{{
+defTest('testCopy'
+, tests
+, function() // {{{
 {
     var data = [{foo: 'bar'}, 1, 2, 3];
     var rv = copy(data);
@@ -177,9 +207,11 @@ function testCopy() // {{{
     assertEquals(data[1], rv[1]);
     assertEquals(data[2], rv[2]);
     assertEquals(data[3], rv[3]);
-} // }}}
+}); // }}}
 
-function testKeys() // {{{
+defTest('testKeys'
+, tests
+, function() // {{{
 {
     var data = range(1, 10);
     for_(
@@ -200,9 +232,11 @@ function testKeys() // {{{
             assertEquals(v, rv[i]);
         }
     );
-} // }}}
+}); // }}}
 
-function testReverse() // {{{
+defTest('testReverse'
+, tests
+, function() // {{{
 {
     var data = range(0, 3);
     var rv = reverse(data);
@@ -210,17 +244,21 @@ function testReverse() // {{{
     assertEquals(data[0], rv[2]);
     assertEquals(data[1], rv[1]);
     assertEquals(data[2], rv[0]);
-} // }}}
+}); // }}}
 
-function testPrevious() // {{{
+defTest('testPrevious'
+, tests
+, function() // {{{
 {
     var prev = previous(42);
     assertEquals(42, prev(69));
     assertEquals(69, prev(78));
     assertEquals(78, prev(13));
-} // }}}
+}); // }}}
 
-function testUnique() // {{{
+defTest('testUnique'
+, tests
+, function() // {{{
 {
     var data = [2, 2, 3, 2, 2, 2, 3, 3, 2, 1, 1, 0, 1, 1, 3];
     var exp =  [2,    3, 2,       3,    2, 1,    0, 1,    3];
@@ -233,9 +271,11 @@ function testUnique() // {{{
             assertEquals(v, rv[i]);
         }
     );
-} // }}}
+}); // }}}
 
-function testSorted() // {{{
+defTest('testSorted'
+, tests
+, function() // {{{
 {
     var data = [3, 0, 2, -1, 1];
     var exp = [-1, 0, 1, 2, 3];
@@ -246,9 +286,11 @@ function testSorted() // {{{
     assertEquals(exp[2], rv[2]);
     assertEquals(exp[3], rv[3]);
     assertEquals(exp[4], rv[4]);
-} // }}}
+}); // }}}
 
-function testSortedCmp() // {{{
+defTest('testSortedCmp'
+, tests
+, function() // {{{
 {
     var data = [3, 0, 2, -1, 1];
     var exp = [3, 2, 1, 0, -1];
@@ -259,23 +301,27 @@ function testSortedCmp() // {{{
     assertEquals(exp[2], rv[2]);
     assertEquals(exp[3], rv[3]);
     assertEquals(exp[4], rv[4]);
-} // }}}
+}); // }}}
 
-function testSlice() // {{{
+defTest('testSlice'
+, tests
+, function() // {{{
 {
     var rv = range(0, 10);
     rv = slice(rv, 2, 5);
     assertEquals(3, rv.length);
-} // }}}
+}); // }}}
 
-function testInsert() // {{{
+defTest('testInsert'
+, tests
+, function() // {{{
 {
     var rv = [];
     var ins = insert(rv);
     ins('omg', 2);
     assertEquals('omg', rv[2]);
     assertEquals('wtf', ins('wtf', 0));
-} // }}}
+}); // }}}
 
 function _testChainData(c, l) // {{{
 {
@@ -286,7 +332,9 @@ function _testChainData(c, l) // {{{
     return d;
 } // }}}
 
-function test_testChainData() // {{{
+defTest('test_testChainData'
+, tests
+, function() // {{{
 {
     var rv = _testChainData(3, 2);
     assertEquals(3, rv.length);
@@ -298,7 +346,7 @@ function test_testChainData() // {{{
             assertEquals(i * length(a) + j, v);
         })
     });
-} // }}}
+}); // }}}
 
 function _testChain(f, c, l) // {{{
 {
@@ -307,17 +355,23 @@ function _testChain(f, c, l) // {{{
     for_(rv, bind(assertEquals, [$2, $1]));
 } // }}}
 
-function testChain2() // {{{
+defTest('testChain2'
+, tests
+, function() // {{{
 {
     _testChain(bind1st(apply, chain2), 2, 6);
-} // }}}
+}); // }}}
 
-function testChain() // {{{
+defTest('testChain'
+, tests
+, function() // {{{
 {
     _testChain(bind1st(apply, chain), 4, 4);
-} // }}}
+}); // }}}
 
-function testZip() // {{{
+defTest('testZip'
+, tests
+, function() // {{{
 {
     var data = [
         [0, 2, 4, 6],
@@ -339,15 +393,19 @@ function testZip() // {{{
     assertEquals(5, rv[2][1]);
     assertEquals(6, rv[3][0]);
     assertEquals(7, rv[3][1]);
-} // }}}
+}); // }}}
 
-function testZipEmptyArgument() // {{{
+defTest('testZipEmptyArgument'
+, tests
+, function() // {{{
 {
     assertEquals(8, reduce(min, [], 8));
     assertEquals(0, zip([]).length);
-} // }}}
+}); // }}}
 
-function testZipDifferentLengths1() // {{{
+defTest('testZipDifferentLengths1'
+, tests
+, function() // {{{
 {
     var data = [
         [0, 2, 4],
@@ -366,9 +424,11 @@ function testZipDifferentLengths1() // {{{
     assertEquals(3, rv[1][1]);
     assertEquals(4, rv[2][0]);
     assertEquals(5, rv[2][1]);
-} // }}}
+}); // }}}
 
-function testZipDifferentLengths2() // {{{
+defTest('testZipDifferentLengths2'
+, tests
+, function() // {{{
 {
     var data = [
         [0, 2, 4, 6],
@@ -387,9 +447,11 @@ function testZipDifferentLengths2() // {{{
     assertEquals(3, rv[1][1]);
     assertEquals(4, rv[2][0]);
     assertEquals(5, rv[2][1]);
-} // }}}
+}); // }}}
 
-function testGroup_by() // {{{
+defTest('testGroup_by'
+, tests
+, function() // {{{
 {
     var data = range(11, 7);
     var rv = group_by(even, data);
@@ -403,15 +465,19 @@ function testGroup_by() // {{{
     assertEquals(12, rv[1][0]);
     assertEquals(14, rv[1][1]);
     assertEquals(16, rv[1][2]);
-} // }}}
+}); // }}}
 
-function testReduce() // {{{
+defTest('testReduce'
+, tests
+, function() // {{{
 {
     var data = range(1, 3);
     assertEquals(6, reduce(plus, data, 0));
-} // }}}
+}); // }}}
 
-function testTakeWhile() // {{{
+defTest('testTakeWhile'
+, tests
+, function() // {{{
 {
     var data = range(0, 8);
     var rv = take_while(bind1st(gt, 5), data);
@@ -423,9 +489,11 @@ function testTakeWhile() // {{{
             assertEquals(data[i], v);
         }
     );
-} // }}}
+}); // }}}
 
-function testTakeWhileSparseInput() // {{{
+defTest('testTakeWhileSparseInput'
+, tests
+, function() // {{{
 {
     var data = range(0, 5);
     delete data[1];
@@ -439,24 +507,30 @@ function testTakeWhileSparseInput() // {{{
             assertEquals(v, rv[i]);
         }
     );
-} // }}}
+}); // }}}
 
-function testJoin() // {{{
+defTest('testJoin'
+, tests
+, function() // {{{
 {
     assertEquals('', join([], ''));
     assertEquals('', join([]));
     assertEquals('', join(['']));
     assertEquals('x', join(['', ''], 'x'));
-} // }}}
+}); // }}}
 
-function testJoinDefaultSep() // {{{
+defTest('testJoinDefaultSep'
+, tests
+, function() // {{{
 {
     assertEquals('', join([]));
     assertEquals('', join(['']));
     assertEquals('a,b,c', join(['a', 'b', 'c']));
-} // }}}
+}); // }}}
 
-function testSplit() // {{{
+defTest('testSplit'
+, tests
+, function() // {{{
 {
     var empty = split('', '');
     assertEquals(true, empty instanceof Array);
@@ -469,9 +543,11 @@ function testSplit() // {{{
     assertEquals('b', a[1]);
     assertEquals('c', a[2]);
     assertEquals('d', a[3]);
-} // }}}
+}); // }}}
 
-function testSplitDefaultSep() // {{{
+defTest('testSplitDefaultSep'
+, tests
+, function() // {{{
 {
     var empty = split('');
     assertEquals(true, empty instanceof Array);
@@ -482,20 +558,26 @@ function testSplitDefaultSep() // {{{
     var a = split(s);
     assertEquals(1, a.length);
     assertEquals(s, a[0]);
-} // }}}
+}); // }}}
 
-function testProduct() // {{{
+defTest('testProduct'
+, tests
+, function() // {{{
 {
     assertEquals(3 * 20 * 100, product([3, 20, 100]));
     assertEquals(1, product([]));
-} // }}}
+}); // }}}
 
-function testSum() // {{{
+defTest('testSum'
+, tests
+, function() // {{{
 {
     assertEquals(123, sum([3, 20, 100]));
-} // }}}
+}); // }}}
 
-function testChunk() // {{{
+defTest('testChunk'
+, tests
+, function() // {{{
 {
     var rv = chunk(range(0, 10), 3);
     assertEquals(3, rv[0].length);
@@ -507,9 +589,11 @@ function testChunk() // {{{
     // ...
     assertEquals(8, rv[2][2]);
     assertEquals(9, rv[3][0]);
-} // }}}
+}); // }}}
 
-function testFill() // {{{
+defTest('testFill'
+, tests
+, function() // {{{
 {
     var rv = fill(10, 'omg');
     assertEquals(10, rv.length);
@@ -520,14 +604,18 @@ function testFill() // {{{
             assertEquals('omg', rv[i]);
         }
     );
-} // }}}
+}); // }}}
 
-function testInner_product() // {{{
+defTest('testInner_product'
+, tests
+, function() // {{{
 {
     assertEquals(2 * 3 + 4 * 5, inner_product([2, 4], [3, 5]));
-} // }}}
+}); // }}}
 
-function testItems() // {{{
+defTest('testItems'
+, tests
+, function() // {{{
 {
     var rv = items({
         foo: 20
@@ -548,9 +636,11 @@ function testItems() // {{{
             assertEquals(v[1], rv[i][1]);
         }
     );
-} // }}}
+}); // }}}
 
-function testProperties() // {{{
+defTest('testProperties'
+, tests
+, function() // {{{
 {
     var o = {
         foo: 'omg'
@@ -567,64 +657,18 @@ function testProperties() // {{{
             assertEquals(name, rv[i]);
         }
     );
-} // }}}
+}); // }}}
 
-function testCons() // {{{
+defTest('testCons'
+, tests
+, function() // {{{
 {
     var rv = cons(2, [4, 6]);
     assertEquals(3, rv.length);
     assertEquals(2, rv[0]);
     assertEquals(4, rv[1]);
     assertEquals(6, rv[2]);
-} // }}}
+}); // }}}
 
-tests.push(
-    testFor_
-  , testWhile_
-  , testMap
-  , testEvery
-  , testEveryShortCircuit
-  , testSome
-  , testSomeShortCircuit
-  , testFilter
-  , testPush
-  , testCoalesce
-  , testIota
-  , testFill
-  , testFibonacci
-  , testFind_if
-  , testFind
-  , testCopy
-  , testKeys
-  , testReverse
-  , testPrevious
-  , testUnique
-  , testSorted
-  , testSortedCmp
-  , testSlice
-  , testInsert
-  , test_testChainData
-  , testChain2
-  , testChain
-  , testZip
-  , testZipEmptyArgument
-  , testZipDifferentLengths1
-  , testZipDifferentLengths2
-  , testGroup_by
-  , testChunk
-  , testReduce
-  , testProduct
-  , testSum
-  , testTakeWhile
-  , testTakeWhileSparseInput
-  , testJoin
-  , testJoinDefaultSep
-  , testSplit
-  , testSplitDefaultSep
-  , testInner_product
-  , testItems
-  , testProperties
-  , testCons
-);
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
