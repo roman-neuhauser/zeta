@@ -1386,17 +1386,17 @@ Class and Object Operations
 empty(arr)
 ~~~~~~~~~~
 
-*arr* is an array.  *empty* returns true if and only if *0 == length(arr)*.
+*arr* is an array.  *empty* returns true if and only if *0 == size(arr)*.
 
 Equivalency: ::
 
-    empty(arr) == (0 == length(arr))
+    empty(arr) == (0 == size(arr))
 
-See Also: `length`_.
+See Also: `size`_.
 
 Possible implementation: ::
 
-    var empty = bind(eq, [value(0), length]);
+    var empty = bind(eq, [value(0), size]);
 
 in_(prop, obj)
 ~~~~~~~~~~~~~~
@@ -1410,20 +1410,20 @@ Equivalency: ::
 
 See Also: `member`_.
 
-length(arr)
-~~~~~~~~~~~
+size(arr)
+~~~~~~~~~
 
-*arr* is an array.  *length* returns *arr.length*.
+*arr* is an array.  *size* returns *arr.length*.
 
 Equivalency: ::
 
-    length(arr) == arr.length
+    size(arr) == arr.length
 
 See Also: `empty`_.
 
 Possible implementation: ::
 
-    var length = bind2nd(member, 'length');
+    var size = bind2nd(member, 'length');
 
 member(obj, prop)
 ~~~~~~~~~~~~~~~~~
@@ -1504,7 +1504,7 @@ See Also: `is_a`_.
 .. _itself: `itself(val)`_
 .. _join: `join(arr[, sep])`_
 .. _joiner: `joiner(sep)`_
-.. _length: `length(arr)`_
+.. _size: `size(arr)`_
 .. _map: `map(fun, arr)`_
 .. _max: `max(lhs, rhs)`_
 .. _member: `member(obj, prop)`_

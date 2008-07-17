@@ -74,7 +74,7 @@ var method = function (that, f) // {{{
     }
 } // }}}
 
-var length = bind2nd(member, 'length');
+var size = bind2nd(member, 'length');
 
 var for_ = function (arr, f) // {{{
 {

@@ -338,12 +338,12 @@ defTest('test_testChainData'
 {
     var rv = _testChainData(3, 2);
     assertEquals(3, rv.length);
-    for_(rv, bind(assertEquals, [value(2), length]));
+    for_(rv, bind(assertEquals, [value(2), size]));
     for_(rv, function (a, i)
     {
         for_(a, function (v, j, a)
         {
-            assertEquals(i * length(a) + j, v);
+            assertEquals(i * size(a) + j, v);
         })
     });
 }); // }}}

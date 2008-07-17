@@ -353,14 +353,14 @@ defTest('testType_of'
     assertEquals('undefined', type_of(undefined));
 }); // }}}
 
-defTest('testLength'
+defTest('testSize'
 , tests
 , function() // {{{
 {
-    assertEquals(0, length([]));
-    assertEquals(1, length([0]));
-    assertEquals(2, length([0, 0]));
-    assertEquals(3, length([0, 0, 0]));
+    assertEquals(0, size([]));
+    assertEquals(1, size([0]));
+    assertEquals(2, size([0, 0]));
+    assertEquals(3, size([0, 0, 0]));
 }); // }}}
 
 defTest('testEmpty'
