@@ -395,7 +395,7 @@ This is a functional generalization of the *&&* operator.
 
 Equivalency: ::
 
-    conjoin([f, g, h])(x, y, z) == true && (f(x, y, z) && g(x, y, z) && h(x, y, z))
+    conjoin([f, g, h])(x, y, z) == true && f(x, y, z) && g(x, y, z) && h(x, y, z)
 
 See Also: `disjoin`_.
 
@@ -412,7 +412,7 @@ This is a functional generalization of the *||* operator.
 
 Equivalency: ::
 
-    disjoin([f, g, h])(x, y, z) == false || (f(x, y, z) || g(x, y, z) || h(x, y, z))
+    disjoin([f, g, h])(x, y, z) == false || f(x, y, z) || g(x, y, z) || h(x, y, z)
 
 See Also: `conjoin`_.
 
@@ -568,7 +568,7 @@ argv(...)
 
 Equivalency: ::
 
-    args(x, y, z) == [x, y, z]
+    argv(x, y, z) == [x, y, z]
 
 See Also: `$1`_, `$2`_, `$3`_, `use1st`_, `use2nd`_.
 
@@ -586,7 +586,7 @@ Primitives
 ++++++++++
 
 for_(arr, op)
-~~~~~~~~~~~~~~
+~~~~~~~~~~~~~
 
 *arr* is an array.  *op* is an `array callback`_.  *op* is called
 once for each element in *arr*.
@@ -604,10 +604,7 @@ Print all elements of an array: ::
 
     for_(
         ['foo', 'bar', 'baz']
-      , function (v)
-        {
-            print(v);
-        }
+      , use1st(print)
     );
 
 while_(cond, fun)
