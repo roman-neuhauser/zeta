@@ -20,7 +20,7 @@ This article introduces a few elements of Zeta through several refactorings
 of an implementation of the *composex* function adapter.  Unlike other
 Zeta Usage Examples, this one assumes some prior knowledge. Specifically,
 you should be acquainted with *for_* and *compose*.  `Refactoring
-unique(pred, arr)`_ explains these two functions in a (hopefully)
+unique(pred, arr)`_ explains these two functions in a hopefully
 approachable manner.  This article skims over *for_* while the *compose*
 discussion jumps right to the arithmetic properties of functions.
 
@@ -32,9 +32,10 @@ The `Zeta Library Reference`_ has this description of *composex*:
 
   *fs* is an array of functions.  *composex* returns a variadic function such
   that calling it with arguments *a1, a2, ..., aN* is the same as calling
-  *fs[0](fs[1](...fs[fs.length - 1](a1, a2, ... aN)))*.
+  *$N(fs[0](fs[1](...fs[fs.length - 1](a1, a2, ... aN))))*.
+  When *fs* is empty, *composex* degenerates into `$N`_.
 
-  *composex* is a generalization of the *compose* function adapter.
+  *composex* is a generalization of the `compose`_ function adapter.
 
 .. _Zeta Library Reference: reference.rest
 
@@ -71,8 +72,9 @@ Comments
 
 These things are worth noting:
 
-* The array is traversed top-down because the functions in *f(g(h(...)))*
-  must be evaluated from inside out.
+* The *fs* array is traversed in reverse order because the function calls
+  must be evaluated from inside out.  *composex([f, g, h])(...)* corresponds
+  to *f(g(h(...)))*
 * Line 12 uses *apply* to serve both the innermost, variadic function, and
   the other, unary ones.  *tmp* points to *arguments* on the first pass, and
   contains *[rv]* on subsequent passes; *rv* denotes the previous (inner)
@@ -88,7 +90,7 @@ The simplest form of the *for* loop, from zero to the end of the array, is
 bad enough with all its chatter. ::
 
     var len = arr.length;
-    for (var i = 0; i < arr.length; ++i) {
+    for (var i = 0; i < len; ++i) {
         if (!(i in arr)) {
             continue;
         }
@@ -96,8 +98,9 @@ bad enough with all its chatter. ::
         ...
     }
 
-Other traversals make things even worse, such code is prone to error during
-writing, and misinterpretation during reading.  Suddenly you cannot just
+Other traversals make things even worse, such code is prone to error when
+written, and misinterpretation when being read.
+Consider the simple case of reverse iteration.  Suddenly you cannot just
 skim over the code and be sure it doesn't under- or overrun the array. ::
 
     for (var i = arr.length - 1; i > -1; --i) {
@@ -108,7 +111,7 @@ skim over the code and be sure it doesn't under- or overrun the array. ::
         ...
     }
 
-You must actually read the code, and that's time and energy better spent on
+You must actually read such code, and that's time and energy better spent on
 other parts of the software.
 
 *for_* is just the beginning of the story.  Most loops can be (more or less)
