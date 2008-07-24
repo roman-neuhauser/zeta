@@ -1129,8 +1129,8 @@ Find the index of the first positive element in an array: ::
 is_a(val, cls)
 ~~~~~~~~~~~~~~
 
-*val* is any value.  *cls* is a class.  *is_a* returns true if and only
-if *val instanceof cls*.
+*val* is any value.  *cls* is a class.  *is_a* returns true iff
+*val instanceof cls*.
 
 Equivalency: ::
 
@@ -1141,7 +1141,7 @@ See Also: `type_of`_.
 is_null(val)
 ~~~~~~~~~~~~
 
-*val* is any value.  *is_null* returns true if and only if *null == val*.
+*val* is any value.  *is_null* returns true iff *null == val*.
 
 Equivalency: ::
 
@@ -1385,7 +1385,7 @@ Class and Object Operations
 empty(arr)
 ~~~~~~~~~~
 
-*arr* is an array.  *empty* returns true if and only if *0 == size(arr)*.
+*arr* is an array.  *empty* returns true iff *0 == size(arr)*.
 
 Equivalency: ::
 
@@ -1401,7 +1401,7 @@ in_(prop, obj)
 ~~~~~~~~~~~~~~
 
 *prop* is an object property name or array index.  *obj* is an object or
-array.  *in_* returns true if and only if *prop in obj* is true.
+array.  *in_* returns true iff *prop in obj* is true.
 
 Equivalency: ::
 
