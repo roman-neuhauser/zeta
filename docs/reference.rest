@@ -191,16 +191,18 @@ composex(fs)
 
 *fs* is an array of functions.  *composex* returns a variadic function such
 that calling it with arguments *a1, a2, ..., aN* is the same as calling
-*fs[0](fs[1](...fs[fs.length - 1](a1, a2, ... aN)))*.
+*$N(fs[0](fs[1](...fs[fs.length - 1](a1, a2, ... aN))))*.
+When *fs* is empty, *composex* degenerates into `$N`_.
 
-*composex* is a generalization of the *compose* function adapter.
+*composex* is a generalization of the `compose`_ function adapter.
 
 Equivalency: ::
 
-    composex([f, g, h])(x, y, z) == f(g(h(x, y, z)))
+    composex([f, g, h])(x, y, z) == $N(f(g(h(x, y, z))))
+    composex([])(x, y, z) == $N(x, y, z) == z
 
-See Also: `$1`_, `$2`_, `$3`_, `bind`_, `bind1st`_, `bind2nd`_, `binder`_,
-`compose`_.
+See Also: `$1`_, `$2`_, `$3`_, `$N`_, `bind`_, `bind1st`_, `bind2nd`_,
+`binder`_, `compose`_.
 
 Possible implementation: ::
 
@@ -1474,6 +1476,7 @@ See Also: `is_a`_.
 .. _$1: `$1(...)`_
 .. _$2: `$2(...)`_
 .. _$3: `$3(...)`_
+.. _$N: `$N(...)`_
 .. _apply: `apply(fun, args)`_
 .. _argv: `argv(...)`_
 .. _bind1st: `bind1st(fun, lhs)`_
