@@ -187,7 +187,7 @@ Find the index of the first element with ``false`` truth value: ::
     assertEquals(2, find_if(not, arr));
 
 composex(fs)
-~~~~~~~~~~~~~
+~~~~~~~~~~~~
 
 *fs* is an array of functions.  *composex* returns a variadic function such
 that calling it with arguments *a1, a2, ..., aN* is the same as calling
