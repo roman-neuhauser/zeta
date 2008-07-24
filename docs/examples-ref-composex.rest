@@ -19,11 +19,13 @@ Introduction
 This article introduces a few elements of Zeta through several refactorings
 of an implementation of the *composex* function adapter.  Unlike other
 Zeta Usage Examples, this one assumes some prior knowledge. Specifically,
-you should be acquainted with *for_* and *compose*.  `Refactoring
+you should be acquainted with `for_`_ and `compose`_.  `Refactoring
 unique(pred, arr)`_ explains these two functions in a hopefully
 approachable manner.  This article skims over *for_* while the *compose*
 discussion jumps right to the arithmetic properties of functions.
 
+.. _for_: reference.rest#for-arr-op
+.. _compose: reference.rest#compose-f-g
 .. _Refactoring unique(pred, arr): examples-ref-unique.rest
 
 The `Zeta Library Reference`_ has this description of *composex*:
@@ -38,6 +40,7 @@ The `Zeta Library Reference`_ has this description of *composex*:
   *composex* is a generalization of the `compose`_ function adapter.
 
 .. _Zeta Library Reference: reference.rest
+.. _$N: reference.rest#n
 
 Setup
 =====
@@ -115,10 +118,16 @@ You must actually read such code, and that's time and energy better spent on
 other parts of the software.
 
 *for_* is just the beginning of the story.  Most loops can be (more or less)
-easily replaced with one of the standard array algorithms: *filter*,
-*find_if*, *map*, *reduce*, *take_while*...  Reliance on standard
+easily replaced with one of the standard array algorithms: `filter`_,
+`find_if`_, `map`_, `reduce`_, `take_while`_...  Reliance on standard
 implementations greatly reduces your chances of introducing a bug, simply
 because the code is written only once.
+
+.. _filter: reference.rest#filter-pred-arr
+.. _find_if: reference.rest#find-if-pred-arr
+.. _map: reference.rest#map-fun-arr
+.. _reduce: reference.rest#reduce-fun-arr-init
+.. _take_while: reference.rest#take-while-pred-arr
 
 Refactorings
 ============
