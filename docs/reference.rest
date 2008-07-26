@@ -393,7 +393,7 @@ returns false or until *fs* is exhausted.  Returns false if one of the
 functions returned false, otherwise returns the return value of the last
 *fs* element.  Returns ``true`` if *fs* is empty.
 
-This is a functional generalization of the *&&* operator.
+*conjoin* is a functional generalization of the *&&* operator.
 
 Equivalency: ::
 
@@ -410,7 +410,7 @@ returns true or until *fs* is exhausted.  Returns true if one of the
 functions returned true, otherwise returns the return value of the
 successful *fs* element.  Returns ``false`` if *fs* is empty.
 
-This is a functional generalization of the *||* operator.
+*disjoin* is a functional generalization of the *||* operator.
 
 Equivalency: ::
 
