@@ -23,14 +23,13 @@ The `Zeta Library Reference`_ carries this description of *unique*:
 
   *unique(eqfun, arr)*
 
-  *eqfun* is binary function, *arr* is an array.  *unique* returns a `shallow
-  copy`_ of *arr* such that every time a consecutive group of identical
-  elements appears in *arr*, *unique* removes all but the first element.
-  The second and succeeding copies of identical adjacent elements are not
-  copied.
+  *eqfun* is a binary predicate_.  *arr* is an array.  *unique* returns a
+  `shallow copy`_ of *arr* such that every time a consecutive group of
+  identical elements appears in *arr*, *unique* copies only the first element.
 
 .. _Zeta Library Reference: reference.rest
 .. _shallow copy: reference.rest#shallow-copy
+.. _predicate: reference.rest#predicate
 
 Setup
 +++++
@@ -140,7 +139,7 @@ Zeta includes this operation wrapped up in a function: *for_(arr, op)*:
 
   *for_(arr, op)*
   
-  *arr* is an array, *op* is an `array callback`_.  *op* is called
+  *arr* is an array.  *op* is an `array callback`_.  *op* is called
   once for each element in *arr*.
 
 .. _array callback: reference.rest#array-callback
@@ -309,8 +308,9 @@ In fact, *compose(not, f)* is so common, it's available as *negate*:
 
   *negate(fun)*
 
-  *fun* is a function.  *negate* returns a function such that calling it with
-  arguments *a1, a2, ... aN* is the same as calling *!fun(a1, a2, ... aN)*.
+  *fun* is a function.  *negate* returns a variadic function such that
+  calling it with arguments *a1, a2, ... aN* is the same as calling
+  *!fun(a1, a2, ... aN)*.
 
 *negate* is a convenient shortcut: ::
 
@@ -413,11 +413,10 @@ Zeta provides a general function adapter factory:
 
   *bind(fun, binders)*
 
-  *fun* is a function, *binders* is an array of functions.
-  *bind* returns a variadic function.  This function calls each element
-  of *binders* relaying arguments, and collects the return values.
-  *fun* is then called with positional arguments supplied from the
-  collected returns.  Returns *fun*'s return value.
+  *fun* is a function.  *binders* is an array of functions.
+  *bind* returns a variadic function such that calling it with arguments
+  *a1, a2, ..., aN* (*args* for brevity) is the same as calling
+  *fun(binders[0](args), binders[1](args) ... binders[binders.length - 1](args))*.
 
   In other words, *bind* returns a function which wraps *fun*, *bind*'s
   first argument.  When called, the wrapper returned from *bind* doesn't
@@ -435,7 +434,7 @@ where *itself* is a function which returns its (first) argument:
 
   *itself(val)*
 
-  *val* is any value.  Returns *val*.  Reference types are not copied.
+  *val* is any value.  *itself* returns *val*.  Reference types are not copied.
 
 The function returned from *bind* will call *maybepush* with two arguments
 (because [*itself*, *prev*] has two elements).  The first argument will be
@@ -488,9 +487,9 @@ It makes sense to encapsulate it as a function.  Zeta has *filter*:
 
   *filter(pred, arr)*
 
-  *arr* is an array, *pred* is an `array callback`_.  *pred* is called once
-  with each element in *arr*.  *filter* returns an array of those elements
-  of *arr* for which *pred* returned ``true``.
+  *pred* is an `array callback`_ predicate_.  *arr* is an array.  *pred* is
+  called once with each element in *arr*.  *filter* returns an array of those
+  elements of *arr* for which *pred* returned a value convertible to ``true``.
 
 Current contents of *maybepush* make the change to a test function trivial:
 ::
@@ -565,10 +564,13 @@ This is the functional || operator:
 
   *disjoin(fs)*
 
-  *fs* is an array of functions.  *disjoin* returns a variadic function
+  *fs* is an array of functions.  *disjoin* returns a variadic predicate_
   which calls each function in *fs* in turn relaying arguments until one
   returns true or until *fs* is exhausted.  Returns true if one of the
-  functions returned true, otherwise false.
+  functions returned true, otherwise returns the return value of the
+  successful *fs* element.  Returns ``false`` if *fs* is empty.
+
+  *disjoin* is a functional generalization of the *||* operator.
 
 And this is what remains of *test* when we use *disjoin*: ::
 
@@ -608,7 +610,7 @@ available as *map*:
 
   *map(fun, arr)*
 
-  *fun* is an `array callback`_, *arr* is an array.  *fun* is called
+  *fun* is an `array callback`_.  *arr* is an array.  *fun* is called
   once for each element in *arr*.  *map* returns an array of results.
 
 We can build the array given to *disjoin* on the fly, and remove the

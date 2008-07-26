@@ -244,10 +244,10 @@ offers it in a generalized form, the *reduce* function:
   *reduce* is a generalization of summation: it computes the sum (or some
   other binary operation) of *init* and all elements of *arr*.
 
-  *fun* is not required to be either commutative or associative: the
-  order of all of *reduce*'s operations is specified. The result is first
-  initialized to *init*. Then, for each element in *arr*, in order from
-  beginning to end, it is updated by *result = fun(result, elem)*.
+  *fun* is not required to be either commutative or associative: the order of
+  all of *reduce*'s operations is specified. The result is first initialized
+  to *init*. Then, for each element in *arr*, in order from beginning to end,
+  it is updated by *result = fun(result, elem)*.
 
 One possible *reduce* implementation looks very much like our *composex*: ::
 
