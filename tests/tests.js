@@ -27,6 +27,7 @@ $$IMPORT_ZETA_INTO$$(this);
 load("tests/runner.js");
 
 var tests = [];
+var output = print;
 
 load("tests/runner-tests.js");
 

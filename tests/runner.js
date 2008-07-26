@@ -64,8 +64,6 @@ function fail(msg) // {{{
     throw new UnconditionalFailure(msg);
 } // }}}
 
-var output = print;
-
 function runTest(output, test) // {{{
 {
     var fail = function (test, e) // {{{
