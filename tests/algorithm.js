@@ -623,9 +623,9 @@ defTest('testItems'
       , baz: 40
     });
     var exp = [
-        ['foo', 20],
-        ['bar', 30],
-        ['baz', 40],
+        ['foo', 20]
+      , ['bar', 30]
+      , ['baz', 40]
     ];
     assertEquals(exp.length, rv.length);
     for_(
