@@ -18,7 +18,7 @@ function fillScope(symtab,	i)
 BEGIN {
     printf("// === GENERATED FILE, DO NOT EDIT ===\n\n");
 
-    printf("function $$IMPORT_ZETA_INTO$$($$IMPORT_SCOPE$$)\n{\n");
+    printf("function $$%s$$($$IMPORT_SCOPE$$)\n{\n", IMPORTER);
     for (i = 1; i < ARGC; ++i) {
         output(ARGV[i]);
     }

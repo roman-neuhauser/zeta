@@ -65,6 +65,7 @@ symtab: tools/symbols.js ${ZETA_JS_SOURCES}
 zeta.js: tools/zeta.awk symtab ${ZETA_JS_SOURCES}
 	${ZETA_AWK} \
 	    -v SYMBOLS=symtab \
+	    -v IMPORTER=IMPORT_ZETA_INTO \
 	    -f tools/zeta.awk \
 	    ${ZETA_JS_SOURCES} > zeta.js
 
