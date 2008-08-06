@@ -118,10 +118,9 @@ low-level operations.  This has at least three negative consequences:
 
 * common low-level code also suggests code duplication
 
-There are at least four aspects that deserve attention: plain presence of
-the *for* loop, inline presence of a common code structure (conditional
-copy of array elements) and convolutions around *first* and *prev* (counting
-*first* and *prev* separately).
+These aspects deserve attention: plain presence of the *for* loop,
+inline presence of a common code structure (conditional copy of array
+elements) and convolutions around *first* and *prev*.
 
 We'll tackle them one by one using functions from the Zeta library,
 reducing the code *and* improving clarity with each step.
@@ -242,9 +241,10 @@ implementation.
 -----
 
 An important thing to realize is that the ``++notfirst`` expression is
-a nullary function (returns (lastvalue + 1)), and we're looking at: ::
+a nullary function (one that returns *(lastvalue + 1)*):
+::
 
-    !next()
+    !notfirst()
 
 Zeta includes the *inc* factory: *inc(x)* returns a function which
 returns *++x*. ::
@@ -394,7 +394,7 @@ The only problem is getting *for_* to call *maybepush(val, prev(val))*. ::
         // for_(arr, ???);
 
 It's always possible (and easy, if tiresome) to write such an adapter by
-hand, but that can lead to excessive code: ::
+hand, but that quickly leads to excessive code: ::
 
         var prev = previous(undefined);
         var maybepush = function (val, prev)
@@ -509,7 +509,7 @@ becomes ::
         }
 
 *for_* is replaced with *filter*, and all mentions of *rv* go away.
-Here's complete current *unique*: ::
+Here's complete current *unique* again: ::
 
     function unique(eqfun, arr)
     {
@@ -601,7 +601,7 @@ As opposed to the handwritten *test*, the function returned from *disjoin*
 will call both *first* and *different* with any arguments it received, but
 that doesn't change their behavior, and so presents no problem.
 
-Here's the complete *unique* again, with *test* definition inlined into
+This is the complete *unique* now, with *test* definition inlined into
 the *bind* call: ::
 
     function unique(eqfun, arr)
@@ -620,22 +620,22 @@ the *bind* call: ::
 *map*
 ~~~~~
 
-All we do with *first* and *different* is pass it to *disjoin*: ::
+All we do with *first* and *different* is pass them to *disjoin*: ::
 
                 disjoin([first, different])
 
-In other words, we're calling *disjoin* with [*notfirst*, *eqfun*] pulled
-through *negate*.  Creating an array from another one with each element
-transformed in some way is also a common structure, and Zeta makes it
-available as *map*:
+In other words, we're calling *disjoin* with each of *[notfirst, eqfun]*
+pulled through *negate*.  Creating an array from another one with each
+element transformed in some way is also a common structure, and Zeta makes
+it available as *map*:
 
   *map(fun, arr)*
 
   *fun* is an `array callback`_.  *arr* is an array.  *fun* is called
   once for each element in *arr*.  *map* returns an array of results.
 
-We can build the array given to *disjoin* on the fly, and remove the
-*first* and *different* symbols. ::
+*map* allows us to get rid of the *first* and *different* symbols by
+building the array given to *disjoin* on the fly. ::
 
     function unique(eqfun, arr)
     {
