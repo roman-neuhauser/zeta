@@ -530,11 +530,32 @@ Here's complete current *unique*: ::
 Let's get rid of the *test* function body.
 
 Logical or, the || operator, can be viewed as a binary function which
-returns true if either of its arguments converts to ``true``, and
+returns the first of its arguments that converts to ``true``, and
 (important, as we've seen) shortcuts argument evaluation.
 
 If we wanted to realize the || operator as a function, what would it take
-as arguments?  Functions.
+as arguments?  Wrapping only ``||`` in a function wouldn't cut it as this
+snippet shows: ::
+
+  f() || g();
+
+  var or = function (lhs, rhs)
+  {
+      return lhs || rhs;
+  }
+  or(f(), g());
+
+While the naked ``||`` on line 1 shortcuts *g()*, the *or(f(), g())*
+expression requires that both *f()* and *g()* are evaluated before *or* is
+invoked.  The fix is to push the *f* and *g* calls into *or*: ::
+
+  var or = function (lhs, rhs)
+  {
+      return lhs() || rhs();
+  }
+  or(f, g);
+
+Getting *test* into this form is actually very easy.
 
 First, the ``!eqfun(val, prev)`` expression needs to turn into a simple
 function call: ::
