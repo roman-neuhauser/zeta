@@ -244,12 +244,12 @@ var items = function (obj) // {{{
 {
     var rv = [];
     for (var i in obj) {
-        rv.push([i, obj[i]]);
+        rv.push([obj[i], i]);
     }
     return rv;
 } // }}}
 
-var properties = bind(map, [value(select(0)), items]);
+var properties = bind(map, [value(select(1)), items]);
 
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

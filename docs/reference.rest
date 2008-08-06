@@ -691,11 +691,11 @@ which generated that particular key.
 items(obj)
 ~~~~~~~~~~
 
-*obj* is an object.  *items* returns an array of *obj*'s *[key, value]* pairs.
+*obj* is an object.  *items* returns an array of *obj*'s *[value, key]* pairs.
 
 Equivalency: ::
 
-    items({a: 10, b: 20, c: 30}) == [['a', 10], ['b', 20], ['c', 30]]
+    items({a: 10, b: 20, c: 30}) == [[10, 'a'], [20, 'b'], [30, 'c']]
 
 See Also: `properties`_.
 
