@@ -233,10 +233,13 @@ var joiner = bind1st(bind2nd, join);
 
 var splitter = bind1st(bind2nd, split);
 
-var chunk = bind( // {{{
-    group_by
-  , [use2nd(bind1st(bind2nd, intdiv)), $1]
-); // }}}
+var chunk = function (arr, sz)
+{
+    return group_by(
+        use2nd(bind2nd(intdiv, sz))
+      , arr
+    );
+}
 
 var fill = bind(map, [use2nd(value), iota]);
 

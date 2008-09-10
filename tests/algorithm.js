@@ -449,7 +449,7 @@ defTest('testZipDifferentLengths2'
     assertEquals(5, rv[2][1]);
 }); // }}}
 
-defTest('testGroup_by'
+defTest('testGroup_byInts'
 , tests
 , function() // {{{
 {
@@ -465,6 +465,28 @@ defTest('testGroup_by'
     assertEquals(12, rv[1][0]);
     assertEquals(14, rv[1][1]);
     assertEquals(16, rv[1][2]);
+}); // }}}
+
+defTest('testGroup_byChars'
+, tests
+, function() // {{{
+{
+    var data = ['h', 'E', 'L', 'l', 'O'];
+    var rv = group_by(
+        function (c)
+        {
+            return c.toUpperCase() == c;
+        }
+      , data
+    );
+    assertEquals(2, rv.length);
+    assertEquals(2, rv[0].length);
+    assertEquals(3, rv[1].length);
+    assertEquals('h', rv[0][0]);
+    assertEquals('l', rv[0][1]);
+    assertEquals('E', rv[1][0]);
+    assertEquals('L', rv[1][1]);
+    assertEquals('O', rv[1][2]);
 }); // }}}
 
 defTest('testReduce'
@@ -575,20 +597,35 @@ defTest('testSum'
     assertEquals(123, sum([3, 20, 100]));
 }); // }}}
 
-defTest('testChunk'
+defTest('testChunkInts'
 , tests
 , function() // {{{
 {
-    var rv = chunk(range(0, 10), 3);
+    var rv = chunk(range(100, 10), 3);
     assertEquals(3, rv[0].length);
     assertEquals(3, rv[1].length);
     assertEquals(3, rv[2].length);
     assertEquals(1, rv[3].length);
-    assertEquals(0, rv[0][0]);
-    assertEquals(1, rv[0][1]);
+    assertEquals(100, rv[0][0]);
+    assertEquals(101, rv[0][1]);
+    assertEquals(102, rv[0][2]);
     // ...
-    assertEquals(8, rv[2][2]);
-    assertEquals(9, rv[3][0]);
+    assertEquals(108, rv[2][2]);
+    assertEquals(109, rv[3][0]);
+}); // }}}
+
+defTest('testChunkChars'
+, tests
+, function() // {{{
+{
+    var rv = chunk(['a', 'b', 'c', 'd', 'e'], 3);
+    assertEquals(3, rv[0].length);
+    assertEquals(2, rv[1].length);
+    assertEquals('a', rv[0][0]);
+    assertEquals('b', rv[0][1]);
+    assertEquals('c', rv[0][2]);
+    assertEquals('d', rv[1][0]);
+    assertEquals('e', rv[1][1]);
 }); // }}}
 
 defTest('testFill'
