@@ -51,13 +51,12 @@ Downloads
 Repository
 ++++++++++
 
-The latest source can be checked out from the Subversion_ repository_,
-which is also available for anonymous browsing using the viewvc_ interface_.
+The latest source can be checked out from the Mercurial_ repository_,
+which is also available for anonymous browsing_.
 
-.. _Subversion: http://subversion.tigris.org/
-.. _repository: https://svn.sigpipe.cz/r/
-.. _viewvc:     http://www.viewvc.org/
-.. _interface:  http://svn.sigpipe.cz/
+.. _Mercurial: http://selenic.com/mercurial/
+.. _repository: https://hg.sigpipe.cz/
+.. _browsing:  http://hg.sigpipe.cz/
 
 Official tarballs
 +++++++++++++++++
