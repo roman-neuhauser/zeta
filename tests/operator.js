@@ -292,6 +292,19 @@ defTest('testTo_bool'
     assertEquals(false, to_bool(itself)(0));
 }); // }}}
 
+defTest('to_bool method'
+, tests
+, function() // {{{
+{
+    var o = { b : true };
+    var f = function ()
+    {
+        return this.b;
+    }
+    o.m = to_bool(f);
+    assertEquals(o.b, o.m());
+}); // }}}
+
 defTest('testTo_num'
 , tests
 , function() // {{{
@@ -301,6 +314,19 @@ defTest('testTo_num'
     assertEquals(0, to_num(itself)(false));
     assertEquals(0, to_num(itself)('0'));
     assertEquals(0.1, to_num(itself)('0.1'));
+}); // }}}
+
+defTest('to_num method'
+, tests
+, function() // {{{
+{
+    var o = { i : 42 };
+    var f = function ()
+    {
+        return this.i;
+    }
+    o.m = to_num(f);
+    assertEquals(o.i, o.m());
 }); // }}}
 
 defTest('testIs_a'
