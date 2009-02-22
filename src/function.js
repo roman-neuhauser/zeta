@@ -34,7 +34,7 @@ var __ZETA__shortcircuit = function (ifempty, test, short_, full) // {{{
                     continue;
                 }
                 var f = spread(fs[i]);
-                if (test(rv = f(arguments))) {
+                if (test(rv = f.call(this, arguments))) {
                     return short_(rv);
                 }
             }
@@ -90,7 +90,10 @@ var ifte = function (p, t, f) // {{{
     {
         var c = bind2nd(apply, arguments);
 
-        return c(c(p) ? t : f)
+        return c.call(
+            this
+          , c.call(this, p) ? t : f
+        );
     }
 } // }}}
 

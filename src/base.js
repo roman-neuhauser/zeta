@@ -24,7 +24,7 @@
 
 var apply = function (f, args) // {{{
 {
-    return f.apply(f, args);
+    return f.apply(this, args);
 } // }}}
 
 var argv = function () // {{{
@@ -36,7 +36,7 @@ var bind1st = function (f, lhs) // {{{
 {
     return function (rhs)
     {
-        return f(lhs, rhs);
+        return f.call(this, lhs, rhs);
     }
 } // }}}
 
@@ -44,7 +44,7 @@ var bind2nd = function (f, rhs) // {{{
 {
     return function (lhs)
     {
-        return f(lhs, rhs);
+        return f.call(this, lhs, rhs);
     }
 } // }}}
 
@@ -52,7 +52,10 @@ var compose = function (f, g) // {{{
 {
     return function()
     {
-        return f(apply(g, arguments))
+        return f.call(
+            this
+          , g.apply(this, arguments)
+        );
     }
 } // }}}
 
@@ -110,8 +113,8 @@ var bind = function (f, binders) // {{{
 {
     return function ()
     {
-        return apply(
-            f
+        return f.apply(
+            this
           , map(
                 bind2nd(apply, arguments)
               , binders

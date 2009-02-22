@@ -52,6 +52,42 @@ defTest('testCompose'
     assertEquals("omg wtf", compose(f, g)("omg"));
 }); // }}}
 
+defTest('compose method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function () { return this; }
+    o.m = compose(itself, f);
+    assertEquals(o, o.m());
+}); // }}}
+
+defTest('negate'
+, tests
+, function() // {{{
+{
+    var f = negate(function (v)
+    {
+        return v;
+    });
+    assertEquals(true, f(false));
+    assertEquals(false, f(true));
+}); // }}}
+
+defTest('negate method'
+, tests
+, function() // {{{
+{
+    var o = { i : 0 };
+    var f = function (v) { ++this.i; return v; }
+    o.m = negate(f);
+    assertEquals(0, o.i);
+    assertEquals(false, o.m(true));
+    assertEquals(1, o.i);
+    assertEquals(true, o.m(false));
+    assertEquals(2, o.i);
+}); // }}}
+
 defTest('testApply'
 , tests
 , function() // {{{
@@ -59,11 +95,38 @@ defTest('testApply'
     assertEquals(7, apply(plus, [2, 5]));
 }); // }}}
 
+defTest('apply method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function () { return this; }
+    o.m = bind1st(apply, f);
+    assertEquals(o, o.m([]));
+}); // }}}
+
 defTest('testSpread'
 , tests
 , function() // {{{
 {
     assertEquals(7, spread(plus)([2, 5]));
+}); // }}}
+
+defTest('spread method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function (a, b)
+    {
+        this.a = a;
+        this.b = b;
+        return this;
+    }
+    o.m = spread(f);
+    assertEquals(o, o.m(['hello', 'world']));
+    assertEquals('hello', o.a);
+    assertEquals('world', o.b);
 }); // }}}
 
 defTest('testCollect'
@@ -83,6 +146,22 @@ defTest('testCollect'
     );
 
     assertEquals(0, f().length);
+}); // }}}
+
+defTest('collect method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function (a)
+    {
+        this.a = a;
+        return this;
+    }
+    o.m = collect(f);
+    assertEquals(o, o.m('hello', 'world'));
+    assertEquals('hello', o.a[0]);
+    assertEquals('world', o.a[1]);
 }); // }}}
 
 defTest('testMethod'
@@ -148,6 +227,27 @@ defTest('testConjoinReturnValue'
     assertEquals(8, conjoin([true_, $1])(8));
 }); // }}}
 
+defTest('conjoin method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function (a)
+    {
+        this.a = a;
+        return true;
+    }
+    var g = function (a, b)
+    {
+        this.b = b;
+        return this;
+    }
+    o.m = conjoin([f, g]);
+    assertEquals(o, o.m('hello', 'world'));
+    assertEquals('hello', o.a);
+    assertEquals('world', o.b);
+}); // }}}
+
 defTest('testOperatorOrReturnValue'
 , tests
 , function() // {{{
@@ -179,6 +279,27 @@ defTest('testDisjoinReturnValue'
     assertEquals('0', disjoin([false_, $1])('0'));
 }); // }}}
 
+defTest('disjoin method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function (a)
+    {
+        this.a = a;
+        return false;
+    }
+    var g = function (a, b)
+    {
+        this.b = b;
+        return this;
+    }
+    o.m = disjoin([f, g]);
+    assertEquals(o, o.m('hello', 'world'));
+    assertEquals('hello', o.a);
+    assertEquals('world', o.b);
+}); // }}}
+
 defTest('testBinder'
 , tests
 , function() // {{{
@@ -187,6 +308,16 @@ defTest('testBinder'
     var f = binder(push(rv));
     apply(f, range(0, 4))();
     assertEquals(4, rv.length);
+}); // }}}
+
+defTest('binder method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function () { return this; }
+    o.m = binder(f)();
+    assertEquals(o, o.m());
 }); // }}}
 
 defTest('testCurry'
@@ -247,6 +378,16 @@ defTest('testBind1st'
     assertEquals(-10, f(20));
 }); // }}}
 
+defTest('bind1st method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function () { return this; }
+    o.m = bind1st(f, 42);
+    assertEquals(o, o.m());
+}); // }}}
+
 defTest('testBind2nd'
 , tests
 , function() // {{{
@@ -257,12 +398,32 @@ defTest('testBind2nd'
     assertEquals(10, f(20));
 }); // }}}
 
+defTest('bind2nd method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function () { return this; }
+    o.m = bind2nd(f, 42);
+    assertEquals(o, o.m());
+}); // }}}
+
 defTest('testBind'
 , tests
 , function() // {{{
 {
     assertEquals(11, bind(value(11), [])(3, 5));
     assertEquals(2, bind(minus, [$2, $1])(3, 5));
+}); // }}}
+
+defTest('bind method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function () { return this; }
+    o.m = bind(f, []);
+    assertEquals(o, o.m());
 }); // }}}
 
 defTest('testUse1st'
@@ -275,6 +436,16 @@ defTest('testUse1st'
     assertEquals(1, use1st(itself)(1, 2, 3));
 }); // }}}
 
+defTest('use1st method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function () { return this; }
+    o.m = use1st(f);
+    assertEquals(o, o.m());
+}); // }}}
+
 defTest('testUse2nd'
 , tests
 , function() // {{{
@@ -283,6 +454,16 @@ defTest('testUse2nd'
     assertEquals(1, rv.length);
     assertEquals(4, rv[0]);
     assertEquals(2, use2nd(itself)(1, 2, 3));
+}); // }}}
+
+defTest('use2nd method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function () { return this; }
+    o.m = use2nd(f);
+    assertEquals(o, o.m());
 }); // }}}
 
 defTest('testNth'
@@ -311,6 +492,16 @@ defTest('testComposex'
 
     assertEquals(33, composex([])(11, 22, 33));
     assertEquals(undefined, composex([])());
+}); // }}}
+
+defTest('composex method'
+, tests
+, function() // {{{
+{
+    var o = {};
+    var f = function () { return this; }
+    o.m = composex([itself, f]);
+    assertEquals(o, o.m());
 }); // }}}
 
 defTest('testJoiner'
@@ -344,6 +535,22 @@ defTest('testIfte'
         [[2, 2], [-7, -7], [-3, 0]]
       , spread(bind(assertEquals, [$1, use2nd(f)]))
     );
+}); // }}}
+
+defTest('ifte method'
+, tests
+, function() // {{{
+{
+    var p = function (cond) { return this.cond = cond; }
+    var t = function () { this.result = 'true'; }
+    var f = function () { this.result = 'false'; }
+    var o = {}; o.m = ifte(p, t, f);
+    o.m(1);
+    assertEquals(1, o.cond);
+    assertEquals('true', o.result);
+    o.m(0);
+    assertEquals(0, o.cond);
+    assertEquals('false', o.result);
 }); // }}}
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
