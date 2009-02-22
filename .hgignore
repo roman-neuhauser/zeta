@@ -1,0 +1,10 @@
+syntax: glob
+
+*.html
+.*.sw?
+.sw?
+commit
+rst2html
+symtab
+tags
+zeta.js
