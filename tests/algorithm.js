@@ -556,6 +556,21 @@ defTest('testGroup_byInts'
     assertEquals(16, rv[1][2]);
 }); // }}}
 
+defTest('group_by method'
+, tests
+, function() // {{{
+{
+    var o = { i : 0 };
+    o.m = group_by;
+    var f = function (i)
+    {
+        ++this.i;
+        return i;
+    }
+    o.m(f, [42, 69]);
+    assertEquals(2, o.i);
+}); // }}}
+
 defTest('testGroup_byChars'
 , tests
 , function() // {{{
@@ -617,6 +632,21 @@ defTest('testTakeWhile'
             assertEquals(data[i], v);
         }
     );
+}); // }}}
+
+defTest('take_while method'
+, tests
+, function() // {{{
+{
+    var o = { i : 0 };
+    var f = function (v)
+    {
+        ++this.i;
+        return v < 4;
+    };
+    o.m = bind2nd(take_while, range(0, 8));
+    var rv = o.m(f);
+    assertEquals(5, o.i);
 }); // }}}
 
 defTest('testTakeWhileSparseInput'

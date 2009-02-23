@@ -204,7 +204,11 @@ var group_by = function (f, arr) // {{{
     {
         (rv[key] || (rv[key] = [])).push(v);
     }
-    for_(arr, bind(store, [to_num(f), $1]));
+    for_.call(
+        this
+      , arr
+      , bind(store, [to_num(f), $1])
+    );
     return rv;
 } // }}}
 
@@ -216,7 +220,7 @@ var take_while = function (p, arr) // {{{
         if (!(i in arr)) {
             continue;
         }
-        if (!p(arr[i])) {
+        if (!p.call(this, arr[i])) {
             break;
         }
         rv.push(arr[i]);

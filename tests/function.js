@@ -422,8 +422,11 @@ defTest('bind method'
 {
     var o = {};
     var f = function () { return this; }
-    o.m = bind(f, []);
-    assertEquals(o, o.m());
+    var b = function () { this.x = 'whatever'; return 0; }
+    o.m = bind(f, [b]);
+    var rv = o.m();
+    assertEquals(o, rv);
+    assertEquals('whatever', o.x);
 }); // }}}
 
 defTest('testUse1st'

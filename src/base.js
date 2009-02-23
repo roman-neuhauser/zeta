@@ -119,8 +119,9 @@ var bind = function (f, binders) // {{{
     {
         return f.apply(
             this
-          , map(
-                bind2nd(apply, arguments)
+          , map.call(
+                this
+              , bind2nd(apply, arguments)
               , binders
             )
         );
