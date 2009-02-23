@@ -42,6 +42,22 @@ defTest('testFor_'
     assertEquals('qux', log[2]);
 }); // }}}
 
+defTest('for_ method'
+, tests
+, function() // {{{
+{
+    var o = { a : [] };
+    var f = function (v)
+    {
+        this.a.push(v);
+    }
+    o.m = bind2nd(for_, f);
+    o.m([42, 69]);
+    assertEquals(2, o.a.length);
+    assertEquals(42, o.a[0]);
+    assertEquals(69, o.a[1]);
+}); // }}}
+
 defTest('testPush'
 , tests
 , function() // {{{
@@ -64,11 +80,50 @@ defTest('testWhile_'
     assertEquals(10, p());
 }); // }}}
 
+defTest('while_ method'
+, tests
+, function() // {{{
+{
+    var o = {
+        i : 0
+      , j : 3
+      , m : while_
+    };
+    var c = function ()
+    {
+        return --this.j;
+    }
+    var f = function ()
+    {
+        ++this.i;
+    }
+    o.m(c, f);
+    assertEquals(2, o.i);
+    assertEquals(0, o.j);
+}); // }}}
+
 defTest('testMap'
 , tests
 , function() // {{{
 {
     assertEquals(3, map(value(3), [0, 1, 2])[0]);
+}); // }}}
+
+defTest('map method'
+, tests
+, function() // {{{
+{
+    var o = { a : [] };
+    var f = function (v)
+    {
+        this.a.push(v);
+        return 2 * v;
+    }
+    o.m = bind1st(map, f);
+    var a = o.m([42, 69]);
+    assertEquals(2, o.a.length);
+    assertEquals(42, o.a[0]);
+    assertEquals(69, o.a[1]);
 }); // }}}
 
 defTest('testEvery'
@@ -136,6 +191,23 @@ defTest('testFilter'
     );
 }); // }}}
 
+defTest('filter method'
+, tests
+, function() // {{{
+{
+    var o = { a : [] };
+    var f = function (v, i)
+    {
+        this.a.push(v);
+        return i % 2;
+    }
+    o.m = bind1st(filter, f);
+    var a = o.m([42, 69]);
+    assertEquals(2, o.a.length);
+    assertEquals(42, o.a[0]);
+    assertEquals(69, o.a[1]);
+}); // }}}
+
 defTest('testCoalesce'
 , tests
 , function() // {{{
@@ -187,6 +259,23 @@ defTest('testFind_if'
 , function() // {{{
 {
     assertEquals(1, find_if(even, range(1, 4)));
+}); // }}}
+
+defTest('find_if method'
+, tests
+, function() // {{{
+{
+    var o = { a : [] };
+    var f = function (v)
+    {
+        this.a.push(v);
+        return v % 2;
+    }
+    o.m = bind1st(find_if, f);
+    var a = o.m([42, 69]);
+    assertEquals(2, o.a.length);
+    assertEquals(42, o.a[0]);
+    assertEquals(69, o.a[1]);
 }); // }}}
 
 defTest('testFind'
@@ -495,6 +584,23 @@ defTest('testReduce'
 {
     var data = range(1, 3);
     assertEquals(6, reduce(plus, data, 0));
+}); // }}}
+
+defTest('reduce method'
+, tests
+, function() // {{{
+{
+    var o = { a : [] };
+    var f = function (rv, v)
+    {
+        this.a.push(v);
+        return rv + v;
+    }
+    o.m = reduce;
+    var a = o.m(f, [42, 69], 0);
+    assertEquals(2, o.a.length);
+    assertEquals(42, o.a[0]);
+    assertEquals(69, o.a[1]);
 }); // }}}
 
 defTest('testTakeWhile'

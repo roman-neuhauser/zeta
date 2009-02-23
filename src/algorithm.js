@@ -25,7 +25,11 @@
 var filter = function (p, arr) // {{{
 {
     var rv = [];
-    for_(arr, conjoin([p, compose(push(rv), $1)]));
+    for_.call(
+        this
+      , arr
+      , conjoin([p, compose(push(rv), $1)])
+    );
     return rv;
 } // }}}
 
@@ -43,7 +47,7 @@ var find_if = function (p, arr) // {{{
 {
     var len = arr.length;
     for (var i = 0; i < len; ++i) {
-        if (i in arr && p(arr[i])) {
+        if (i in arr && p.call(this, arr[i])) {
             return i;
         }
     }
@@ -96,11 +100,12 @@ var unique = function (eqfun, arr) // {{{
 var reduce = function (f, arr, init) // {{{
 {
     var rv = init;
-    for_(
-        arr
+    for_.call(
+        this
+      , arr
       , function (v)
         {
-            rv = f(rv, v);
+            rv = f.call(this, rv, v);
         }
     );
     return rv;

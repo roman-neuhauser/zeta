@@ -86,7 +86,7 @@ var for_ = function (arr, f) // {{{
     var len = arr.length;
     for (var i = 0; i < len; ++i) {
         if (i in arr) {
-            f(arr[i], i, arr);
+            f.call(this, arr[i], i, arr);
         }
     }
 } // }}}
@@ -94,7 +94,11 @@ var for_ = function (arr, f) // {{{
 var map = function (f, arr) // {{{
 {
     var rv = [];
-    for_(arr, compose(push(rv), f));
+    for_.call(
+        this
+      , arr
+      , compose(push(rv), f)
+    );
     return rv;
 } // }}}
 
@@ -158,8 +162,8 @@ var $N = function ()
 
 var while_ = function (cond, f) // {{{
 {
-    while (cond()) {
-        f();
+    while (cond.call(this)) {
+        f.call(this);
     }
 } // }}}
 
