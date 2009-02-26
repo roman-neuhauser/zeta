@@ -22,20 +22,61 @@
 // $HeadURL$
 // $Id$
 
-defTest('failThrowsAssertion' // {{{
+defTest('testAssertion' // {{{
+, tests
+, function ()
+{
+    var e = new Assertion("mitsusnafu fubaru");
+    assertEquals(
+        'mitsusnafu fubaru'
+      , String(e)
+      , '.toString broken'
+    );
+}); // }}}
+
+defTest('testUnconditionalFailure' // {{{
+, tests
+, function ()
+{
+    var e = new UnconditionalFailure("omg wtf");
+    if (!(e instanceof Assertion)) {
+        throw 'UnconditionalFailure is not an Assertion';
+    }
+    assertEquals(
+        'omg wtf'
+      , String(e)
+      , '.toString broken'
+    );
+}); // }}}
+
+defTest('testEqualityFailure' // {{{
+, tests
+, function ()
+{
+    var e = new EqualityFailure('omg', 'wtf', 'rofl');
+    if (!(e instanceof Assertion)) {
+        throw 'EqualityFailure is not an Assertion';
+    }
+    assertEquals(
+        'rofl\nexpected: omg, actual: wtf'
+      , String(e)
+      , '.toString broken'
+    );
+}); // }}}
+
+defTest('failThrowsUnconditionalFailure' // {{{
 , tests
 , function ()
 {
     try {
         fail("omg wtf");
     } catch (e) {
-        if (e instanceof Assertion) {
-            assertEquals('omg wtf', String(e));
+        if (e instanceof UnconditionalFailure) {
             return;
         }
-        assertEquals('fail failed', e);
+        throw 'fail does not throw UnconditionalFailure';
     }
-    assertEquals('fail failed', '');
+    throw 'did not throw';
 }); // }}}
 
 defTest('testRunTestSuccess' // {{{
@@ -81,26 +122,21 @@ defTest('testRunTestFailure' // {{{
     );
 }); // }}}
 
-defTest('testAssertion' // {{{
-, tests
-, function ()
-{
-    var ass = new EqualityFailure(42, 'hello');
-    assertEquals(42, ass.exp);
-    assertEquals('hello', ass.act);
-}); // }}}
-
 defTest('testAssertEqualsFailureThrowsAssertion' // {{{
 , tests
 , function ()
 {
     try {
-        assertEquals(1, 0);
+        assertEquals(1, 0, 'omg wtf');
     } catch (e) {
-        if (e instanceof Assertion) {
-            return;
+        if (!(e instanceof EqualityFailure)) {
+            fail("assertEquals must throw Assertion");
         }
-        throw e;
+        assertEquals(
+            'omg wtf\nexpected: 1, actual: 0'
+          , String(e)
+        );
+        return;
     }
     fail("did not throw");
 }); // }}}

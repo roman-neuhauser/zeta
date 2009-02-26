@@ -37,24 +37,22 @@ function UnconditionalFailure(msg) // {{{
 UnconditionalFailure.prototype = new Assertion;
 // }}}
 
-function EqualityFailure(exp, act) // {{{
+function EqualityFailure(exp, act, msg) // {{{
 {
-    Assertion.apply(this);
-
-    this.exp = exp;
-    this.act = act;
-    this.toString = function ()
-    {
-        return "expected: " + exp + ", actual: " + act;
-    }
+    Assertion.call(
+        this
+      , (msg ? msg + '\n' : '')
+            + "expected: " + exp
+            + ", actual: " + act
+    );
 }
 EqualityFailure.prototype = new Assertion;
 // }}}
 
-function assertEquals(exp, act) // {{{
+function assertEquals(exp, act, msg) // {{{
 {
     if (exp !== act) {
-        throw new EqualityFailure(exp, act);
+        throw new EqualityFailure(exp, act, msg);
     }
 } // }}}
 
