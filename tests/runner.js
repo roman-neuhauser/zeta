@@ -22,18 +22,17 @@
 // $HeadURL$
 // $Id$
 
-function Assertion() // {{{
+function Assertion(msg) // {{{
 {
-} // }}}
-
-function UnconditionalFailure(msg) // {{{
-{
-    Assertion.apply(this);
-
     this.toString = function ()
     {
         return msg;
     }
+} // }}}
+
+function UnconditionalFailure(msg) // {{{
+{
+    Assertion.call(this, msg);
 }
 UnconditionalFailure.prototype = new Assertion;
 // }}}

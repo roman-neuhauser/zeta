@@ -22,6 +22,22 @@
 // $HeadURL$
 // $Id$
 
+defTest('failThrowsAssertion' // {{{
+, tests
+, function ()
+{
+    try {
+        fail("omg wtf");
+    } catch (e) {
+        if (e instanceof Assertion) {
+            assertEquals('omg wtf', String(e));
+            return;
+        }
+        assertEquals('fail failed', e);
+    }
+    assertEquals('fail failed', '');
+}); // }}}
+
 defTest('testRunTestSuccess' // {{{
 , tests
 , function ()
