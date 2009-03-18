@@ -61,7 +61,7 @@ var find = function (v, arr) // {{{
 
 var coalesce = function (vs, dflt) // {{{
 {
-    var i = find_if(negate(bind1st(eq, null)), vs);
+    var i = find_if(negate(is_null), vs);
     if (-1 == i) {
         return 1 < arguments.length ? dflt : null;
     }
