@@ -231,21 +231,25 @@ defTest('conjoin method'
 , tests
 , function() // {{{
 {
-    var o = {};
-    var f = function (a)
+    var o = { a : [], b : [] };
+    var f = function (a, b)
     {
-        this.a = a;
+        this.a.push(a);
+        this.b.push(b);
         return true;
     }
     var g = function (a, b)
     {
-        this.b = b;
+        this.a.push(a);
+        this.b.push(b);
         return this;
     }
     o.m = conjoin([f, g]);
     assertEquals(o, o.m('hello', 'world'));
-    assertEquals('hello', o.a);
-    assertEquals('world', o.b);
+    assertEquals('hello', o.a[0]);
+    assertEquals('hello', o.a[1]);
+    assertEquals('world', o.b[0]);
+    assertEquals('world', o.b[1]);
 }); // }}}
 
 defTest('testOperatorOrReturnValue'
@@ -283,21 +287,25 @@ defTest('disjoin method'
 , tests
 , function() // {{{
 {
-    var o = {};
-    var f = function (a)
+    var o = { a : [], b : [] };
+    var f = function (a, b)
     {
-        this.a = a;
+        this.a.push(a);
+        this.b.push(b);
         return false;
     }
     var g = function (a, b)
     {
-        this.b = b;
+        this.a.push(a);
+        this.b.push(b);
         return this;
     }
     o.m = disjoin([f, g]);
     assertEquals(o, o.m('hello', 'world'));
-    assertEquals('hello', o.a);
-    assertEquals('world', o.b);
+    assertEquals('hello', o.a[0]);
+    assertEquals('hello', o.a[1]);
+    assertEquals('world', o.b[0]);
+    assertEquals('world', o.b[1]);
 }); // }}}
 
 defTest('testBinder'
@@ -314,10 +322,16 @@ defTest('binder method'
 , tests
 , function() // {{{
 {
-    var o = {};
-    var f = function () { return this; }
-    o.m = binder(f)();
-    assertEquals(o, o.m());
+    var o = { a : [] };
+    var f = function (a)
+    {
+        this.a.push(a);
+        return this;
+    }
+    o.m = binder(f)(42);
+    var rv = o.m();
+    assertEquals(o, rv);
+    assertEquals(42, o.a[0]);
 }); // }}}
 
 defTest('testCurry'
