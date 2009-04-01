@@ -415,6 +415,21 @@ defTest('testIn'
     );
 }); // }}}
 
+defTest('contains'
+, tests
+, function() // {{{
+{
+    var a = [40, 50, 60];
+    assertEquals(true, contains(40, a));
+    assertEquals(true, contains(50, a));
+    assertEquals(true, contains(60, a));
+
+    assertEquals(false, contains(39, a));
+    assertEquals(false, contains(41, a));
+    assertEquals(false, contains(59, a));
+    assertEquals(false, contains(61, a));
+}); // }}}
+
 defTest('testList'
 , tests
 , function() // {{{

@@ -910,6 +910,26 @@ Test whether any element in an array is 0: ::
     assertEquals(true, some(is_0, [1, 2, 0, 3]));
     assertEquals(false, some(is_0, [1, 2, 3]));
 
+contains(val, arr)
+~~~~~~~~~~~~~~~~~~
+
+*val* is a value.  *arr* is an array.  *contains* returns true iff
+*val == arr[i]* for any *i in arr*.
+
+Equivalency: ::
+
+    contains(v, a) == some(bind1st(eq, v), a)
+
+See Also: `find`_, `in_`_.
+
+Possible implementation: ::
+
+    var contains = bind(lt, [value(-1), find]);
+    var contains = compose(bind1st(lt, -1), find);
+    var contains = bind(some, [bind1st(bind1st, eq), $2]);
+    var contains = to_bool(compose(bind1st(plus, 1), find));
+    var contains = composex([Boolean, bind1st(plus, 1), find]);
+
 find(val, arr)
 ~~~~~~~~~~~~~~
 
@@ -1495,7 +1515,9 @@ See Also: `is_a`_.
 .. _even: `even(int)`_
 .. _false_: `false`_()_
 .. _filter: `filter(pred, arr)`_
+.. _find: `find(val, arr)`_
 .. _group_by: `group_by(fun, arr)`_
+.. _in_: `in_(prop, obj)`_
 .. _insert: `insert(arr)`_
 .. _intdiv: `intdiv(lhs, rhs)`_
 .. _iota: `iota(cnt)`_

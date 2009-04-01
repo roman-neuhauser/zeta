@@ -198,4 +198,9 @@ var in_ = function (ind, arr) // {{{
     return (ind in arr);
 } // }}}
 
+var contains = function (v, a) // {{{
+{
+    return some(bind1st(eq, v), a);
+} // }}}
+
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
