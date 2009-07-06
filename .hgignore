@@ -7,4 +7,5 @@ commit
 rst2html
 symtab
 tags
+tests/times.js
 zeta.js

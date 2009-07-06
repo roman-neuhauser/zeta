@@ -22,6 +22,9 @@ all: docs zeta.js
 check: zeta.js
 	js -f zeta.js -f tests/tests.js
 
+time: zeta.js tests/times.js
+	js -f zeta.js -f tests/time.js -f tests/times.js -f tests/time.console.js
+
 docs: README.html docs/examples.html docs/examples-ref-minmax.html \
 	docs/examples-ref-composex.html docs/examples-ref-unique.html \
 	docs/reference.html
@@ -50,6 +53,12 @@ docs/reference.html: rst2html docs/reference.rest
 symtab: tools/symbols.js ${ZETA_JS_SOURCES}
 	js ${ZETA_JS_INCLUDES} -f tools/symbols.js | sort > symtab
 
+tests/times.js: tools/times.awk symtab
+	${ZETA_AWK} \
+	    -f tools/times.awk \
+	    < symtab \
+	    > tests/times.js
+
 zeta.js: tools/zeta.awk symtab ${ZETA_JS_SOURCES}
 	${ZETA_AWK} \
 	    -v SYMBOLS=symtab \
@@ -61,7 +70,7 @@ clean:
 	rm -f zeta.js
 
 maint-clean: clean
-	rm -f *.html docs/*.html symtab rst2html
+	rm -f *.html docs/*.html symtab rst2html tests/times.js
 
 .DEFAULT: all
-.PHONY: all check clean docs maint-clean
+.PHONY: all check clean docs maint-clean time
