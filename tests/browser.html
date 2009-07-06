@@ -1,7 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01//EN"
-   "http://www.w3.org/TR/html4/strict.dtd"
+<?xml version="1.0" encoding="ISO-8859-1" ?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"
 >
-<html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
 <head>
 <title>Zeta test suite browser frontend</title>
 <!--
@@ -29,23 +30,14 @@
 // $HeadURL$
 // $Id$
 -->
-<script type="text/javascript">
-var tests = [];
-var print = function ()
-{
-    var s = '';
-    for (var i = 0; i < arguments.length; ++i) {
-        s += arguments[i];
-    }
-    return document.writeln(s);
-}
-</script>
 
-</head>
-<body>
 <script type="text/javascript" src="../zeta.js"></script>
 
 <script type="text/javascript" src="runner.js"></script>
+
+<script type="text/javascript">
+    var tests = [];
+</script>
 
 <script type="text/javascript" src="runner-tests.js"></script>
 <script type="text/javascript" src="algorithm.js"></script>
@@ -53,11 +45,10 @@ var print = function ()
 <script type="text/javascript" src="operator.js"></script>
 <script type="text/javascript" src="reference.js"></script>
 
-<pre>
-<script type="text/javascript">
-    $$IMPORT_ZETA_INTO$$(this, { import_internals : true });
-    runTests(print, tests);
-</script>
-</pre>
+<script type="text/javascript" src="jquery-1.3.2.js"></script>
+<script type="text/javascript" src="browser.html.js"></script>
+</head>
+<body>
+  <pre id="display"></pre>
 </body>
 </html>
