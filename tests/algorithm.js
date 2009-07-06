@@ -448,7 +448,7 @@ defTest('testChain2'
 , tests
 , function() // {{{
 {
-    _testChain(bind1st(apply, chain2), 2, 6);
+    _testChain(bind1st(apply, __chain2), 2, 6);
 }); // }}}
 
 defTest('testChain'

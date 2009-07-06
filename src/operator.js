@@ -159,14 +159,14 @@ var odd = compose(Boolean, bind2nd(mod, 2));
 
 var even = negate(odd);
 
-var minmax = function (p) // {{{
+var __minmax = function (p) // {{{
 {
     return bind(member, [argv, to_num(to_bool(p))]);
 } // }}}
 
-var min = minmax(gt);
+var min = __minmax(gt);
 
-var max = minmax(lt);
+var max = __minmax(lt);
 
 var compare = function (lhs, rhs) // {{{
 {

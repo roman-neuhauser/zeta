@@ -158,16 +158,16 @@ var insert = function (arr) // {{{
     }
 } // }}}
 
-var chain2 = function (l, r) // {{{
+var __chain2 = function (l, r) // {{{
 {
     return l.concat(r);
 } // }}}
 
-var cons = bind(chain2, [use1st(argv), $2]);
+var cons = bind(__chain2, [use1st(argv), $2]);
 
 var chain = bind(
     reduce
-  , [value(chain2), argv, list]
+  , [value(__chain2), argv, list]
 );
 
 var product = function (arr) // {{{

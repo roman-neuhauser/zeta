@@ -31,9 +31,12 @@ function output(file)
     close(file);
 }
 
-function fillScope(symtab,	i)
+function fillScope(symtab,	guard, i)
 {
     for (i = 0; (getline < symtab) > 0; ++i) {
+        if ("__" == substr($2, 0, 2)) {
+            printf("    if ($$IMPORT_INTERNALS$$)");
+        }
         printf("    $$IMPORT_SCOPE$$.%s = %s;\n", $2, $2);
     }
     close(symtab);
@@ -42,7 +45,8 @@ function fillScope(symtab,	i)
 BEGIN {
     printf("// === GENERATED FILE, DO NOT EDIT ===\n\n");
 
-    printf("function $$%s$$($$IMPORT_SCOPE$$)\n{\n", IMPORTER);
+    printf("function $$%s$$($$IMPORT_SCOPE$$, $$CONFIG$$)\n{\n", IMPORTER);
+    printf("    var $$IMPORT_INTERNALS$$ = $$CONFIG$$ && $$CONFIG$$.import_internals;\n");
     for (i = 1; i < ARGC; ++i) {
         output(ARGV[i]);
     }

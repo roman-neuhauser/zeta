@@ -239,8 +239,8 @@ defTest('testMinMax'
 {
     var a = ['a'];
     var b = ['b'];
-    assertEquals(b, minmax(true_)(a, b));
-    assertEquals(a, minmax(false_)(a, b));
+    assertEquals(b, __minmax(true_)(a, b));
+    assertEquals(a, __minmax(false_)(a, b));
 }); // }}}
 
 defTest('testMin'

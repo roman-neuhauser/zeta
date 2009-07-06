@@ -22,7 +22,7 @@
 // $HeadURL$
 // $Id$
 
-$$IMPORT_ZETA_INTO$$(this);
+$$IMPORT_ZETA_INTO$$(this, { import_internals : true });
 
 load("tests/runner.js");
 
