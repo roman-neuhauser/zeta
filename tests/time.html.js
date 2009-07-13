@@ -9,5 +9,5 @@ $(document).ready(function ()
         }
         display.append(s + "\n");
     }
-    time_js();
+    time_js.apply(this, []);
 });

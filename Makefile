@@ -23,7 +23,7 @@ check: zeta.js
 	js -f zeta.js -f tests/tests.js
 
 time: zeta.js tests/times.js
-	js -f zeta.js -f tests/time.js -f tests/times.js -f tests/time.console.js
+	js -f zeta.js -f tests/time.js -f tests/times.js tests/time.console.js ${TIME}
 
 docs: README.html docs/examples.html docs/examples-ref-minmax.html \
 	docs/examples-ref-composex.html docs/examples-ref-unique.html \

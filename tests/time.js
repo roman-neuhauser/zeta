@@ -2,7 +2,6 @@ var TIMES = 500;
 
 var time_js = function ()
 {
-
     var z = {}; $$IMPORT_ZETA_INTO$$(z);
 
     var ats = {
@@ -146,7 +145,7 @@ var time_js = function ()
     $$IMPORT_ZETA_INTO$$(this, { import_internals: true });
 
     times.call(this, 'argv', 1);
-    times_js.call(this, times);
+    times_js.call(this, times, arguments);
 }
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

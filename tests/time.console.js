@@ -1,1 +1,1 @@
-time_js();
+time_js.apply(this, arguments);
