@@ -145,7 +145,13 @@ var false_ = value(false);
 
 var negate = bind1st(compose, not);
 
-var select = bind1st(bind2nd, member);
+var select = function (i)
+{
+    return function (a)
+    {
+        return a[i];
+    }
+}
 
 var project = bind(compose, [select, value(argv)]);
 
