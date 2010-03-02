@@ -33,15 +33,19 @@ var filter = function (p, arr) // {{{
     return rv;
 } // }}}
 
-var every = function (p, arr) // {{{
+var __some_every = function (isok, dflt)
 {
-    return conjoin(map(binder(p), arr))();
-} // }}}
-
-var some = function (p, arr) // {{{
-{
-    return disjoin(map(binder(p), arr))();
-} // }}}
+    return function (p, arr) // {{{
+    {
+        for (var v, i = 0, l = arr.length; i < l; ++i) {
+            if (isok(v = p.call(this, arr[i])))
+                return v;
+        }
+        return dflt;
+    }; // }}}
+}
+var every = __some_every(not, true);
+var some = __some_every(itself, false);
 
 var find_if = function (p, arr) // {{{
 {
