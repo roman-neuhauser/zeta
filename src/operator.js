@@ -203,7 +203,7 @@ var in_ = function (ind, arr) // {{{
 
 var contains = function (v, a) // {{{
 {
-    return some(bind1st(eq, v), a);
+    return -1 < find(v, a);
 } // }}}
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
