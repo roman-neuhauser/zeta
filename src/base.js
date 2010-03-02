@@ -141,10 +141,9 @@ var value = function (v) // {{{
 } // }}}
 
 var true_ = value(true);
+var false_ = value(false);
 
 var negate = bind1st(compose, not);
-
-var false_ = negate(true_);
 
 var select = bind1st(bind2nd, member);
 
