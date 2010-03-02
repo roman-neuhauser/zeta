@@ -29,7 +29,7 @@ var apply = function (f, args) // {{{
 
 var argv = function () // {{{
 {
-    return map(itself, arguments);
+    return Array.prototype.slice.call(arguments, 0);
 } // }}}
 
 var bind1st = function (f, lhs) // {{{
