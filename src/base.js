@@ -153,7 +153,13 @@ var select = function (i)
     }
 }
 
-var project = bind(compose, [select, value(argv)]);
+var project = function (i)
+{
+    return function ()
+    {
+        return arguments[i];
+    }
+}
 
 var $1 = project(0);
 
