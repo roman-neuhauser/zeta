@@ -191,7 +191,10 @@ var type_of = function (v)
     return typeof(v);
 }
 
-var empty = bind(eq, [value(0), size]);
+var empty = function (o) // {{{
+{
+    return 0 == o.length;
+} // }}}
 
 var in_ = function (ind, arr) // {{{
 {
