@@ -21,7 +21,8 @@ var time_js = function ()
             }
         } // }}}
     };
-    var Args = {
+    var Args = // {{{
+    {
         default_ : z.iota
       , __chain2 : function () { return [z.iota(10), z.iota(10)]; }
       , apply : ats.val_array(z.true_)
@@ -64,7 +65,7 @@ var time_js = function ()
       , unique : ats.val_array(z.itself)
       , while_ : function (v) { return [z.dec(5), z.false_]; }
       , zip : function (v) { return [[z.iota(v), z.iota(v)]]; }
-    };
+    }; // }}}
 
     var avg = function (arr) // {{{
     {
@@ -77,17 +78,29 @@ var time_js = function ()
         rv = f.apply(this, args);
         return new Date() - start;
     } // }}}
-    var __timex = function (cnt, f, args) // {{{
+    var __timex = function (cnt, fname, args) // {{{
     {
+        var f = this[fname];
         var durs = [];
         for (var i = 0; i < cnt; ++i) {
             durs.push(time.call(this, f, args(i % 10)));
         }
         return {
-            tot: z.sum(durs)
+            fun: fname
+          , tot: z.sum(durs)
           , avg: avg(durs)
           , max: z.reduce(z.max, durs, 0)
           , min: z.reduce(z.min, durs, 0)
+        };
+    } // }}}
+    var aggregate = function (durs) // {{{
+    {
+        return {
+            fun: 'TOTAL'
+          , tot: z.sum(z.map(z.select('tot'), durs))
+          , avg: avg(z.map(z.select('avg'), durs))
+          , max: z.reduce(z.max, z.map(z.select('max'), durs), 0)
+          , min: z.reduce(z.min, z.map(z.select('min'), durs), 0)
         };
     } // }}}
     var str_repeat = function (str, cnt) // {{{
@@ -106,15 +119,16 @@ var time_js = function ()
     {
         return str_repeat(' ', len - v.length) + v;
     } // }}}
-    var output = function (sex, dur, wall) // {{{
+    var output = function (dur, wall) // {{{
     {
+        var fun = dur.fun;
         var tot = msfmt(dur.tot);
         var avg = msfmt(dur.avg);
         var max = msfmt(dur.max);
         var min = msfmt(dur.min);
         var ovh = msfmt(wall - dur.tot);
         print(
-            sex + ":" + str_repeat(' ', 20 - sex.length)
+            fun + ":" + str_repeat(' ', 20 - fun.length)
           + field(tot, 12)
           + field(avg, 10)
           + field(max, 10)
@@ -122,30 +136,32 @@ var time_js = function ()
           + field(ovh, 11)
         );
     } // }}}
-    var __times = function (cnt, args, sex, q) // {{{
+    var __times = function (cnt, args, sex, durs, q) // {{{
     {
         if ('skip' == args[sex]) {
             return;
         }
         var start = new Date();
-        var ex = this[sex];
         var dur = __timex.call(
             this
           , cnt
-          , ex
+          , sex
           , args[sex] || args.default_
         );
         if (!q) {
-            output(sex, dur, new Date - start);
+            output(dur, new Date - start);
         }
+        durs.push(dur);
     } // }}}
 
     var times = z.curry(z.curry(__times, TIMES), Args);
 
     $$IMPORT_ZETA_INTO$$(this, { import_internals: true });
 
-    times.call(this, 'argv', 1);
-    times_js.call(this, times, arguments);
+    times.call(this, 'argv', [], 1);
+    var start = new Date();
+    var durs = times_js.call(this, times, arguments);
+    output(aggregate(durs), new Date - start);
 }
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s
