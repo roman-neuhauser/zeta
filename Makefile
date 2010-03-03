@@ -17,7 +17,7 @@ ZETA_JS_SOURCES=	src/base.js \
 			src/function.js \
 			src/algorithm.js
 
-all: docs zeta.js
+all: docs zeta.js tests/times.js
 
 check: zeta.js
 	js -f zeta.js -f tests/tests.js
