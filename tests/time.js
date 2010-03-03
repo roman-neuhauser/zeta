@@ -128,7 +128,7 @@ var time_js = function ()
             return;
         }
         var start = new Date();
-        var ex = eval.call(this, sex);
+        var ex = this[sex];
         var dur = __timex.call(
             this
           , cnt
