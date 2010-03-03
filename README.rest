@@ -31,6 +31,58 @@ welcome to use it in any way.
 .. _open-source: http://opensource.org/docs/definition.php
 .. _MIT license: http://opensource.org/licenses/mit-license.php
 
+Use
+===
+
+The library is distributed as a single file, ``zeta.js``.  This file
+contains a single function ::
+
+  $$IMPORT_ZETA_INTO$$($$IMPORT_SCOPE$$)
+
+which creates the library proper.  The function takes an object, the scope
+into which Zeta is to be imported.
+
+``$$IMPORT_ZETA_INTO$$`` protects Zeta from other code and vice versa as
+much as possible, and gives you the freedom to import the library into
+any scope.
+
+To import Zeta into the current scope: ::
+
+  $$IMPORT_ZETA_INTO$$(this);
+
+When the above runs in the global scope in a browser, it is equivalent to ::
+
+  $$IMPORT_ZETA_INTO$$(window);
+
+Wehn Zeta is injected into the global scope, its functions can be called by
+unadorned names.  An example showing this (and the import mechanism) in the
+SpiderMonkey_ shell: ::
+
+  % js
+  js> load("zeta.js");
+  js> sum // not yet
+  typein:2: ReferenceError: sum is not defined
+  js> $$IMPORT_ZETA_INTO$$(this);
+  js> sum(map(Number, ["10.2", "20.3", "30.5"]))
+  61
+  js> 
+
+To put Zeta in a namespace: ::
+ 
+  % js
+  js> load("zeta.js");
+  js> $$IMPORT_ZETA_INTO$$(Z = {});
+  js> Z.sum(Z.map(Number, ["10.2", "20.3", "30.5"]));
+  61
+  js> sum // does not leak
+  typein:4: ReferenceError: sum is not defined
+  js> 
+
+The above creates a global "namespace" ``Z`` and puts all Zeta functions
+in it.  Namespacing may clutter the resulting code considerably and is not
+recommended, but may be the only way to get Zeta into legacy code, which
+is why this provision exists.
+
 
 Prerequisities
 ==============
@@ -78,10 +130,14 @@ Build and Installation
 Build
 +++++
 
+The build mechanism requires a subset of the POSIX shell environment
+with a few commmon extensions, and works at least on FreeBSD, GNU/Linux
+and Cygwin.  The build product is of course completely system-agnostic.
+
 Zeta source code is distributed among several files (all in the `src`_
 directory).  You can use individual files (but note that `base.js`_ is
-needed by all other files), or create a single file containing all of
-Zeta by running ``make zeta.js`` in the top directory.
+needed by all other files), or create a single file (``zeta.js``)
+containing all of Zeta by running ``make`` in the top directory.
 
 .. _base.js: src/base.js
 
@@ -94,36 +150,7 @@ This task is left as an excercise for the user's software configuration
 management process.  Zeta can (and should) be seen as a static library,
 and this position is therefore fully justified.
 
-``zeta.js`` contains a single unary function, ``$$IMPORT_ZETA_INTO$$``
-which creates the library proper.  The function takes an object, the
-scope into which Zeta is to be imported.
-
-``$$IMPORT_ZETA_INTO$$`` protects Zeta from other code and vice versa as
-much as possible, and gives you the freedom to import the library into
-any scope.
-
-For example, `tests/browser.html`_, the browser interface to Zeta's test
-suite loads the library into the current ``window`` with ::
-
-  <script type="text/javascript" src="../zeta.js"></script>
-  ...
-  <script type="text/javascript">
-      $$IMPORT_ZETA_INTO$$(this);
-      runTests(print, tests);
-  </script>
-
-Zeta is most convenient as a set of global functions (imported into
-``window``), but can be also put in a namespace with eg. ::
- 
-  <script type="text/javascript">
-      Z = {};
-      $$IMPORT_ZETA_INTO$$(Z);
-  </script>
-
-The above creates a global namespace ``Z`` and puts all Zeta functions
-in it.  Namespacing clutters the resulting code considerably and is not
-recommended, but may be the only way to get Zeta into legacy code, which
-is why this provision exists.
+Just copy ``zeta.js`` into a convenient location.
 
 Running the test suite
 ++++++++++++++++++++++
