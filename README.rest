@@ -137,18 +137,21 @@ directory).  You can use individual files (but note that `base.js`_ is
 needed by all other files), or create a single file (``zeta.js``)
 containing all of Zeta by running ``make`` in the top directory.
 
+Repository checkouts require Docutils_ to build HTML documentation.
+
+.. _Docutils: http://docutils.sourceforge.net/
 .. _base.js: src/base.js
 
 Install
 +++++++
+
+Just copy ``zeta.js`` into a convenient location.
 
 Web servers (and even more so *non-web* uses of JavaScript/ECMA-262) are
 an area too volatile to warrant a vendor-provided installation mechanism.
 This task is left as an excercise for the user's software configuration
 management process.  Zeta can (and should) be seen as a static library,
 and this position is therefore fully justified.
-
-Just copy ``zeta.js`` into a convenient location.
 
 Running the test suite
 ++++++++++++++++++++++
