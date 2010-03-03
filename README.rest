@@ -125,11 +125,6 @@ in it.  Namespacing clutters the resulting code considerably and is not
 recommended, but may be the only way to get Zeta into legacy code, which
 is why this provision exists.
 
-For a transition period, this will reference all members of ``Z`` in the
-current ``window`` (or the global namespace): ::
-
-  Z.for_each(Z, Z.insert(window));
-
 Running the test suite
 ++++++++++++++++++++++
 
