@@ -37,12 +37,12 @@ Prerequisities
 
 * JavaScript 1.5+
 
-Zeta is developed and tested on FreeBSD 6 with SpiderMonkey_ 1.5,
-SeaMonkey_ 1.1.1, and Opera_ 9.23.
+Zeta is developed and tested on FreeBSD 9 with SpiderMonkey_ 1.7,
+Firefox_ 3.5, and Arora_ 0.10.
 
 .. _SpiderMonkey: http://www.mozilla.org/js/spidermonkey/
-.. _SeaMonkey: http://www.seamonkey-project.org/
-.. _Opera: http://www.opera.com/
+.. _Firefox: http://www.firefox.org/
+.. _Arora: http://www.arora-browser.org/
 
 
 Downloads
