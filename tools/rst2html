@@ -5,6 +5,6 @@ html="$2.html"
 surl="${rest##*/}"
 
 sed -e '/^\.\. /s/\.rest/.html/' < $rest | \
-  $rst2html -stg --source-url $surl > $html
+  $rst2html -stg --source-url $surl - $html
 
 # vim: ft=sh sw=2 ts=2 et
