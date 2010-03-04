@@ -94,11 +94,11 @@ var for_ = function (arr, f) // {{{
 var map = function (f, arr) // {{{
 {
     var rv = [];
-    for_.call(
-        this
-      , arr
-      , compose(push(rv), f)
-    );
+    for (var i = 0, l = arr.length; i < l; ++i) {
+        if (i in arr) {
+            rv[rv.length] = (f.call(this, arr[i], i, arr));
+        }
+    }
     return rv;
 } // }}}
 
