@@ -33,8 +33,7 @@ var __shortcircuit = function (ifempty, test, short_, full) // {{{
                 if (!(i in fs)) {
                     continue;
                 }
-                var f = spread(fs[i]);
-                if (test(rv = f.call(this, arguments))) {
+                if (test(rv = fs[i].apply(this, arguments))) {
                     return short_(rv);
                 }
             }
