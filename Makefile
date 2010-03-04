@@ -4,8 +4,7 @@
 SHELL=		/bin/sh
 ZETA_AWK?=	awk
 
-ZETA_FIND_RST2HTML=	${SHELL} tools/find-rst2html || exit 1
-ZETA_RST2HTML=	${SHELL} tools/rst2html $$(pwd)/rst2html
+ZETA_RST2HTML=	${SHELL} tools/rst2html
 
 ZETA_JS_INCLUDES=	-f src/base.js \
 			-f src/operator.js \
@@ -29,25 +28,22 @@ docs: README.html docs/examples.html docs/examples-ref-minmax.html \
 	docs/examples-ref-composex.html docs/examples-ref-unique.html \
 	docs/reference.html
 
-rst2html:
-	ln -s $$(${ZETA_FIND_RST2HTML}) rst2html
-
-README.html: rst2html README.rest
+README.html: README.rest
 	${ZETA_RST2HTML} README
 
-docs/examples.html: rst2html docs/examples.rest
+docs/examples.html: docs/examples.rest
 	${ZETA_RST2HTML} docs/examples
 
-docs/examples-ref-unique.html: rst2html docs/examples-ref-unique.rest
+docs/examples-ref-unique.html: docs/examples-ref-unique.rest
 	${ZETA_RST2HTML} docs/examples-ref-unique
 
-docs/examples-ref-minmax.html: rst2html docs/examples-ref-minmax.rest
+docs/examples-ref-minmax.html: docs/examples-ref-minmax.rest
 	${ZETA_RST2HTML} docs/examples-ref-minmax
 
-docs/examples-ref-composex.html: rst2html docs/examples-ref-composex.rest
+docs/examples-ref-composex.html: docs/examples-ref-composex.rest
 	${ZETA_RST2HTML} docs/examples-ref-composex
 
-docs/reference.html: rst2html docs/reference.rest
+docs/reference.html: docs/reference.rest
 	${ZETA_RST2HTML} docs/reference
 
 symtab: tools/symbols.js ${ZETA_JS_SOURCES}
@@ -70,7 +66,7 @@ clean:
 	rm -f zeta.js
 
 maint-clean: clean
-	rm -f *.html docs/*.html symtab rst2html tests/times.js
+	rm -f *.html docs/*.html symtab tests/times.js
 
 .DEFAULT: all
 .PHONY: all check clean docs maint-clean time

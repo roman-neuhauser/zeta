@@ -2,8 +2,6 @@ for n in rst2html.py rst2html; do
   command which $n && exit 0
 done || true 2>/dev/null
 
-echo false
-
 {
   echo "";
   echo "rst2html is required to build HTML documentation.";

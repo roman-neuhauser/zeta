@@ -1,7 +1,8 @@
-rst2html="$1"
-rest="$2.rest"
-preh="$2.prehtml"
-html="$2.html"
+rst2html="$(${0%/*}/find-rst2html)"
+test -z "$rst2html" && exit 1
+rest="$1.rest"
+preh="$1.prehtml"
+html="$1.html"
 surl="${rest##*/}"
 
 sed -e '/^\.\. /s/\.rest/.html/' < $rest | \
