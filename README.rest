@@ -166,12 +166,18 @@ Runtime overhead
 ================
 
 You can either run ``make time`` on the command line, or access
-``tests/time.html`` in a browser.  Beware, the results cannot be taken
+`tests/time.html`_ in a browser.  Beware, the results cannot be taken
 literally!  As a prominent example, ``bind`` has trivial overhead which is
 nice but quite uninteresting, much more important is the overhead of the
 functions ``bind`` returns, and this tool measures the former.  However,
 Zeta is mostly implemented using Zeta, so ``bind``'s "real" overhead shows up
 in other functions' results.
+
+My results suggest that arora-0.10.2 (webkit-532.4) is about 7x as fast
+as Firefox-3.5.5, and that is several times as fast as SpiderMonkey-1.7
+(Firefox-3.0).
+
+.. _tests/time.html: tests/time.html
 
 Reference
 =========
