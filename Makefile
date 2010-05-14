@@ -1,5 +1,6 @@
 SHELL=		/bin/sh
 ZETA_AWK?=	awk
+ZETA_JSH?=	js
 
 ZETA_RST2HTML=	${SHELL} tools/rst2html
 
@@ -16,10 +17,10 @@ ZETA_JS_SOURCES=	src/base.js \
 all: docs zeta.js tests/times.js
 
 check: zeta.js
-	js -f zeta.js -f tests/tests.js
+	$(ZETA_JSH) -f zeta.js -f tests/tests.js
 
 time: zeta.js tests/times.js
-	js -f zeta.js -f tests/time.js -f tests/times.js tests/time.console.js ${TIME}
+	$(ZETA_JSH) -f zeta.js -f tests/time.js -f tests/times.js tests/time.console.js ${TIME}
 
 docs: README.html docs/examples.html docs/examples-ref-minmax.html \
 	docs/examples-ref-composex.html docs/examples-ref-unique.html \
@@ -44,7 +45,7 @@ docs/reference.html: docs/reference.rest
 	${ZETA_RST2HTML} docs/reference
 
 symtab: tools/symbols.js ${ZETA_JS_SOURCES}
-	js ${ZETA_JS_INCLUDES} -f tools/symbols.js | sort > symtab
+	$(ZETA_JSH) ${ZETA_JS_INCLUDES} -f tools/symbols.js | sort > symtab
 
 tests/times.js: tools/times.awk symtab
 	${ZETA_AWK} \
