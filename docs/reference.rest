@@ -5,8 +5,6 @@
 :Author: Roman Neuhauser
 :Contact: neuhauser@sigpipe.cz
 :Copyright: This document is in the public domain.
-:HeadURL: $HeadURL$
-:Id: $Id$
 
 .. contents::
 
