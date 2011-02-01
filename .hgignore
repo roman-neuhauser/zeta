@@ -3,6 +3,7 @@ syntax: glob
 *.html
 .*.sw?
 .sw?
+builtins
 commit
 rst2html
 symtab

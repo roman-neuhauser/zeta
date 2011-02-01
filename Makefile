@@ -44,8 +44,16 @@ docs/examples-ref-composex.html: docs/examples-ref-composex.rest
 docs/reference.html: docs/reference.rest
 	${ZETA_RST2HTML} docs/reference
 
-symtab: tools/symbols.js ${ZETA_JS_SOURCES}
-	$(ZETA_JSH) ${ZETA_JS_INCLUDES} -f tools/symbols.js | sort > symtab
+builtins: tools/symbols.js
+	$(ZETA_JSH) -f tools/symbols.js \
+	| sort \
+	> builtins
+
+symtab: tools/symbols.js builtins ${ZETA_JS_SOURCES}
+	$(ZETA_JSH) ${ZETA_JS_INCLUDES} -f tools/symbols.js \
+	| sort \
+	| comm -13 builtins - \
+	> symtab
 
 tests/times.js: tools/times.awk symtab
 	${ZETA_AWK} \
@@ -64,7 +72,7 @@ clean:
 	rm -f zeta.js
 
 maint-clean: clean
-	rm -f *.html docs/*.html symtab tests/times.js
+	rm -f *.html builtins docs/*.html symtab tests/times.js
 
 .DEFAULT: all
 .PHONY: all check clean docs maint-clean time
