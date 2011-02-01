@@ -4,23 +4,36 @@ ZETA_JSH?=	js
 
 ZETA_RST2HTML=	${SHELL} tools/rst2html
 
-ZETA_JS_INCLUDES=	-f src/base.js \
-			-f src/operator.js \
-			-f src/function.js \
-			-f src/algorithm.js
-
 ZETA_JS_SOURCES=	src/base.js \
 			src/operator.js \
 			src/function.js \
 			src/algorithm.js
 
-all: docs zeta.js tests/times.js
+ZETA_SYMTAB_JS_SOURCES= ${ZETA_JS_SOURCES} \
+			tools/symbols.js
 
-check: zeta.js
-	$(ZETA_JSH) -f zeta.js -f tests/tests.js
+ZETA_TESTS_JS_INCLUDES=	zeta.js \
+			tests/intro.js \
+			tests/runner.js \
+			tests/runner-tests.js \
+			tests/algorithm.js \
+			tests/function.js \
+			tests/operator.js \
+			tests/reference.js \
+			tests/tests.js
 
-time: zeta.js tests/times.js
-	$(ZETA_JSH) -f zeta.js -f tests/time.js -f tests/times.js tests/time.console.js ${TIME}
+ZETA_TIME_JS_SOURCES=   zeta.js \
+			tests/time.js \
+			times.js \
+			tests/time.console.js
+
+all: docs zeta.js tests.js times.js
+
+check: tests.js
+	$(ZETA_JSH) tests.js
+
+time: time.js
+	$(ZETA_JSH) time.js ${TIME}
 
 docs: README.html docs/examples.html docs/examples-ref-minmax.html \
 	docs/examples-ref-composex.html docs/examples-ref-unique.html \
@@ -45,21 +58,30 @@ docs/reference.html: docs/reference.rest
 	${ZETA_RST2HTML} docs/reference
 
 builtins: tools/symbols.js
-	$(ZETA_JSH) -f tools/symbols.js \
+	$(ZETA_JSH) tools/symbols.js \
 	| sort \
 	> builtins
 
-symtab: tools/symbols.js builtins ${ZETA_JS_SOURCES}
-	$(ZETA_JSH) ${ZETA_JS_INCLUDES} -f tools/symbols.js \
+symtab: builtins symtab.js
+	$(ZETA_JSH) symtab.js \
 	| sort \
 	| comm -13 builtins - \
 	> symtab
 
-tests/times.js: tools/times.awk symtab
+times.js: tools/times.awk symtab
 	${ZETA_AWK} \
 	    -f tools/times.awk \
 	    < symtab \
-	    > tests/times.js
+	    > times.js
+
+symtab.js: ${ZETA_SYMTAB_JS_SOURCES}
+	cat ${ZETA_SYMTAB_JS_SOURCES} > symtab.js
+
+tests.js: ${ZETA_TESTS_JS_INCLUDES}
+	cat ${ZETA_TESTS_JS_INCLUDES} > tests.js
+
+time.js: ${ZETA_TIME_JS_SOURCES}
+	cat ${ZETA_TIME_JS_SOURCES} > time.js
 
 zeta.js: tools/zeta.awk symtab ${ZETA_JS_SOURCES}
 	${ZETA_AWK} \
@@ -69,10 +91,10 @@ zeta.js: tools/zeta.awk symtab ${ZETA_JS_SOURCES}
 	    ${ZETA_JS_SOURCES} > zeta.js
 
 clean:
-	rm -f zeta.js
+	rm -f zeta.js symtab symtab.js tests.js time.js times.js
 
 maint-clean: clean
-	rm -f *.html builtins docs/*.html symtab tests/times.js
+	rm -f *.html builtins docs/*.html
 
 .DEFAULT: all
 .PHONY: all check clean docs maint-clean time
