@@ -24,16 +24,16 @@ ZETA_TESTS_JS_INCLUDES=	zeta.js \
 
 ZETA_TIME_JS_SOURCES=   zeta.js \
 			tests/time.js \
-			times.js \
+			.times.js \
 			tests/time.console.js
 
-all: docs zeta.js tests.js times.js
+all: docs zeta.js .check.js .times.js
 
-check: tests.js
-	$(ZETA_JSH) tests.js
+check: .check.js
+	$(ZETA_JSH) .check.js
 
-time: time.js
-	$(ZETA_JSH) time.js ${TIME}
+time: .time.js
+	$(ZETA_JSH) .time.js ${TIME}
 
 docs: README.html docs/examples.html docs/examples-ref-minmax.html \
 	docs/examples-ref-composex.html docs/examples-ref-unique.html \
@@ -57,31 +57,31 @@ docs/examples-ref-composex.html: docs/examples-ref-composex.rest
 docs/reference.html: docs/reference.rest
 	${ZETA_RST2HTML} docs/reference
 
-builtins: tools/symbols.js
+.builtins: tools/symbols.js
 	$(ZETA_JSH) tools/symbols.js \
 	| sort \
-	> builtins
+	> .builtins
 
-symtab: builtins symtab.js
-	$(ZETA_JSH) symtab.js \
+symtab: .builtins .symtab.js
+	$(ZETA_JSH) .symtab.js \
 	| sort \
-	| comm -13 builtins - \
+	| comm -13 .builtins - \
 	> symtab
 
-times.js: tools/times.awk symtab
+.times.js: tools/times.awk symtab
 	${ZETA_AWK} \
 	    -f tools/times.awk \
 	    < symtab \
-	    > times.js
+	    > .times.js
 
-symtab.js: ${ZETA_SYMTAB_JS_SOURCES}
-	cat ${ZETA_SYMTAB_JS_SOURCES} > symtab.js
+.symtab.js: ${ZETA_SYMTAB_JS_SOURCES}
+	cat ${ZETA_SYMTAB_JS_SOURCES} > .symtab.js
 
-tests.js: ${ZETA_TESTS_JS_INCLUDES}
-	cat ${ZETA_TESTS_JS_INCLUDES} > tests.js
+.check.js: ${ZETA_TESTS_JS_INCLUDES}
+	cat ${ZETA_TESTS_JS_INCLUDES} > .check.js
 
-time.js: ${ZETA_TIME_JS_SOURCES}
-	cat ${ZETA_TIME_JS_SOURCES} > time.js
+.time.js: ${ZETA_TIME_JS_SOURCES}
+	cat ${ZETA_TIME_JS_SOURCES} > .time.js
 
 zeta.js: tools/zeta.awk symtab ${ZETA_JS_SOURCES}
 	${ZETA_AWK} \
@@ -91,10 +91,10 @@ zeta.js: tools/zeta.awk symtab ${ZETA_JS_SOURCES}
 	    ${ZETA_JS_SOURCES} > zeta.js
 
 clean:
-	rm -f zeta.js symtab symtab.js tests.js time.js times.js
+	rm -f zeta.js symtab .symtab.js .check.js .time.js .times.js
 
 maint-clean: clean
-	rm -f *.html builtins docs/*.html
+	rm -f *.html .builtins docs/*.html
 
 .DEFAULT: all
 .PHONY: all check clean docs maint-clean time
