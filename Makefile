@@ -1,6 +1,3 @@
-# $HeadURL$
-# $Id$
-
 SHELL=		/bin/sh
 ZETA_AWK?=	awk
 
