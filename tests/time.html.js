@@ -1,7 +1,7 @@
 $(document).ready(function ()
 {
     var display = $('#display');
-    print = function ()
+    output = function ()
     {
         var s = '';
         for (var i = 0; i < arguments.length; ++i) {
