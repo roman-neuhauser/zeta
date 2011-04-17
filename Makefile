@@ -9,9 +9,6 @@ ZETA_JS_SOURCES=	src/base.js \
 			src/function.js \
 			src/algorithm.js
 
-ZETA_SYMTAB_JS_SOURCES= ${ZETA_JS_SOURCES} \
-			tools/symbols.js
-
 ZETA_TESTS_JS_INCLUDES=	zeta.js \
 			tests/intro.js \
 			tests/runner.js \
@@ -57,25 +54,14 @@ docs/examples-ref-composex.html: docs/examples-ref-composex.rest
 docs/reference.html: docs/reference.rest
 	${ZETA_RST2HTML} docs/reference
 
-.builtins: tools/symbols.js
-	$(ZETA_JSH) tools/symbols.js \
-	| sort \
-	> .builtins
-
-symtab: .builtins .symtab.js
-	$(ZETA_JSH) .symtab.js \
-	| sort \
-	| comm -13 .builtins - \
-	> symtab
+symtab: tools/symtab.awk ${ZETA_JS_SOURCES}
+	${ZETA_AWK} -f tools/symtab.awk ${ZETA_JS_SOURCES} > symtab
 
 .times.js: tools/times.awk symtab
 	${ZETA_AWK} \
 	    -f tools/times.awk \
 	    < symtab \
 	    > .times.js
-
-.symtab.js: ${ZETA_SYMTAB_JS_SOURCES}
-	cat ${ZETA_SYMTAB_JS_SOURCES} > .symtab.js
 
 .check.js: ${ZETA_TESTS_JS_INCLUDES}
 	cat ${ZETA_TESTS_JS_INCLUDES} > .check.js
@@ -91,10 +77,10 @@ zeta.js: tools/zeta.awk symtab ${ZETA_JS_SOURCES}
 	    ${ZETA_JS_SOURCES} > zeta.js
 
 clean:
-	rm -f zeta.js symtab .symtab.js .check.js .time.js .times.js
+	rm -f zeta.js symtab .check.js .time.js .times.js
 
 maint-clean: clean
-	rm -f *.html .builtins docs/*.html
+	rm -f *.html docs/*.html
 
 .DEFAULT: all
 .PHONY: all check clean docs maint-clean time

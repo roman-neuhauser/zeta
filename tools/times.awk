@@ -8,8 +8,8 @@ BEGIN {
     printf("        return durs;\n");
     printf("    }\n");
 }
-("function" == $1) {
-    printf("    times.call(this, '%s', durs);\n", $2);
+{
+    printf("    times.call(this, '%s', durs);\n", $1);
 }
 END {
     printf("    return durs;\n");

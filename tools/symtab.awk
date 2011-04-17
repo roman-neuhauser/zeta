@@ -1,5 +1,5 @@
 # Copyright (c) 2008 Roman Neuhauser
-# 
+#
 # Permission is hereby granted, free of charge, to any person obtaining
 # a copy of this software and associated documentation files (the
 # "Software"), to deal in the Software without restriction, including
@@ -7,10 +7,10 @@
 # distribute, sublicense, and/or sell copies of the Software, and to
 # permit persons to whom the Software is furnished to do so, subject to
 # the following conditions:
-# 
+#
 # The above copyright notice and this permission notice shall be included
 # in all copies or substantial portions of the Software.
-# 
+#
 # THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
 # EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
 # MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT.
@@ -19,34 +19,18 @@
 # TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE
 # SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
 
+
 function output(file)
 {
-    printf("// FILE: %s\n", file);
-    while ((getline < file) > 0) {
-        printf("    %s\n", $0);
+  while ((getline < file) > 0) {
+    if ($0 ~ /^var /) {
+      print $2;
     }
-    close(file);
+  }
+  close(file);
 }
-
-function fillScope(symtab,	guard, i)
-{
-    for (i = 0; (getline < symtab) > 0; ++i) {
-        if ("__" == substr($1, 0, 2)) {
-            printf("    if ($$IMPORT_INTERNALS$$)");
-        }
-        printf("    $$IMPORT_SCOPE$$.%s = %s;\n", $1, $1);
-    }
-    close(symtab);
-}
-
 BEGIN {
-    printf("// === GENERATED FILE, DO NOT EDIT ===\n\n");
-
-    printf("function $$%s$$($$IMPORT_SCOPE$$, $$CONFIG$$)\n{\n", IMPORTER);
-    printf("    var $$IMPORT_INTERNALS$$ = $$CONFIG$$ && $$CONFIG$$.import_internals;\n");
-    for (i = 1; i < ARGC; ++i) {
-        output(ARGV[i]);
-    }
-    fillScope(SYMBOLS);
-    printf("};\n");
+  for (i = 1; i < ARGC; ++i) {
+    output(ARGV[i]);
+  }
 }

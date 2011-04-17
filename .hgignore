@@ -5,7 +5,6 @@ syntax: glob
 .sw?
 .builtins
 .check.js
-.symtab.js
 .time.js
 .times.js
 commit
