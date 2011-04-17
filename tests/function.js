@@ -21,21 +21,21 @@
 
 defTest('testItself'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(42, itself(42));
 }); // }}}
 
 defTest('testValue'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(42, value(42)());
 }); // }}}
 
 defTest('testCompose'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var generator = function (rhs)
     {
@@ -51,7 +51,7 @@ defTest('testCompose'
 
 defTest('compose method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function () { return this; }
@@ -61,7 +61,7 @@ defTest('compose method'
 
 defTest('negate'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var f = negate(function (v)
     {
@@ -73,7 +73,7 @@ defTest('negate'
 
 defTest('negate method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { i : 0 };
     var f = function (v) { ++this.i; return v; }
@@ -87,14 +87,14 @@ defTest('negate method'
 
 defTest('testApply'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(7, apply(plus, [2, 5]));
 }); // }}}
 
 defTest('apply method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function () { return this; }
@@ -104,14 +104,14 @@ defTest('apply method'
 
 defTest('testSpread'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(7, spread(plus)([2, 5]));
 }); // }}}
 
 defTest('spread method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function (a, b)
@@ -128,7 +128,7 @@ defTest('spread method'
 
 defTest('testCollect'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var args = [3, 4, 5];
     var f = collect(itself);
@@ -147,7 +147,7 @@ defTest('testCollect'
 
 defTest('collect method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function (a)
@@ -163,7 +163,7 @@ defTest('collect method'
 
 defTest('testMethod'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var s = 'omg wtf';
     var a = [];
@@ -179,7 +179,7 @@ defTest('testMethod'
 
 defTest('testOperatorAndReturnValue'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(false, (false && null));
     assertEquals(4, (true && 4));
@@ -188,7 +188,7 @@ defTest('testOperatorAndReturnValue'
 
 defTest('testConjoinShortCircuit'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = [];
     var f = push(rv);
@@ -202,21 +202,21 @@ defTest('testConjoinShortCircuit'
 
 defTest('testConjoinOfNoPredicatesIsTrue'
 , tests
-, function()
+, function (z)
 {
     assertEquals(true, conjoin([])());
 });
 
 defTest('testDisjoinOfNoPredicatesIsFalse'
 , tests
-, function()
+, function (z)
 {
     assertEquals(false, disjoin([])());
 });
 
 defTest('testConjoinReturnValue'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(true, conjoin([true_, true_])());
     assertEquals(false, conjoin([true_, $1])(null));
@@ -226,7 +226,7 @@ defTest('testConjoinReturnValue'
 
 defTest('conjoin method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { a : [], b : [] };
     var f = function (a, b)
@@ -251,7 +251,7 @@ defTest('conjoin method'
 
 defTest('testOperatorOrReturnValue'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(false, (null || false));
     assertEquals(null, (false || null));
@@ -259,7 +259,7 @@ defTest('testOperatorOrReturnValue'
 
 defTest('testDisjoinShortCircuit'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = [];
     var f = push(rv);
@@ -271,7 +271,7 @@ defTest('testDisjoinShortCircuit'
 
 defTest('testDisjoinReturnValue'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(true, disjoin([false_, true_])());
     assertEquals(false, disjoin([false_, $1])(null));
@@ -282,7 +282,7 @@ defTest('testDisjoinReturnValue'
 
 defTest('disjoin method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { a : [], b : [] };
     var f = function (a, b)
@@ -307,7 +307,7 @@ defTest('disjoin method'
 
 defTest('testBinder'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = [];
     var f = binder(push(rv));
@@ -317,7 +317,7 @@ defTest('testBinder'
 
 defTest('binder method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { a : [] };
     var f = function (a)
@@ -333,7 +333,7 @@ defTest('binder method'
 
 defTest('testCurry'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var f = curry(curry(argv, 7), 8);
     var rv = f(9);
@@ -345,7 +345,7 @@ defTest('testCurry'
 
 defTest('testSelect'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = ['foo', 'bar', 'baz'];
     for_(
@@ -359,7 +359,7 @@ defTest('testSelect'
 
 defTest('testProject'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = ['foo', 'bar', 'baz'];
     for_(
@@ -373,7 +373,7 @@ defTest('testProject'
 
 defTest('test$1'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var args = ['foo', 'bar', 'baz'];
     assertEquals('foo', $1('foo', 'bar', 'baz'));
@@ -381,7 +381,7 @@ defTest('test$1'
 
 defTest('testBind1st'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var f = bind1st(minus, 10);
     assertEquals(5, f(5));
@@ -391,7 +391,7 @@ defTest('testBind1st'
 
 defTest('bind1st method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function () { return this; }
@@ -401,7 +401,7 @@ defTest('bind1st method'
 
 defTest('testBind2nd'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var f = bind2nd(minus, 10);
     assertEquals(-5, f(5));
@@ -411,7 +411,7 @@ defTest('testBind2nd'
 
 defTest('bind2nd method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function () { return this; }
@@ -421,7 +421,7 @@ defTest('bind2nd method'
 
 defTest('testBind'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(11, bind(value(11), [])(3, 5));
     assertEquals(2, bind(minus, [$2, $1])(3, 5));
@@ -429,7 +429,7 @@ defTest('testBind'
 
 defTest('bind method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function () { return this; }
@@ -442,7 +442,7 @@ defTest('bind method'
 
 defTest('testUse1st'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = use1st(argv)(3, 4, 5);
     assertEquals(1, rv.length);
@@ -452,7 +452,7 @@ defTest('testUse1st'
 
 defTest('use1st method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function () { return this; }
@@ -462,7 +462,7 @@ defTest('use1st method'
 
 defTest('testUse2nd'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = use2nd(argv)(3, 4, 5);
     assertEquals(1, rv.length);
@@ -472,7 +472,7 @@ defTest('testUse2nd'
 
 defTest('use2nd method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function () { return this; }
@@ -482,7 +482,7 @@ defTest('use2nd method'
 
 defTest('testNth'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var a = range(0, 5);
     assertEquals(a[3], nth(a)(3));
@@ -495,7 +495,7 @@ defTest('testNth'
 
 defTest('testComposex'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var f = bind1st(mul, 10000);
     var g = bind1st(plus, 1000)
@@ -510,7 +510,7 @@ defTest('testComposex'
 
 defTest('composex method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {};
     var f = function () { return this; }
@@ -520,14 +520,14 @@ defTest('composex method'
 
 defTest('testJoiner'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals('a-b-c', joiner('-')(['a', 'b', 'c']));
 }); // }}}
 
 defTest('testSplitter'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var exp = ['a', 'b', 'c'];
     var rv = splitter('-')('a-b-c');
@@ -542,7 +542,7 @@ defTest('testSplitter'
 
 defTest('testIfte'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var f = ifte(Boolean, itself, bind2nd(minus, 3));
     for_(
@@ -553,7 +553,7 @@ defTest('testIfte'
 
 defTest('ifte method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var p = function (cond) { return this.cond = cond; }
     var t = function () { this.result = 'true'; }

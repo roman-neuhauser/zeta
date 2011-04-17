@@ -21,7 +21,7 @@
 
 defTest('testFor_'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [];
     data[1] = 'foo';
@@ -41,7 +41,7 @@ defTest('testFor_'
 
 defTest('for_ method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { a : [] };
     var f = function (v)
@@ -57,7 +57,7 @@ defTest('for_ method'
 
 defTest('testPush'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var a = [];
     var p = push(a);
@@ -70,7 +70,7 @@ defTest('testPush'
 
 defTest('testWhile_'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var p = inc(0);
     while_(dec(10), p)
@@ -79,7 +79,7 @@ defTest('testWhile_'
 
 defTest('while_ method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {
         i : 0
@@ -101,14 +101,14 @@ defTest('while_ method'
 
 defTest('testMap'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(3, map(value(3), [0, 1, 2])[0]);
 }); // }}}
 
 defTest('map method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { a : [] };
     var f = function (v)
@@ -125,7 +125,7 @@ defTest('map method'
 
 defTest('testEvery'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(true, every(true_, range(0, 5)));
     assertEquals(true, every(true_, []));
@@ -135,7 +135,7 @@ defTest('testEvery'
 
 defTest('testEveryShortCircuit'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var f = inc(0);
     var s = function (v)
@@ -149,7 +149,7 @@ defTest('testEveryShortCircuit'
 
 defTest('testSome'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(false, some(bind1st(le, 5), range(0, 5)));
     assertEquals(false, some(true_, []));
@@ -159,7 +159,7 @@ defTest('testSome'
 
 defTest('testSomeShortCircuit'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var f = inc(0);
     var s = function (v)
@@ -174,7 +174,7 @@ defTest('testSomeShortCircuit'
 
 defTest('testFilter'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = filter(odd, [1, 2, 3, 4, 5]);
     var exp = [1, 3, 5];
@@ -190,7 +190,7 @@ defTest('testFilter'
 
 defTest('filter method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { a : [] };
     var f = function (v, i)
@@ -207,7 +207,7 @@ defTest('filter method'
 
 defTest('testCoalesce'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals('hello', coalesce([null, undefined, 'hello']));
     assertEquals(null, coalesce([null, undefined]));
@@ -217,7 +217,7 @@ defTest('testCoalesce'
 
 defTest('testIota'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
     assertEquals(10, range(0, 10).length);
@@ -240,7 +240,7 @@ function fib (n) // {{{
 
 defTest('testFibonacci'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(1, fib(0));
     assertEquals(1, fib(1));
@@ -253,14 +253,14 @@ defTest('testFibonacci'
 
 defTest('testFind_if'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(1, find_if(even, range(1, 4)));
 }); // }}}
 
 defTest('find_if method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { a : [] };
     var f = function (v)
@@ -277,14 +277,14 @@ defTest('find_if method'
 
 defTest('testFind'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(3, find(4, range(1, 4)));
 }); // }}}
 
 defTest('testCopy'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [{foo: 'bar'}, 1, 2, 3];
     var rv = copy(data);
@@ -297,7 +297,7 @@ defTest('testCopy'
 
 defTest('testKeys'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = range(1, 10);
     for_(
@@ -322,7 +322,7 @@ defTest('testKeys'
 
 defTest('testReverse'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = range(0, 3);
     var rv = reverse(data);
@@ -334,7 +334,7 @@ defTest('testReverse'
 
 defTest('testPrevious'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var prev = previous(42);
     assertEquals(42, prev(69));
@@ -344,7 +344,7 @@ defTest('testPrevious'
 
 defTest('testUnique'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [2, 2, 3, 2, 2, 2, 3, 3, 2, 1, 1, 0, 1, 1, 3];
     var exp =  [2,    3, 2,       3,    2, 1,    0, 1,    3];
@@ -361,7 +361,7 @@ defTest('testUnique'
 
 defTest('testSorted'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [3, 0, 2, -1, 1];
     var exp = [-1, 0, 1, 2, 3];
@@ -376,7 +376,7 @@ defTest('testSorted'
 
 defTest('testSortedCmp'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [3, 0, 2, -1, 1];
     var exp = [3, 2, 1, 0, -1];
@@ -391,7 +391,7 @@ defTest('testSortedCmp'
 
 defTest('testSlice'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = range(0, 10);
     rv = slice(rv, 2, 5);
@@ -400,7 +400,7 @@ defTest('testSlice'
 
 defTest('testInsert'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = [];
     var ins = insert(rv);
@@ -420,7 +420,7 @@ function _testChainData(c, l) // {{{
 
 defTest('test_testChainData'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = _testChainData(3, 2);
     assertEquals(3, rv.length);
@@ -443,21 +443,21 @@ function _testChain(f, c, l) // {{{
 
 defTest('testChain2'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     _testChain(bind1st(apply, __chain2), 2, 6);
 }); // }}}
 
 defTest('testChain'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     _testChain(bind1st(apply, chain), 4, 4);
 }); // }}}
 
 defTest('testZip'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [
         [0, 2, 4, 6],
@@ -483,7 +483,7 @@ defTest('testZip'
 
 defTest('testZipEmptyArgument'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(8, reduce(min, [], 8));
     assertEquals(0, zip([]).length);
@@ -491,7 +491,7 @@ defTest('testZipEmptyArgument'
 
 defTest('testZipDifferentLengths1'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [
         [0, 2, 4],
@@ -514,7 +514,7 @@ defTest('testZipDifferentLengths1'
 
 defTest('testZipDifferentLengths2'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [
         [0, 2, 4, 6],
@@ -537,7 +537,7 @@ defTest('testZipDifferentLengths2'
 
 defTest('testGroup_byInts'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = range(11, 7);
     var rv = group_by(even, data);
@@ -555,7 +555,7 @@ defTest('testGroup_byInts'
 
 defTest('group_by method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { i : 0 };
     o.m = group_by;
@@ -570,7 +570,7 @@ defTest('group_by method'
 
 defTest('testGroup_byChars'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = ['h', 'E', 'L', 'l', 'O'];
     var rv = group_by(
@@ -592,7 +592,7 @@ defTest('testGroup_byChars'
 
 defTest('testReduce'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = range(1, 3);
     assertEquals(6, reduce(plus, data, 0));
@@ -600,7 +600,7 @@ defTest('testReduce'
 
 defTest('reduce method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { a : [] };
     var f = function (rv, v)
@@ -617,7 +617,7 @@ defTest('reduce method'
 
 defTest('testTakeWhile'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = range(0, 8);
     var rv = take_while(bind1st(gt, 5), data);
@@ -633,7 +633,7 @@ defTest('testTakeWhile'
 
 defTest('take_while method'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = { i : 0 };
     var f = function (v)
@@ -648,7 +648,7 @@ defTest('take_while method'
 
 defTest('testTakeWhileSparseInput'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = range(0, 5);
     delete data[1];
@@ -666,7 +666,7 @@ defTest('testTakeWhileSparseInput'
 
 defTest('testJoin'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals('', join([], ''));
     assertEquals('', join([]));
@@ -676,7 +676,7 @@ defTest('testJoin'
 
 defTest('testJoinDefaultSep'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals('', join([]));
     assertEquals('', join(['']));
@@ -685,7 +685,7 @@ defTest('testJoinDefaultSep'
 
 defTest('testSplit'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var empty = split('', '');
     assertEquals(true, empty instanceof Array);
@@ -702,7 +702,7 @@ defTest('testSplit'
 
 defTest('testSplitDefaultSep'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var empty = split('');
     assertEquals(true, empty instanceof Array);
@@ -717,7 +717,7 @@ defTest('testSplitDefaultSep'
 
 defTest('testProduct'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(3 * 20 * 100, product([3, 20, 100]));
     assertEquals(1, product([]));
@@ -725,14 +725,14 @@ defTest('testProduct'
 
 defTest('testSum'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(123, sum([3, 20, 100]));
 }); // }}}
 
 defTest('testChunkInts'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = chunk(range(100, 10), 3);
     assertEquals(3, rv[0].length);
@@ -749,7 +749,7 @@ defTest('testChunkInts'
 
 defTest('testChunkChars'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = chunk(['a', 'b', 'c', 'd', 'e'], 3);
     assertEquals(3, rv[0].length);
@@ -763,7 +763,7 @@ defTest('testChunkChars'
 
 defTest('testFill'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = fill(10, 'omg');
     assertEquals(10, rv.length);
@@ -778,14 +778,14 @@ defTest('testFill'
 
 defTest('testInner_product'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     assertEquals(2 * 3 + 4 * 5, inner_product([2, 4], [3, 5]));
 }); // }}}
 
 defTest('testItems'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = items({
         foo: 20
@@ -810,7 +810,7 @@ defTest('testItems'
 
 defTest('testProperties'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var o = {
         foo: 'omg'
@@ -831,7 +831,7 @@ defTest('testProperties'
 
 defTest('testCons'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var rv = cons(2, [4, 6]);
     assertEquals(3, rv.length);
