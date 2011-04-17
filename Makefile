@@ -9,7 +9,7 @@ ZETA_JS_SOURCES=	src/base.js \
 			src/function.js \
 			src/algorithm.js
 
-ZETA_TESTS_JS_INCLUDES=	zeta.js \
+ZETA_TESTS_JS_SOURCES=	zeta.js \
 			tests/intro.js \
 			tests/runner.js \
 			tests/runner-tests.js \
@@ -63,8 +63,8 @@ symtab: tools/symtab.awk ${ZETA_JS_SOURCES}
 	    < symtab \
 	    > .times.js
 
-.check.js: ${ZETA_TESTS_JS_INCLUDES}
-	cat ${ZETA_TESTS_JS_INCLUDES} > .check.js
+.check.js: ${ZETA_TESTS_JS_SOURCES}
+	cat ${ZETA_TESTS_JS_SOURCES} > .check.js
 
 .time.js: ${ZETA_TIME_JS_SOURCES}
 	cat ${ZETA_TIME_JS_SOURCES} > .time.js
