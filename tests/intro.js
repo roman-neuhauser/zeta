@@ -3,6 +3,7 @@
 $$IMPORT_ZETA_INTO$$(this, { import_internals : true });
 
 var tests = [];
+
 var output;
 if (typeof(print) != 'undefined') {
   output = print;
@@ -15,3 +16,11 @@ if (typeof(print) != 'undefined') {
   throw "unsupported js shell.  please submit a patch.";
 };
 
+var exit;
+if (typeof(quit) != 'undefined') {
+  exit = quit;
+} else if (typeof(process) != 'undefined' && 'exit' in process) {
+  exit = process.exit;
+} else {
+  throw "unsupported js shell.  please submit a patch.";
+}

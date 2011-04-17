@@ -21,7 +21,7 @@
 
 defTest('testRefApply'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var args = [
         [],
@@ -29,18 +29,18 @@ defTest('testRefApply'
         [2007, 9, 24],
         [2007, 9, 24, 22, 45]
     ];
-    var dates = map(bind1st(apply, new_(Date)), args);
-    for_(
+    var dates = z.map(z.bind1st(z.apply, z.new_(Date)), args);
+    z.for_(
         dates
-      , true_ //compose(print, $1)
+      , z.true_ //compose(print, $1)
     );
 }); // }}}
 
 defTest('testRefBind2nd'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    var rv = map(bind2nd(pow, 2), range(0, 4));
+    var rv = z.map(z.bind2nd(z.pow, 2), z.range(0, 4));
     assertEquals(4, rv.length);
     assertEquals(0, rv[0]);
     assertEquals(1, rv[1]);
@@ -50,12 +50,12 @@ defTest('testRefBind2nd'
 
 defTest('testRefMap'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var data = [0, 2, 4, 6, 8];
     var exp = [1, 2, 5, 13, 34];
-    for_(
-        map(fib, data)
+    z.for_(
+        z.map(fib, data)
       , function (v, i)
         {
             assertEquals(exp[i], v);
@@ -65,82 +65,82 @@ defTest('testRefMap'
 
 defTest('testRefCompose'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
     var arr = [2, 'f', 0, 1, -3];
-    assertEquals(2, find_if(compose(not, Boolean), arr));
+    assertEquals(2, z.find_if(z.compose(z.not, Boolean), arr));
 }); // }}}
 
 defTest('testRefEvery'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    var is_pos = bind1st(lt, 0);
-    assertEquals(true, every(is_pos, [1, 2, 3]));
-    assertEquals(false, every(is_pos, [1, -2, 3]));
+    var is_pos = z.bind1st(z.lt, 0);
+    assertEquals(true, z.every(is_pos, [1, 2, 3]));
+    assertEquals(false, z.every(is_pos, [1, -2, 3]));
 }); // }}}
 
 defTest('testRefSome'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    var is_0 = bind1st(eq, 0);
-    assertEquals(true, some(is_0, [0, 1, 2, 3]));
-    assertEquals(false, some(is_0, [1, 2, 3]));
+    var is_0 = z.bind1st(z.eq, 0);
+    assertEquals(true, z.some(is_0, [0, 1, 2, 3]));
+    assertEquals(false, z.some(is_0, [1, 2, 3]));
 }); // }}}
 
 defTest('testRefEq'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    var arr = range(16, 9, -4);
-    assertEquals(4, find_if(bind2nd(eq, 0), arr));
+    var arr = z.range(16, 9, -4);
+    assertEquals(4, z.find_if(z.bind2nd(z.eq, 0), arr));
 }); // }}}
 
 defTest('testRefGe'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    var arr = range(-3, 7);
-    assertEquals(3, find_if(bind2nd(ge, 0), arr));
+    var arr = z.range(-3, 7);
+    assertEquals(3, z.find_if(z.bind2nd(z.ge, 0), arr));
 }); // }}}
 
 defTest('testRefGt'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    var arr = range(-3, 7);
-    assertEquals(4, find_if(bind2nd(gt, 0), arr));
+    var arr = z.range(-3, 7);
+    assertEquals(4, z.find_if(z.bind2nd(z.gt, 0), arr));
 }); // }}}
 
 defTest('testRefLe'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    var arr = range(7, 7, -2);
-    assertEquals(4, find_if(bind2nd(le, 0), arr));
+    var arr = z.range(7, 7, -2);
+    assertEquals(4, z.find_if(z.bind2nd(z.le, 0), arr));
 }); // }}}
 
 defTest('testRefLt'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    var arr = range(3, 7, -1);
-    assertEquals(4, find_if(bind2nd(lt, 0), arr));
+    var arr = z.range(3, 7, -1);
+    assertEquals(4, z.find_if(z.bind2nd(z.lt, 0), arr));
 }); // }}}
 
 defTest('testRefMax'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    assertEquals(7, reduce(max, [0, 7, -3, 5], 0));
+    assertEquals(7, z.reduce(z.max, [0, 7, -3, 5], 0));
 }); // }}}
 
 defTest('testRefMin'
 , tests
-, function() // {{{
+, function (z) // {{{
 {
-    assertEquals(-3, reduce(min, [0, 7, -3, 5], 0));
+    assertEquals(-3, z.reduce(z.min, [0, 7, -3, 5], 0));
 }); // }}}
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

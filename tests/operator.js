@@ -23,14 +23,14 @@ defTest('testNew_'
 , tests
 , function (z) // {{{
 {
-    var a = new_(Array)(1, 2, 3);
+    var a = z.new_(Array)(1, 2, 3);
     assertEquals(3, a.length);
     assertEquals(1, a[0]);
     assertEquals(2, a[1]);
     assertEquals(3, a[2]);
 
-    assertEquals(42, new_(Number)(42).valueOf());
-    assertEquals('hello', new_(String)('hello').toString());
+    assertEquals(42, z.new_(Number)(42).valueOf());
+    assertEquals('hello', z.new_(String)('hello').toString());
     assertEquals('hello', new(String)('hello').toString());
 }); // }}}
 
@@ -38,158 +38,158 @@ defTest('testPlus'
 , tests
 , function (z) // {{{
 {
-    assertEquals('abc', plus('ab', 'c'));
-    assertEquals(42, plus(40, 2));
+    assertEquals('abc', z.plus('ab', 'c'));
+    assertEquals(42, z.plus(40, 2));
 }); // }}}
 
 defTest('testMinus'
 , tests
 , function (z) // {{{
 {
-    assertEquals(38, minus(40, 2));
+    assertEquals(38, z.minus(40, 2));
 }); // }}}
 
 defTest('testMul'
 , tests
 , function (z) // {{{
 {
-    assertEquals(24, mul(3, 8));
+    assertEquals(24, z.mul(3, 8));
 }); // }}}
 
 defTest('testDiv'
 , tests
 , function (z) // {{{
 {
-    assertEquals(3, div(24, 8));
-    assertEquals(3.14, div(9.42, 3));
+    assertEquals(3, z.div(24, 8));
+    assertEquals(3.14, z.div(9.42, 3));
 }); // }}}
 
 defTest('testIntdiv'
 , tests
 , function (z) // {{{
 {
-    assertEquals(6, intdiv(24, 4));
-    assertEquals(4, intdiv(9.99, 2));
-    assertEquals(1, intdiv(4, 2.3));
+    assertEquals(6, z.intdiv(24, 4));
+    assertEquals(4, z.intdiv(9.99, 2));
+    assertEquals(1, z.intdiv(4, 2.3));
 }); // }}}
 
 defTest('testMod'
 , tests
 , function (z) // {{{
 {
-    assertEquals(0, mod(2, 2));
-    assertEquals(1, mod(3, 2));
-    assertEquals(2, mod(8, 3));
-    assertEquals(3, mod(9, 6));
+    assertEquals(0, z.mod(2, 2));
+    assertEquals(1, z.mod(3, 2));
+    assertEquals(2, z.mod(8, 3));
+    assertEquals(3, z.mod(9, 6));
 }); // }}}
 
 defTest('testPow'
 , tests
 , function (z) // {{{
 {
-    assertEquals(0, pow(0, 2));
-    assertEquals(0, pow(0, 1));
-    assertEquals(1, pow(0, 0));
-    assertEquals(1, pow(2, 0));
-    assertEquals(2, pow(2, 1));
-    assertEquals(4, pow(2, 2));
-    assertEquals(8, pow(2, 3));
-    assertEquals(9, pow(3, 2));
+    assertEquals(0, z.pow(0, 2));
+    assertEquals(0, z.pow(0, 1));
+    assertEquals(1, z.pow(0, 0));
+    assertEquals(1, z.pow(2, 0));
+    assertEquals(2, z.pow(2, 1));
+    assertEquals(4, z.pow(2, 2));
+    assertEquals(8, z.pow(2, 3));
+    assertEquals(9, z.pow(3, 2));
 }); // }}}
 
 defTest('testNot'
 , tests
 , function (z) // {{{
 {
-    assertEquals(false, not(true));
-    assertEquals(true, not(false));
-    assertEquals(false, not(1));
-    assertEquals(false, not(-1));
-    assertEquals(false, not(3));
-    assertEquals(true, not(0));
-    assertEquals(true, not(null));
+    assertEquals(false, z.not(true));
+    assertEquals(true, z.not(false));
+    assertEquals(false, z.not(1));
+    assertEquals(false, z.not(-1));
+    assertEquals(false, z.not(3));
+    assertEquals(true, z.not(0));
+    assertEquals(true, z.not(null));
 }); // }}}
 
 defTest('testTrue_'
 , tests
 , function (z) // {{{
 {
-    assertEquals(true, true_());
+    assertEquals(true, z.true_());
 }); // }}}
 
 defTest('testFalse_'
 , tests
 , function (z) // {{{
 {
-    assertEquals(false, false_());
+    assertEquals(false, z.false_());
 }); // }}}
 
 defTest('testNeg'
 , tests
 , function (z) // {{{
 {
-    assertEquals(0, neg(0));
-    assertEquals(1, neg(-1));
-    assertEquals(-3, neg(3));
+    assertEquals(0, z.neg(0));
+    assertEquals(1, z.neg(-1));
+    assertEquals(-3, z.neg(3));
 }); // }}}
 
 defTest('testEq'
 , tests
 , function (z) // {{{
 {
-    assertEquals(true, eq(0, 0));
-    assertEquals(true, eq(1, 1));
-    assertEquals(false, eq(1, -1));
-    assertEquals(false, eq(1, 0));
+    assertEquals(true, z.eq(0, 0));
+    assertEquals(true, z.eq(1, 1));
+    assertEquals(false, z.eq(1, -1));
+    assertEquals(false, z.eq(1, 0));
 }); // }}}
 
 defTest('testLt'
 , tests
 , function (z) // {{{
 {
-    assertEquals(true, lt(-1, 0));
-    assertEquals(true, lt(0, 1));
-    assertEquals(false, lt(0, -1));
-    assertEquals(false, lt(1, 1));
-    assertEquals(false, lt(1, 0));
+    assertEquals(true, z.lt(-1, 0));
+    assertEquals(true, z.lt(0, 1));
+    assertEquals(false, z.lt(0, -1));
+    assertEquals(false, z.lt(1, 1));
+    assertEquals(false, z.lt(1, 0));
 }); // }}}
 
 defTest('testGt'
 , tests
 , function (z) // {{{
 {
-    assertEquals(false, gt(-1, 0));
-    assertEquals(false, gt(0, 1));
-    assertEquals(false, gt(1, 1));
-    assertEquals(true, gt(1, 0));
+    assertEquals(false, z.gt(-1, 0));
+    assertEquals(false, z.gt(0, 1));
+    assertEquals(false, z.gt(1, 1));
+    assertEquals(true, z.gt(1, 0));
 }); // }}}
 
 defTest('testLe'
 , tests
 , function (z) // {{{
 {
-    assertEquals(true, le(-1, 0));
-    assertEquals(true, le(0, 1));
-    assertEquals(true, le(1, 1));
-    assertEquals(false, le(1, 0));
+    assertEquals(true, z.le(-1, 0));
+    assertEquals(true, z.le(0, 1));
+    assertEquals(true, z.le(1, 1));
+    assertEquals(false, z.le(1, 0));
 }); // }}}
 
 defTest('testGe'
 , tests
 , function (z) // {{{
 {
-    assertEquals(false, ge(-1, 0));
-    assertEquals(false, ge(0, 1));
-    assertEquals(true, ge(1, 1));
-    assertEquals(true, ge(1, 0));
+    assertEquals(false, z.ge(-1, 0));
+    assertEquals(false, z.ge(0, 1));
+    assertEquals(true, z.ge(1, 1));
+    assertEquals(true, z.ge(1, 0));
 }); // }}}
 
 defTest('testDec'
 , tests
 , function (z) // {{{
 {
-    var i = dec(2);
-    var j = dec(20);
+    var i = z.dec(2);
+    var j = z.dec(20);
     assertEquals(1, i());
     assertEquals(19, j());
     assertEquals(0, i());
@@ -202,8 +202,8 @@ defTest('testInc'
 , tests
 , function (z) // {{{
 {
-    var i = inc(2);
-    var j = inc(9);
+    var i = z.inc(2);
+    var j = z.inc(9);
     assertEquals(3, i());
     assertEquals(10, j());
     assertEquals(4, i());
@@ -214,20 +214,20 @@ defTest('testOdd'
 , tests
 , function (z) // {{{
 {
-    assertEquals(false, odd(0));
-    assertEquals(false, odd(2));
-    assertEquals(true, odd(1));
-    assertEquals(true, odd(3));
+    assertEquals(false, z.odd(0));
+    assertEquals(false, z.odd(2));
+    assertEquals(true, z.odd(1));
+    assertEquals(true, z.odd(3));
 }); // }}}
 
 defTest('testEven'
 , tests
 , function (z) // {{{
 {
-    assertEquals(true, even(0));
-    assertEquals(true, even(2));
-    assertEquals(false, even(1));
-    assertEquals(false, even(3));
+    assertEquals(true, z.even(0));
+    assertEquals(true, z.even(2));
+    assertEquals(false, z.even(1));
+    assertEquals(false, z.even(3));
 }); // }}}
 
 defTest('testMinMax'
@@ -236,57 +236,57 @@ defTest('testMinMax'
 {
     var a = ['a'];
     var b = ['b'];
-    assertEquals(b, __minmax(true_)(a, b));
-    assertEquals(a, __minmax(false_)(a, b));
+    assertEquals(b, z.__minmax(z.true_)(a, b));
+    assertEquals(a, z.__minmax(z.false_)(a, b));
 }); // }}}
 
 defTest('testMin'
 , tests
 , function (z) // {{{
 {
-    assertEquals(3, min(3, 5));
-    assertEquals(5, min(7, 5));
-    assertEquals(1, min(1, 1));
+    assertEquals(3, z.min(3, 5));
+    assertEquals(5, z.min(7, 5));
+    assertEquals(1, z.min(1, 1));
 }); // }}}
 
 defTest('testMax'
 , tests
 , function (z) // {{{
 {
-    assertEquals(5, max(3, 5));
-    assertEquals(7, max(7, 5));
-    assertEquals(1, max(1, 1));
+    assertEquals(5, z.max(3, 5));
+    assertEquals(7, z.max(7, 5));
+    assertEquals(1, z.max(1, 1));
 }); // }}}
 
 defTest('testCompare'
 , tests
 , function (z) // {{{
 {
-    assertEquals(true, 0 > compare(-1, 0));
-    assertEquals(true, 0 < compare(1, 0));
-    assertEquals(true, 0 == compare(1, 1));
+    assertEquals(true, 0 > z.compare(-1, 0));
+    assertEquals(true, 0 < z.compare(1, 0));
+    assertEquals(true, 0 == z.compare(1, 1));
 }); // }}}
 
 defTest('testMember'
 , tests
 , function (z) // {{{
 {
-    var a = range(0, 5);
-    assertEquals(a[3], member(a, 3));
-    assertEquals(undefined, member(a, 5));
+    var a = z.range(0, 5);
+    assertEquals(a[3], z.member(a, 3));
+    assertEquals(undefined, z.member(a, 5));
 
     var o = { foo : 'bar' };
-    assertEquals(o.foo, member(o, 'foo'));
-    assertEquals(undefined, member(o, 'qux'));
+    assertEquals(o.foo, z.member(o, 'foo'));
+    assertEquals(undefined, z.member(o, 'qux'));
 }); // }}}
 
 defTest('testTo_bool'
 , tests
 , function (z) // {{{
 {
-    assertEquals(true, to_bool(itself)(-1));
-    assertEquals(true, to_bool(itself)(1));
-    assertEquals(false, to_bool(itself)(0));
+    assertEquals(true, z.to_bool(z.itself)(-1));
+    assertEquals(true, z.to_bool(z.itself)(1));
+    assertEquals(false, z.to_bool(z.itself)(0));
 }); // }}}
 
 defTest('to_bool method'
@@ -298,7 +298,7 @@ defTest('to_bool method'
     {
         return this.b;
     }
-    o.m = to_bool(f);
+    o.m = z.to_bool(f);
     assertEquals(o.b, o.m());
 }); // }}}
 
@@ -306,11 +306,11 @@ defTest('testTo_num'
 , tests
 , function (z) // {{{
 {
-    assertEquals(1, to_num(itself)(true));
-    assertEquals(1, to_num(itself)('1'));
-    assertEquals(0, to_num(itself)(false));
-    assertEquals(0, to_num(itself)('0'));
-    assertEquals(0.1, to_num(itself)('0.1'));
+    assertEquals(1, z.to_num(z.itself)(true));
+    assertEquals(1, z.to_num(z.itself)('1'));
+    assertEquals(0, z.to_num(z.itself)(false));
+    assertEquals(0, z.to_num(z.itself)('0'));
+    assertEquals(0.1, z.to_num(z.itself)('0.1'));
 }); // }}}
 
 defTest('to_num method'
@@ -322,7 +322,7 @@ defTest('to_num method'
     {
         return this.i;
     }
-    o.m = to_num(f);
+    o.m = z.to_num(f);
     assertEquals(o.i, o.m());
 }); // }}}
 
@@ -336,11 +336,11 @@ defTest('testIs_a'
         [true, new Number(1), Number],
         [true, new String('abc'), String],
     ];
-    for_(
+    z.for_(
         data
-      , spread(function (exp, val, cls)
+      , z.spread(function (exp, val, cls)
         {
-            assertEquals(exp, is_a(val, cls));
+            assertEquals(exp, z.is_a(val, cls));
         })
     );
 }); // }}}
@@ -355,12 +355,12 @@ defTest('testIs_null'
         [true, null],
         [true, undefined],
     ];
-    for_(
+    z.for_(
         data
-      , spread(function (exp, val, cls)
+      , z.spread(function (exp, val, cls)
         {
             assertEquals(exp, null == val);
-            assertEquals(null == val, is_null(val, cls));
+            assertEquals(null == val, z.is_null(val, cls));
         })
     );
 }); // }}}
@@ -369,28 +369,28 @@ defTest('testType_of'
 , tests
 , function (z) // {{{
 {
-    assertEquals('string', type_of('hello'));
-    assertEquals('object', type_of([]));
-    assertEquals('object', type_of({}));
-    assertEquals('object', type_of(null));
-    assertEquals('undefined', type_of(undefined));
+    assertEquals('string', z.type_of('hello'));
+    assertEquals('object', z.type_of([]));
+    assertEquals('object', z.type_of({}));
+    assertEquals('object', z.type_of(null));
+    assertEquals('undefined', z.type_of(undefined));
 }); // }}}
 
 defTest('testSize'
 , tests
 , function (z) // {{{
 {
-    assertEquals(0, size([]));
-    assertEquals(1, size([0]));
-    assertEquals(2, size([0, 0]));
-    assertEquals(3, size([0, 0, 0]));
+    assertEquals(0, z.size([]));
+    assertEquals(1, z.size([0]));
+    assertEquals(2, z.size([0, 0]));
+    assertEquals(3, z.size([0, 0, 0]));
 }); // }}}
 
 defTest('testEmpty'
 , tests
 , function (z) // {{{
 {
-    assertEquals(true, empty([]));
+    assertEquals(true, z.empty([]));
 }); // }}}
 
 defTest('testIn'
@@ -403,11 +403,11 @@ defTest('testIn'
         [false, 'bar'],
         [false, 'qux'],
     ];
-    for_(
+    z.for_(
         data
-      , spread(bind(
+      , z.spread(z.bind(
             assertEquals
-          , [$1, use2nd(bind2nd(in_, o))]
+          , [z.$1, z.use2nd(z.bind2nd(z.in_, o))]
         ))
     );
 }); // }}}
@@ -417,31 +417,31 @@ defTest('contains'
 , function (z) // {{{
 {
     var a = [40, 50, 60];
-    assertEquals(true, contains(40, a));
-    assertEquals(true, contains(50, a));
-    assertEquals(true, contains(60, a));
+    assertEquals(true, z.contains(40, a));
+    assertEquals(true, z.contains(50, a));
+    assertEquals(true, z.contains(60, a));
 
-    assertEquals(false, contains(39, a));
-    assertEquals(false, contains(41, a));
-    assertEquals(false, contains(59, a));
-    assertEquals(false, contains(61, a));
+    assertEquals(false, z.contains(39, a));
+    assertEquals(false, z.contains(41, a));
+    assertEquals(false, z.contains(59, a));
+    assertEquals(false, z.contains(61, a));
 }); // }}}
 
 defTest('testList'
 , tests
 , function (z) // {{{
 {
-    var l = list();
+    var l = z.list();
     l.push(2);
 
     assertEquals(1, l.length);
     assertEquals(2, l[0]);
 
-    var m = list();
+    var m = z.list();
 
     assertEquals(0, m.length);
 
-    var n = list(2, 'x', {});
+    var n = z.list(2, 'x', {});
 
     assertEquals(0, n.length);
 }); // }}}

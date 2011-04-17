@@ -119,7 +119,7 @@ var time_js = function ()
     {
         return str_repeat(' ', len - v.length) + v;
     } // }}}
-    var output = function (dur, wall) // {{{
+    var display = function (dur, wall) // {{{
     {
         var fun = dur.fun;
         var tot = msfmt(dur.tot);
@@ -127,7 +127,7 @@ var time_js = function ()
         var max = msfmt(dur.max);
         var min = msfmt(dur.min);
         var ovh = msfmt(wall - dur.tot);
-        print(
+        output(
             fun + ":" + str_repeat(' ', 20 - fun.length)
           + field(tot, 12)
           + field(avg, 10)
@@ -149,7 +149,7 @@ var time_js = function ()
           , args[sex] || args.default_
         );
         if (!q) {
-            output(dur, new Date - start);
+            display(dur, new Date - start);
         }
         durs.push(dur);
     } // }}}
@@ -161,7 +161,7 @@ var time_js = function ()
     times.call(this, 'argv', [], 1);
     var start = new Date();
     var durs = times_js.call(this, times, arguments);
-    output(aggregate(durs), new Date - start);
+    display(aggregate(durs), new Date - start);
 }
 
 // vim: et sts=4 sw=4 fdm=marker cms=\ //\ %s

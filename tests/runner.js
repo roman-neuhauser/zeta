@@ -58,7 +58,7 @@ function fail(msg) // {{{
     throw new UnconditionalFailure(msg);
 } // }}}
 
-function runTest(output, test) // {{{
+function runTest(output, test, z) // {{{
 {
     var fail = function (test, e) // {{{
     {
@@ -69,7 +69,7 @@ function runTest(output, test) // {{{
         output("error in " + test.name + ": " + e);
     } // }}}
     try {
-        (test.test ? test.test : test)();
+        (test.test ? test.test : test)(z);
         return 0;
     } catch (e) {
         if (e instanceof Assertion) {
@@ -83,9 +83,10 @@ function runTest(output, test) // {{{
 
 function runTests(output, tests) // {{{
 {
+    var z = {}; $$IMPORT_ZETA_INTO$$(z, { import_internals : true });
     var rv = 0;
     for (var i = 0; i < tests.length; ++i) {
-        rv |= runTest(output, tests[i]);
+        rv |= runTest(output, tests[i], z);
     }
     output(i + " tests run");
     return rv;
