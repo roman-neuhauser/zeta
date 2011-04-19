@@ -2,7 +2,7 @@ var TIMES = 500;
 
 var time_js = function ()
 {
-    var z = {}; $$IMPORT_ZETA_INTO$$(z);
+    var z = {}; $$IMPORT_ZETA_INTO$$(z, { import_internals: true });
 
     var ats = {
         single_array : z.compose(Array, z.iota)
@@ -80,7 +80,7 @@ var time_js = function ()
     } // }}}
     var __timex = function (cnt, fname, args) // {{{
     {
-        var f = this[fname];
+        var f = z[fname];
         var durs = [];
         for (var i = 0; i < cnt; ++i) {
             durs.push(time.call(this, f, args(i % 10)));
@@ -155,8 +155,6 @@ var time_js = function ()
     } // }}}
 
     var times = z.curry(z.curry(__times, TIMES), Args);
-
-    $$IMPORT_ZETA_INTO$$(this, { import_internals: true });
 
     times.call(this, 'argv', [], 1);
     var start = new Date();
