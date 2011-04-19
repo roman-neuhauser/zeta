@@ -1379,7 +1379,7 @@ Possible implementation: ::
 
     var project = bind(compose, [select, value(argv)]);
 
-See Also: `project`_.
+See Also: `$1`_, `$2`_, `$3`_, `$N`_, `select`_, `use1st`_, `use2nd`_.
 
 select(i)
 ~~~~~~~~~
