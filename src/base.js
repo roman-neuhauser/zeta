@@ -26,7 +26,7 @@ var apply = function (f, args) // {{{
 
 var argv = function () // {{{
 {
-    return Array.prototype.slice.call(arguments, 0);
+    return Array.prototype.slice.call(arguments, 0, arguments.length);
 } // }}}
 
 var bind1st = function (f, lhs) // {{{
