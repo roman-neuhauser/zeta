@@ -76,11 +76,14 @@ zeta.js: tools/zeta.js symtab ${ZETA_JS_SOURCES}
 	    tools/zeta.js \
 	    ${ZETA_JS_SOURCES} > zeta.js
 
+src/algorithm.js: src/algorithm.coffee
+	coffee -bc src/algorithm.coffee
+
 src/base.js: src/base.coffee
 	coffee -bc src/base.coffee
 
 clean:
-	rm -f zeta.js symtab .check.js .time.js .times.js
+	rm -f zeta.js src/algorithm.js src/base.js symtab .check.js .time.js .times.js
 	rm -f *.html docs/*.html
 
 .DEFAULT: all
