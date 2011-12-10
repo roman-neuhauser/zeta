@@ -11,6 +11,7 @@ commit
 rst2html
 src/algorithm.js
 src/base.js
+src/function.js
 symtab
 tags
 zeta.js
