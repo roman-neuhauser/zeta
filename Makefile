@@ -1,6 +1,6 @@
 SHELL=		/bin/sh
 ZETA_AWK?=	awk
-ZETA_JSH?=	js
+ZETA_JSH?=	node
 
 ZETA_RST2HTML=	${SHELL} tools/rst2html
 
