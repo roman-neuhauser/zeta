@@ -76,6 +76,9 @@ zeta.js: tools/zeta.js symtab ${ZETA_JS_SOURCES}
 	    tools/zeta.js \
 	    ${ZETA_JS_SOURCES} > zeta.js
 
+src/base.js: src/base.coffee
+	coffee -bc src/base.coffee
+
 clean:
 	rm -f zeta.js symtab .check.js .time.js .times.js
 	rm -f *.html docs/*.html

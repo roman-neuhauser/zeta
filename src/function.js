@@ -39,7 +39,7 @@ var __shortcircuit = function (ifempty, test, short_, full) // {{{
     }
 } // }}}
 
-var conjoin = __shortcircuit(true, not, false_, itself);
+var conjoin = __shortcircuit(true, not_, false_, itself);
 
 var disjoin = __shortcircuit(false, itself, itself, false_);
 

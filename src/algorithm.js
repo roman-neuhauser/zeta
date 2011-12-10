@@ -41,7 +41,7 @@ var __some_every = function (isok, dflt)
         return dflt;
     }; // }}}
 }
-var every = __some_every(not, true);
+var every = __some_every(not_, true);
 var some = __some_every(itself, false);
 
 var find_if = function (p, arr) // {{{

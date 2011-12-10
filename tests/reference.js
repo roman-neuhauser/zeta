@@ -68,7 +68,7 @@ defTest('testRefCompose'
 , function (z) // {{{
 {
     var arr = [2, 'f', 0, 1, -3];
-    assertEquals(2, z.find_if(z.compose(z.not, Boolean), arr));
+    assertEquals(2, z.find_if(z.compose(z.not_, Boolean), arr));
 }); // }}}
 
 defTest('testRefEvery'

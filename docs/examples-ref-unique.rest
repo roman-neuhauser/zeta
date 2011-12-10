@@ -264,8 +264,8 @@ That leaves us with ::
             }
         ...
 
-*not*, *compose*
-----------------
+*not_*, *compose*
+-----------------
 
 ``!notfirst()``, eh?  What we want to achieve is ::
 
@@ -279,9 +279,9 @@ but what will *first* look like?  A naive attempt could be: ::
             return !notfirst();
         }
 
-The "logical not" operator is a unary function, and ``not(notfirst())`` is a
-case of *function composition*.  Zeta includes *not(v)* and *compose(f, g)*.
-*not* should be obvious, so let's take a look at *compose*.  The `Zeta Library
+The "logical not" operator is a unary function, and ``not_(notfirst())`` is a
+case of *function composition*.  Zeta includes *not_(v)* and *compose(f, g)*.
+*not_* should be obvious, so let's take a look at *compose*.  The `Zeta Library
 Reference`_ describes it this way:
 
   *compose(f, g)*
@@ -293,16 +293,16 @@ Reference`_ describes it this way:
 That means we can write *first* as ::
 
         var notfirst = inc(-1);
-        var first = compose(not, notfirst);
+        var first = compose(not_, notfirst);
 
 but more probably as: ::
 
-        var first = compose(not, inc(-1));
+        var first = compose(not_, inc(-1));
 
 *negate*
 --------
 
-In fact, *compose(not, f)* is so common, it's available as *negate*:
+In fact, *compose(not_, f)* is so common, it's available as *negate*:
 
   *negate(fun)*
 

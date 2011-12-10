@@ -9,6 +9,7 @@ syntax: glob
 .times.js
 commit
 rst2html
+src/base.js
 symtab
 tags
 zeta.js

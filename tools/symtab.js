@@ -28,12 +28,16 @@ var output = function (file)
 {
   var body = fs.readFileSync(file, 'utf8')
   var reline = /[^\n]*\n/g
-  var resym = /^var +([\w$]+)/
+  var resym1 = /^var +([\w$]+) = /
+  var resym2 = /^var +([\w$]+,.*);\s*$/
+  var recomma = /,\s*/g
   var mline
   var msym
   while (mline = reline.exec(body))
-    if (msym = resym.exec(mline[0]))
+    if (msym = resym1.exec(mline[0]))
       printf("%s\n", msym[1])
+    else if (msym = resym2.exec(mline[0]))
+      printf("%s\n", msym[1].replace(recomma, "\n"))
 }
 
 for (var i = 2; i < process.argv.length; ++i)

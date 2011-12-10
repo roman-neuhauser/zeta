@@ -182,7 +182,7 @@ Example:
 Find the index of the first element with ``false`` truth value: ::
 
     var arr = [2, 'f', 0, 1, -3];
-    assertEquals(2, find_if(not, arr));
+    assertEquals(2, find_if(not_, arr));
 
 composex(fs)
 ~~~~~~~~~~~~
@@ -255,11 +255,11 @@ Equivalency: ::
 
     negate(f)(x, y, z) == !f(x, y, z)
 
-See Also: `not`_.
+See Also: `not_`_.
 
 Possible implementation: ::
 
-    var negate = bind1st(compose, not);
+    var negate = bind1st(compose, not_);
 
 split(str[, sep])
 ~~~~~~~~~~~~~~~~~
@@ -1271,14 +1271,14 @@ Possible implementation: ::
 
     var false_ = negate(true_);
 
-not(val)
-~~~~~~~~
+not_(val)
+~~~~~~~~~
 
-*val* is any value.  *not* returns *val*'s logical complement.
+*val* is any value.  *not_* returns *val*'s logical complement.
 
 Equivalency: ::
 
-    not(v) == !v
+    not_(v) == !v
 
 See Also: `negate`_.
 
@@ -1530,7 +1530,7 @@ See Also: `is_a`_.
 .. _member: `member(obj, prop)`_
 .. _min: `min(lhs, rhs)`_
 .. _negate: `negate(fun)`_
-.. _not: `not(val)`_
+.. _not_: `not_(val)`_
 .. _nth: `nth(arr)`_
 .. _odd: `odd(int)`_
 .. _product: `product(arr)`_

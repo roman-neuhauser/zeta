@@ -101,13 +101,13 @@ defTest('testNot'
 , tests
 , function (z) // {{{
 {
-    assertEquals(false, z.not(true));
-    assertEquals(true, z.not(false));
-    assertEquals(false, z.not(1));
-    assertEquals(false, z.not(-1));
-    assertEquals(false, z.not(3));
-    assertEquals(true, z.not(0));
-    assertEquals(true, z.not(null));
+    assertEquals(false, z.not_(true));
+    assertEquals(true, z.not_(false));
+    assertEquals(false, z.not_(1));
+    assertEquals(false, z.not_(-1));
+    assertEquals(false, z.not_(3));
+    assertEquals(true, z.not_(0));
+    assertEquals(true, z.not_(null));
 }); // }}}
 
 defTest('testTrue_'
