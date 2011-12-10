@@ -85,8 +85,11 @@ src/base.js: src/base.coffee
 src/function.js: src/function.coffee
 	coffee -bc src/function.coffee
 
+src/operator.js: src/operator.coffee
+	coffee -bc src/operator.coffee
+
 clean:
-	rm -f zeta.js src/algorithm.js src/base.js src/function.js symtab .check.js .time.js .times.js
+	rm -f zeta.js ${ZETA_JS_SOURCES} symtab .check.js .time.js .times.js
 	rm -f *.html docs/*.html
 
 .DEFAULT: all
