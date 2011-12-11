@@ -22,11 +22,15 @@
 
 function output(file)
 {
-  while ((getline < file) > 0) {
+  if ((getline < file) < 1) {
+    printf("symtab.awk: error opening %s\n", file) > "/dev/stderr";
+    exit(1);
+  }
+  do {
     if ($0 ~ /^var /) {
       print $2;
     }
-  }
+  } while ((getline < file) > 0);
   close(file);
 }
 BEGIN {

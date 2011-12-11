@@ -21,10 +21,14 @@
 
 function output(file)
 {
-    printf("// FILE: %s\n", file);
-    while ((getline < file) > 0) {
-        printf("    %s\n", $0);
+    if ((getline < file) < 1) {
+        printf("zeta.awk: error opening %s\n", file) > "/dev/stderr";
+        exit(1);
     }
+    printf("// FILE: %s\n", file);
+    do {
+        printf("    %s\n", $0);
+    } while ((getline < file) > 0);
     close(file);
 }
 
