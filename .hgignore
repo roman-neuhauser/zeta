@@ -8,11 +8,8 @@ syntax: glob
 .time.js
 .times.js
 commit
+obj/
 rst2html
-src/algorithm.js
-src/base.js
-src/function.js
-src/operator.js
 symtab
 tags
 zeta.js

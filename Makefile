@@ -1,13 +1,14 @@
 SHELL=		/bin/sh
 ZETA_JSH?=	node
 ZETA_NODE?=	node
+ZETA_COFFEE?=	coffee -bco obj
 
 ZETA_RST2HTML=	${SHELL} tools/rst2html
 
-ZETA_JS_SOURCES=	src/base.js \
-			src/operator.js \
-			src/function.js \
-			src/algorithm.js
+ZETA_JS_SOURCES=	obj/base.js \
+			obj/operator.js \
+			obj/function.js \
+			obj/algorithm.js
 
 ZETA_TESTS_JS_SOURCES=	zeta.js \
 			tests/intro.js \
@@ -76,20 +77,21 @@ zeta.js: tools/zeta.js symtab ${ZETA_JS_SOURCES}
 	    tools/zeta.js \
 	    ${ZETA_JS_SOURCES} > zeta.js
 
-src/algorithm.js: src/algorithm.coffee
-	coffee -bc src/algorithm.coffee
+obj/algorithm.js: src/algorithm.coffee
+	${ZETA_COFFEE} src/algorithm.coffee
 
-src/base.js: src/base.coffee
-	coffee -bc src/base.coffee
+obj/base.js: src/base.coffee
+	${ZETA_COFFEE} src/base.coffee
 
-src/function.js: src/function.coffee
-	coffee -bc src/function.coffee
+obj/function.js: src/function.coffee
+	${ZETA_COFFEE} src/function.coffee
 
-src/operator.js: src/operator.coffee
-	coffee -bc src/operator.coffee
+obj/operator.js: src/operator.coffee
+	${ZETA_COFFEE} src/operator.coffee
 
 clean:
 	rm -f zeta.js ${ZETA_JS_SOURCES} symtab .check.js .time.js .times.js
+	rm -r obj
 	rm -f *.html docs/*.html
 
 .DEFAULT: all
