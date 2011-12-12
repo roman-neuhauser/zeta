@@ -87,11 +87,13 @@ Prerequisities
 
 * JavaScript 1.5+
 
-Zeta is developed and tested on FreeBSD 9 with SpiderMonkey_ 1.7,
-Firefox_ 3.5, and Arora_ 0.10.
+Zeta is developed and tested on FreeBSD 9 and Windows 7 with
+NodeJS_, SpiderMonkey_, Firefox_, Opera_ and Arora_.
 
+.. _NodeJS: http://nodejs.org/
 .. _SpiderMonkey: http://www.mozilla.org/js/spidermonkey/
 .. _Firefox: http://www.firefox.org/
+.. _Opera: http://www.opera.com/
 .. _Arora: http://www.arora-browser.org/
 
 
@@ -129,18 +131,13 @@ Build
 +++++
 
 The build mechanism requires a subset of the POSIX shell environment
-with a few commmon extensions, and works at least on FreeBSD, GNU/Linux
-and Cygwin.  The build product is of course completely system-agnostic.
+with a few commmon extensions, and NodeJS_, and works at least on FreeBSD,
+GNU/Linux, Windows/MSYS and Windows/Cygwin.
+The build product is of course completely system-agnostic.
 
-Zeta source code is distributed among several files (all in the `src`_
-directory).  You can use individual files (but note that `base.js`_ is
-needed by all other files), or create a single file (``zeta.js``)
-containing all of Zeta by running ``make`` in the top directory.
-
-Repository checkouts require Docutils_ to build HTML documentation.
+Docutils_ is required to build HTML documentation.
 
 .. _Docutils: http://docutils.sourceforge.net/
-.. _base.js: src/base.js
 
 Install
 +++++++

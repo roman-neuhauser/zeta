@@ -1,6 +1,6 @@
 SHELL=		/bin/sh
-ZETA_AWK?=	awk
 ZETA_JSH?=	node
+ZETA_NODE?=	node
 
 ZETA_RST2HTML=	${SHELL} tools/rst2html
 
@@ -54,14 +54,14 @@ docs/examples-ref-composex.html: docs/examples-ref-composex.rest
 docs/reference.html: docs/reference.rest
 	${ZETA_RST2HTML} docs/reference
 
-symtab: tools/symtab.awk ${ZETA_JS_SOURCES}
-	${ZETA_AWK} -f tools/symtab.awk ${ZETA_JS_SOURCES} > symtab
+symtab: tools/symtab.js ${ZETA_JS_SOURCES}
+	${ZETA_NODE} tools/symtab.js ${ZETA_JS_SOURCES} > symtab
 
-.times.js: tools/times.awk symtab
-	${ZETA_AWK} \
-	    -f tools/times.awk \
-	    < symtab \
-	    > .times.js
+.times.js: tools/times.js symtab
+	${ZETA_NODE} \
+	  tools/times.js \
+	  symtab \
+	  .times.js
 
 .check.js: ${ZETA_TESTS_JS_SOURCES}
 	cat ${ZETA_TESTS_JS_SOURCES} > .check.js
@@ -69,18 +69,16 @@ symtab: tools/symtab.awk ${ZETA_JS_SOURCES}
 .time.js: ${ZETA_TIME_JS_SOURCES}
 	cat ${ZETA_TIME_JS_SOURCES} > .time.js
 
-zeta.js: tools/zeta.awk symtab ${ZETA_JS_SOURCES}
-	${ZETA_AWK} \
-	    -v SYMBOLS=symtab \
-	    -v IMPORTER=IMPORT_ZETA_INTO \
-	    -f tools/zeta.awk \
+zeta.js: tools/zeta.js symtab ${ZETA_JS_SOURCES}
+	SYMBOLS=symtab \
+	IMPORTER=IMPORT_ZETA_INTO \
+	${ZETA_NODE} \
+	    tools/zeta.js \
 	    ${ZETA_JS_SOURCES} > zeta.js
 
 clean:
 	rm -f zeta.js symtab .check.js .time.js .times.js
-
-maint-clean: clean
 	rm -f *.html docs/*.html
 
 .DEFAULT: all
-.PHONY: all check clean docs maint-clean time
+.PHONY: all check clean docs time
