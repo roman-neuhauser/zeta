@@ -1,7 +1,8 @@
 SHELL=		/bin/sh
 ZETA_JSH?=	node
 ZETA_NODE?=	node
-ZETA_COFFEE?=	coffee -bco obj
+ZETA_COFFEE?=	coffee
+ZETA_COMPILE?=	${ZETA_COFFEE} -bco obj
 
 ZETA_RST2HTML=	${SHELL} tools/rst2html
 
@@ -55,14 +56,11 @@ docs/examples-ref-composex.html: docs/examples-ref-composex.rest
 docs/reference.html: docs/reference.rest
 	${ZETA_RST2HTML} docs/reference
 
-symtab: tools/symtab.js ${ZETA_JS_SOURCES}
-	${ZETA_NODE} tools/symtab.js ${ZETA_JS_SOURCES} > symtab
+symtab: tools/symtab.coffee ${ZETA_JS_SOURCES}
+	${ZETA_COFFEE} tools/symtab.coffee ${ZETA_JS_SOURCES} > symtab
 
-.times.js: tools/times.js symtab
-	${ZETA_NODE} \
-	  tools/times.js \
-	  symtab \
-	  .times.js
+.times.js: tools/times.coffee symtab
+	${ZETA_COFFEE} tools/times.coffee symtab .times.js
 
 .check.js: ${ZETA_TESTS_JS_SOURCES}
 	cat ${ZETA_TESTS_JS_SOURCES} > .check.js
@@ -70,28 +68,28 @@ symtab: tools/symtab.js ${ZETA_JS_SOURCES}
 .time.js: ${ZETA_TIME_JS_SOURCES}
 	cat ${ZETA_TIME_JS_SOURCES} > .time.js
 
-zeta.js: tools/zeta.js symtab ${ZETA_JS_SOURCES}
+zeta.js: tools/zeta.coffee symtab ${ZETA_JS_SOURCES}
 	SYMBOLS=symtab \
 	IMPORTER=IMPORT_ZETA_INTO \
-	${ZETA_NODE} \
-	    tools/zeta.js \
+	${ZETA_COFFEE} \
+	    tools/zeta.coffee \
 	    ${ZETA_JS_SOURCES} > zeta.js
 
 obj/algorithm.js: src/algorithm.coffee
-	${ZETA_COFFEE} src/algorithm.coffee
+	${ZETA_COMPILE} src/algorithm.coffee
 
 obj/base.js: src/base.coffee
-	${ZETA_COFFEE} src/base.coffee
+	${ZETA_COMPILE} src/base.coffee
 
 obj/function.js: src/function.coffee
-	${ZETA_COFFEE} src/function.coffee
+	${ZETA_COMPILE} src/function.coffee
 
 obj/operator.js: src/operator.coffee
-	${ZETA_COFFEE} src/operator.coffee
+	${ZETA_COMPILE} src/operator.coffee
 
 clean:
 	rm -f zeta.js ${ZETA_JS_SOURCES} symtab .check.js .time.js .times.js
-	rm -r obj
+	rm -fr obj
 	rm -f *.html docs/*.html
 
 .DEFAULT: all
